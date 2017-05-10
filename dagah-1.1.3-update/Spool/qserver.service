@@ -1,0 +1,13 @@
+[Unit]
+Description=Spooler queue process
+After=network.target
+
+[Service]
+Type=simple
+User=dagah
+ExecStart=/home/dagah/dagah/Spool/start.qserver
+ExecStop=/home/dagah/dagah/Spool/stop.qserver
+
+
+[Install]
+WantedBy=multi-user.target

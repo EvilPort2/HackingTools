@@ -1,0 +1,859 @@
+<?php
+/*
+ * Create a new harvester template:  The user names the template (e.g. www.dropbox.com).  This name has to be unique.  The GUI creates a folder under DAGAHLOC\TEMPLATESLOCATION named the name provided by the user.  The user then adds a page (index.html) to the template by entering a URL.  The GUI retrieves the page at the URL (text only) and displays it in the HTML editor.  The user is given the opportunity to edit the HTML and then saves it to the file index.html in the folder created for the template.  The user is offered an option to create a second page (repeating the process above, but saving the file as "index2.html").
+ */
+    require_once './php/db_creds.php';
+    session_start();
+    date_default_timezone_set('UTC');
+    
+	if (isset($_SESSION['message'])) {
+        
+		$message = $_SESSION['message'];
+        unset($_SESSION['message']);
+    }
+    
+	if (!isset($_SESSION['userid'])) {
+		
+		// no session data-- send back to login
+        header('Location:  login.html');
+	}
+        
+	$userID = $_SESSION['userid'];
+	$connection = mysqli_connect($db_hostname, $db_username, $db_password, $db_database);
+	$stmt = mysqli_stmt_init($connection);
+	mysqli_stmt_prepare($stmt, 'SELECT ID, Name, Created FROM campaigns WHERE UserID=? ORDER BY Created DESC');
+	mysqli_stmt_bind_param($stmt,'i',$userID);
+	mysqli_stmt_execute($stmt);
+	mysqli_stmt_store_result($stmt);
+	mysqli_stmt_bind_result($stmt, $campaignID, $campaignName, $campaignCreated);
+
+	//const $templatesDir = '../templates_processed';
+	$templatesDir = $_SESSION['dagah_dir'] . DIRECTORY_SEPARATOR . 'templates';
+	
+	function parseDirectory($path) {
+		
+		$result = [];
+		
+		if ($handle = opendir($path)) {
+
+			while (false !== ($entry = readdir($handle))) {
+
+				if ($entry != "." && $entry != "..") {
+
+					$result[$entry] = is_dir($newPath = $path . DIRECTORY_SEPARATOR . $entry)
+						? parseDirectory($newPath)
+						: $entry;
+				}
+			}
+
+			closedir($handle);
+		}
+		
+		return $result;
+	}
+	
+	// give back the harvester template
+	
+	if (!empty($_POST['loadTemplateFromURL']) && !empty($_POST['url'])) {
+		
+		$url = $_POST['url'];
+		if (substr($url, 'http://') !== 0 || substr($url, 'https://') !== 0) {
+			
+			$url = 'http://' . $url;
+		}
+		$template = substr(file_get_contents($url), 0, 10);
+		$template = file_get_contents($url);
+		
+		header('Content-type: text/html');
+		echo $template;
+		//echo json_encode(['template' => $template], JSON_HEX_TAG|JSON_HEX_APOS|JSON_HEX_QUOT|JSON_HEX_AMP);
+		//echo json_encode(['template' => $template], JSON_HEX_QUOT | JSON_HEX_TAG);
+		exit;
+		
+	} elseif (!empty($_POST['checkTemplateName']) && !empty($_POST['template'])) {
+		
+		$path = $templatesDir . DIRECTORY_SEPARATOR . $_POST['template'];
+		$exists = file_exists($path);
+		
+		header('Content-type: application/json');
+		echo json_encode(['exists' => $exists]);
+		exit;
+		
+	} elseif (!empty($_POST['getTemplate']) && !empty($_POST['template'])) {
+
+		$path = $templatesDir . DIRECTORY_SEPARATOR . $_POST['template'];
+		if (file_exists($path)) {
+
+			$filesContent = [];
+			$options = parseDirectory($path);
+			foreach ($options as $option) {
+
+				$filesContent[$option] = file_get_contents($path . DIRECTORY_SEPARATOR . $option);
+			}
+			$result = ['status' => 'ok', 'content' => $filesContent];
+
+		} else {
+
+			$result = ['status' => 'error', 'content' => 'Wrong template name.'];
+		}
+
+		header('Content-type: application/json');
+		echo json_encode($result);
+		exit;
+		
+	} elseif (!empty($_GET['deleteTemplate']) && !empty($_GET['template']) && !empty($template = urldecode($_GET['template']))) {
+
+		$directory = $templatesDir . DIRECTORY_SEPARATOR . $template;
+		if (is_dir($directory) && strpos($directory, '../') === false) {
+		
+			system('rm -rf ' . escapeshellarg($directory));
+		}
+		header('Location: dagah_vHarvesterTemplates.html');
+		exit;
+		
+	} elseif (!empty($_POST['saveTemplate']) && !empty($_POST['name']) && !empty($_POST['pages'])) {
+
+		$path	= $templatesDir . DIRECTORY_SEPARATOR . $_POST['name'];
+		$pages	= $_POST['pages'];
+
+		$newTemplate = (!empty($_POST['isNewTemplate']) && $_POST['isNewTemplate']);
+		
+		if (($exist = file_exists($path)) && is_array($pages) || $newTemplate) {
+
+			if (!$exist && $newTemplate) {
+			
+				mkdir($path);
+			}
+			
+			$filesContent = [];
+			$options = parseDirectory($path);
+			foreach ($pages as $pageName => $pageContent) {
+
+				if (file_exists($path . DIRECTORY_SEPARATOR . $pageName) || $newTemplate) {
+
+					file_put_contents($path . DIRECTORY_SEPARATOR . $pageName, $pageContent);
+				}
+
+				$result = ['status' => 'ok'];
+			}
+
+
+		} else {
+
+			$result = ['status' => 'error', 'content' => 'Wrong template name or data. '.$path];
+		}
+
+		header('Content-type: application/json');
+		echo json_encode($result);
+		exit;
+	}
+	
+	$templates = parseDirectory($templatesDir);
+	//echo '<pre>';print_r($templates);die;
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>View Campaigns</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="./components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+
+    <!-- MetisMenu CSS -->
+    <link href="./components/metisMenu/dist/metisMenu.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="./css/Dagah.css" rel="stylesheet">
+    <link href="./css/Dagah_custom.css" rel="stylesheet">
+
+    <!-- Custom Fonts -->
+    <link href="./components/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+	<style>
+		table.pages {
+			margin-top: 30px;
+			margin-bottom: 20px;
+		}
+		table.pages span.page2 {
+			
+			display: none;
+		}
+	</style>
+</head>
+
+<body>
+
+    <div id="wrapper">
+
+        <!-- Navigation -->
+        <?php include('dagah_nav.html'); ?>
+		
+        <!-- Page Content -->
+        <div id="page-wrapper">
+            <div class="container-fluid">
+				
+				<?php echo $message ?>
+				
+                <h2><i class="fa fa-html5 fa-fw"></i> Harvester Templates</h2>
+                <div class="row">
+                <!-- /.col-lg-6 -->
+                <div class="col-lg-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            Current Campaign List
+                        </div>
+                        <!-- /.panel-heading -->
+                        <div class="panel-body">
+                            <div class="table-responsive">
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Name</th>
+                                            <th style="width: 0px;"></th>
+											<th style="width: 0px;"></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+									<?php
+										$id = 0;
+										foreach ($templates as $templateName => $templateFiles):
+									?>
+                                        <tr>
+                                            <td><?php echo $templateName ?></td>
+                                            
+											<td>
+												<input type="button" template-name="<?= $templateName ?>" data-target="#harvesterdialog<?= $id ?>" data-toggle="modal" class="btn btn-primary btn-xs edit-template" value="Edit template" />
+												
+												<div aria-hidden="true" aria-labelledby="myModalLabel" role="dialog" tabindex="-1" id="harvesterdialog<?= $id ++ ?>" template-name="<?= $templateName ?>" class="modal fade harvesterdialog">
+													<div class="modal-dialog modal-lg">
+														<div class="modal-content">
+															<div class="modal-header">
+																<button aria-hidden="true" data-dismiss="modal" class="close" type="button">x</button>
+																<h4 id="myModalLabel" class="modal-title">View/Edit harvester template "<span class="edit-template-name"><?= $templateName ?></span>"</h4>
+															</div>
+
+															<div class="panel-body">
+																<table style="width:100%;"><tr><td>
+																Choose the template's page:
+																<select name="templatepage" class="templatepage">
+																</td>
+																<td style="text-align:right;">
+																	<input type="button" class="btn btn-primary expand-preview" style="outline:0;" value="Expand"/>
+																</td>
+																</tr></select>
+																</table>
+
+																<div class="pagescontainer"></div>
+
+																<div style="float:left;"><input type="button" class="btn btn-primary save-template" value="Save"/></div>
+																<div style="float:right;"><input type="button" data-dismiss="modal" class="btn btn-default" value="Cancel"/></div>
+															</div>
+														</div>
+														<!-- /.modal-content -->
+													</div>
+													<!-- /.modal-dialog -->
+												</div>
+											</td>
+											<td>
+												<a href="?deleteTemplate=1&template=<?= urlencode($templateName) ?>"><div class="fa fa-trash-o"></div></a>
+											</td>
+                                        </tr>
+									
+									<?php endforeach; ?>
+									
+                                    </tbody>
+                                </table>
+                            </div>
+                            <!-- /.table-responsive -->
+
+							<button data-target="#harvesterdialognew" data-toggle="modal" class="btn btn-primary">Add new Harvester Template</button>
+							
+							<div aria-hidden="true" aria-labelledby="myModalLabel" role="dialog" tabindex="-1" id="harvesterdialognew" class="modal fade harvesterdialog">
+								<div class="modal-dialog modal-lg">
+									<div class="modal-content">
+										<div class="modal-header">
+											<button aria-hidden="true" data-dismiss="modal" class="close" type="button">x</button>
+											<h4 id="myModalLabel" class="modal-title">Add harvester template</h4>
+										</div>
+
+										<div class="panel-body">
+											<div id="template-name-block">
+												Enter the new template name (must be unique and should be the domain name of the site e.g. salesforce.com)
+												<input type="text" id="template-name" template-name="" />
+											</div>
+											<div width="100%;" style="text-align:center;display:none;" id="add-second-page-to-new-block">
+												Do you want to add the second URL to template?
+												<input type="button" class="btn btn-primary" style="outline:0;" value="Yes" id="add-second-page-to-new"/>
+												<input type="button" data-dismiss="modal" class="btn btn-default" value="No"/>
+											</div>
+											<div>
+												
+												<table class="pages" style="display:none;">
+													<tr>
+														<td>
+															<div class="page">
+																<div id="page-block">
+																	<span>Load template's index.html page from URL (e.g. login.salesforce.com):</span>
+																	<input type="text" id="template-url" name="template-url" />
+																	<input type="button" class="btn btn-primary load-url" style="outline:0;" value="Load"/>
+																</div>
+																<div id="page2-block" style="display:none;">
+																	<span>Load template's index2.html template from URL (optional):</span>
+																	<input type="text" id="template-url2" name="template-url" />
+																	<input type="button" class="btn btn-primary load-url2" style="outline:0;" value="Load"/>
+																</div>
+															</div>
+														</td>
+													</tr>
+												</table>						
+
+											</div>
+											
+											<div class="pagescontainer"></div>
+
+											<div style="float:left;"><input type="button" id="save-button" class="btn btn-primary save-template" value="Save" disabled="disabled"/></div>
+											<div style="float:right;"><input type="button" data-dismiss="modal" class="btn btn-default" value="Cancel"/></div>
+										</div>
+									</div>
+									<!-- /.modal-content -->
+								</div>
+								<!-- /.modal-dialog -->
+							</div>
+							
+                        </div>
+                        <!-- /.panel-body -->
+                    </div>
+                    <!-- /.panel -->
+                </div>
+                <!-- /.col-lg-6 -->
+                
+            </div>
+            </div>
+            <!-- /.container-fluid -->
+        </div>
+        <!-- /#page-wrapper -->
+
+    </div>
+    <!-- /#wrapper -->
+
+    <!-- jQuery -->
+    <script src="./components/jquery/dist/jquery.min.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="./components/bootstrap/dist/js/bootstrap.min.js"></script>
+
+    <!-- Metis Menu Plugin JavaScript -->
+    <script src="./components/metisMenu/dist/metisMenu.min.js"></script>
+
+    <!-- Custom Theme JavaScript -->
+    <script src="./js/sb-admin-2.js"></script>
+	
+	<script src="./js/codemirror/lib/codemirror.js"></script>
+	<link rel="stylesheet" href="./js/codemirror/lib/codemirror.css">
+	
+	<!--script src="./js/codemirror/mode/css/css.js"></script>
+	<script src="./js/codemirror/mode/javascript/javascript.js"></script>
+	<script src="./js/codemirror/mode/htmlmixed/htmlmixed.js"></script>
+	<script src="./js/codemirror/addon/edit/matchbrackets.js"></script-->
+	<link rel=stylesheet href="./js/codemirror/lib/codemirror.css">
+	<link rel="stylesheet" href="./js/codemirror/theme/paraiso-light.css">
+	<script src="./js/codemirror/lib/codemirror.js"></script>
+	<script src="./js/codemirror/mode/xml/xml.js"></script>
+	<script src="./js/codemirror/mode/javascript/javascript.js"></script>
+	<script src="./js/codemirror/mode/css/css.js"></script>
+	<script src="./js/codemirror/mode/htmlmixed/htmlmixed.js"></script>
+	<script src="./js/codemirror/addon/edit/matchbrackets.js"></script>
+	
+
+	<style>
+		div.page-container > div.CodeMirror {
+			height: 100%;
+		}
+	</style>
+
+	<script>		
+		
+		var myCodeMirrors	= {};
+		var targetShown		= {};
+		// full screen functionality
+		var oldSizes		= {};
+		var isFullScreen	= false;
+		
+		// adding the new dialog element
+		$('div#harvesterdialognew #template-name').on('input', function(e) {
+			
+			var el = $(e.target)[0];
+			var targetDialog = getParentDialog(e);
+			
+			function toggleTemplateNameValidated (show) {
+				
+				// template name already exists
+				if (show) {
+
+					el.setCustomValidity( '' );
+					el.reportValidity();
+					el.blur();
+					el.focus();
+
+					targetDialog.find('table.pages').show();
+					//$('input#save-button').removeAttr('disabled');
+				} else {
+
+					targetDialog.find('table.pages').hide();
+					targetDialog.find('input#save-button').attr('disabled', 'disabled');
+				}
+			}
+			
+			var value = $(e.target).val();
+			if (!value) {
+				
+				return toggleTemplateNameValidated(false);
+			}
+			
+			$.post(
+				'',
+				{
+					checkTemplateName	: true,
+					template			: value
+				},
+				function (res) {
+
+					var show = !res.exists;
+					if (!show) {
+						
+						el.setCustomValidity('Template with this name already exists');
+						el.reportValidity();
+					}
+					return toggleTemplateNameValidated(show);
+				}
+			);
+		});
+		
+		var getURLLoader = function (urlScr, page, targetDialog) {
+		
+			return $.post(
+				'',
+				{
+					loadTemplateFromURL	: true,
+					url					: urlScr.value
+				},
+				function (res) {
+
+					if (res.length > 0) {
+
+						var pages = {};
+						pages[page] = res;
+						
+						targetDialog.find('.pagescontainer').show();
+						
+						showEditor(pages, targetDialog);
+						
+						//initPageEditor('page_' + targetDialog.find('.templatepage').children(':first').html(), targetDialog);
+						initPageEditorAndControls(page, targetDialog);
+						
+						targetDialog.find('input#save-button').removeAttr('disabled');
+					} else {
+						
+						targetDialog.find('.pagescontainer').hide();
+						targetDialog.find('input#save-button').attr('disabled', 'disabled');
+					}
+				},
+				'html'
+			);
+		};
+		
+		$('input.load-url').click(function (e) {
+			
+			return getURLLoader($('input#template-url')[0], 'index.html', getParentDialog(e));
+		});
+		$('input.load-url2').click(function (e) {
+			
+			return getURLLoader($('input#template-url2')[0], 'index2.html', getParentDialog(e));
+		});
+		
+		
+		
+		function initPageEditor(pageId, targetDialog) {
+
+			myCodeMirrors[pageId] = CodeMirror.fromTextArea(targetDialog.find('div[id="' + pageId + '"]').find('.code-container')[0], {
+				lineNumbers: true,
+				mode: "text/html",
+				matchBrackets: true,
+				theme: "paraiso-light"
+			});
+
+			targetShown[pageId] = 'html';
+		}
+		
+		var initPageEditorAndControls = function (page, targetDialog) {
+
+			initPageEditor('page_' + page, targetDialog);
+			
+			//var pageContainer = targetDialog.find('.pagescontainer');
+
+			targetDialog.find('.switchhtml').click(function (event) {
+
+				switchMode(true, $(event.target).parent('.page-container').attr('id'), $(event.target).parent('.page-container'));
+			});
+
+			targetDialog.find('.switchpreview').click(function (event) {
+
+				switchMode(false, $(event.target).parent('.page-container').attr('id'), $(event.target).parent('.page-container'));
+			});
+		};
+		
+		var getParentDialog = function (event) {
+
+			return $(event.target).closest('.harvesterdialog');
+		};
+		
+		var showEditor = function (pages, targetDialog) {
+			
+			// re-init variables and settings
+			myCodeMirrors	= {};
+			targetShown		= {};
+			// full screen functionality
+			oldSizes		= {};
+			isFullScreen	= false;
+
+			// empty the container
+			targetDialog.find('.pagescontainer').html('');
+
+			//var pages = {};
+
+			var options = '';
+			var isFirstPage = true;
+			for (var templatePage in pages) {
+
+				var target = targetDialog.find('.code-container');
+
+				options += '<option name="' + templatePage + '">' + templatePage + '</option>';
+				//pages[templatePage] = pages[templatePage];
+
+				// add template page editor and previewer elements here
+				targetDialog.find('.pagescontainer').append(
+					'<div id="page_' + templatePage + '" class="page-container" style="display:' + (isFirstPage ? 'block' : 'none') + ';height:90%">'
+					+ '<input type="button" class="btn btn-primary switchhtml" style="border-radius:4px 0px 0px 0px;outline: 0;" value="HTML"><input type="button" class="btn btn-default switchpreview" style="border-radius:0px 4px 0px 0px;outline: 0;" value="Preview">'
+					+ '</br>'
+					+ '<br>Edit html to remove client-side validation scripts and update the POST action to "./post.php" or to "./index2.html" if necessary.</br>'
+					+ '<textarea class="code-container html ' + (isFirstPage ? 'active' : '') + '" style="width:100%;height:100%">'
+					+ pages[templatePage]
+					+ '</textarea>'
+					+ '<iframe class="preview-container" style="display:none;width:100%;height:100%"></iframe>'
+					+ '</br>'
+					+ '</div>'
+				);
+
+				if (isFirstPage) {
+
+					isFirstPage = false;
+				}
+			}
+
+			targetDialog.find('.pagescontainer').height(($(window).height() * 0.7));
+
+			// set page choose list options if options selector present
+			if (targetDialog.find('.templatepage').length) {
+
+				targetDialog.find('.templatepage').html(options);
+			};
+
+			// show the popup
+			//$('#edit-template').show();
+		};
+		
+		$('.edit-template').click(function (e) {
+		//console.log(e.target);
+
+			var selectAttribute	= 'data-target';
+			var selected		= $(e.target).attr('template-name');
+			var templateId		= $(e.target).attr(selectAttribute);
+			var targetDialog	= $(templateId);
+			
+			if (selected) {
+				
+				// load template's files here
+				$.post(
+					'',
+					{
+						getTemplate	: true,
+						template	: selected
+					},
+					function (res) {
+			
+						if (res.status == 'ok') {
+
+							showEditor(res.content, targetDialog);
+						}
+					}
+				);
+			}
+		});
+		
+		$('.save-template').click(function (e) {
+
+			var targetDialog = getParentDialog(e);
+			
+			if (targetDialog.attr('id') == 'harvesterdialognew') {
+				
+				var name = targetDialog.find('#template-name').val();
+				var isNewTemplate = true;
+			} else {
+				
+				var isNewTemplate = false;
+				var name = targetDialog.find('.edit-template-name').html();
+			}
+						
+			var pages = {};
+			var pageIndex;
+			targetDialog.find('.pagescontainer div').each(function () {
+
+				var currentPage = $(this).attr('id');
+				if (!currentPage) {
+					
+					return;
+				}
+				pageIndex = currentPage;
+				var editorIndex	= /*'page_' + */pageIndex;
+				if (myCodeMirrors[editorIndex]) {
+
+					pages[pageIndex.substr('page_'.length)] = myCodeMirrors[editorIndex].doc.getValue();
+				}
+			});
+
+			$.post(
+				'',
+				{
+					saveTemplate	: true,
+					isNewTemplate	: isNewTemplate,
+					name			: name,
+					pages			: pages
+				},
+				function (res) {
+
+					if (targetDialog.attr('id') !== 'harvesterdialognew') {
+					
+						targetDialog.modal('hide');
+					} else {
+
+						if (res.status == 'ok') {
+
+							// nned to show the next page
+							if (pageIndex == 'page_index.html') {
+
+								targetDialog.find('#template-name-block').hide();
+								targetDialog.find('#add-second-page-to-new-block').show();
+
+								targetDialog.find('.template-name').attr('disabled', 'disabled');
+								targetDialog.find('.pagescontainer').html('');
+								targetDialog.find('.pagescontainer').height(0);
+								targetDialog.find('.pages #page-block').hide();
+								
+								targetDialog.find('input#save-button').attr('disabled', 'disabled');
+							} else {
+								
+								targetDialog.modal('hide');
+							}
+						}
+					}
+				}
+			);
+		});
+		
+		$('#add-second-page-to-new').click(function (e) {
+
+			var targetDialog = getParentDialog(e);
+			
+			targetDialog.find('#add-second-page-to-new-block').hide();
+			
+			targetDialog.find('#template-name').attr('disabled', 'disabled');
+			targetDialog.find('#template-name-block').show();
+
+			//targetDialog.find('.template-name').attr('disabled', 'disabled');
+			
+			targetDialog.find('.page').show();
+			targetDialog.find('.page #page-block').hide();
+			targetDialog.find('.page #page2-block').show();
+			
+			targetDialog.find('#template-url').val('');
+		});
+		
+		// set page choose list onchange event
+		$('.templatepage').on('change', function(e) {
+
+			var targetDialog = getParentDialog(e);
+
+			targetDialog.find('div.page-container').hide();
+			var page = 'page_' + e.target.value;
+			targetDialog.find('div[id="' + page + '"]').show();
+
+			// activate the CodeMirror on first page visit
+
+			if (typeof myCodeMirrors[page] === 'undefined') {
+
+				initPageEditor(page, targetDialog);
+			}
+		});
+
+
+		// full screen functionality
+
+		// show the code in editor here
+		$('.harvesterdialog').on('shown.bs.modal', function (e) {
+			
+			var targetDialog = $(e.target);
+			
+			if (targetDialog.attr('id') !== 'harvesterdialognew') {
+
+				initPageEditorAndControls(targetDialog.find('.templatepage').children(':first').html(), targetDialog);
+			}
+		});
+		
+		// exit fullscreen on close
+		$('.harvesterdialog').on('hidden.bs.modal', function () {
+			
+			if (isFullScreen) {
+				
+				toggleFullScreen();
+			}
+			
+			var targetDialog = $(this);
+			if (targetDialog.attr('id') == 'harvesterdialognew') {
+
+				targetDialog.find('#add-second-page-to-new-block').hide();
+
+				targetDialog.find('#template-name').removeAttr('disabled');
+				targetDialog.find('#template-name').val('');
+				targetDialog.find('#template-name-block').show();
+
+				targetDialog.find('.pagescontainer').html('');
+				targetDialog.find('.pagescontainer').height(0);
+
+				targetDialog.find('.pages').hide();
+				targetDialog.find('.pages #page-block').show();
+				targetDialog.find('.pages #page2-block').hide();
+
+				targetDialog.find('#template-url').val('');
+				
+				location.reload();
+			}
+		});
+		
+		$('.expand-preview').click(toggleFullScreen);
+		
+		function toggleFullScreen(e) {
+			
+			var targetDialog = getParentDialog(e);
+			var newSizes;
+			
+			if (!isFullScreen) {
+			
+				oldSizes = {
+					'.modal-dialog.modal-lg' : {
+						'height': $('.modal-dialog.modal-lg').height(),
+						'width': $('.modal-dialog.modal-lg').width()
+					},
+					'.pagescontainer' : {
+						'height': $('.pagescontainer').height()
+					}
+				};
+				
+				newSizes = {
+					'.modal-dialog.modal-lg' : {
+						'height': $(window).height() * 0.95,
+						'width': $(window).width() * 0.95
+					},
+					'.pagescontainer': {
+						'height': $('.modal-dialog.modal-lg').height() * 0.9
+					}
+				};
+				targetDialog.find('.expand-preview').val('Normal size');
+				isFullScreen = true;
+			} else {
+				
+				newSizes = oldSizes;
+				targetDialog.find('.expand-preview').val('Expand');
+				isFullScreen = false;
+			}
+			
+			for (var element in newSizes) {
+				
+				for (var ns in newSizes[element]) {
+					
+					$(element)[ns](newSizes[element][ns]);
+				}
+			}
+		}
+		
+		function switchMode(showHTML, pageId, page) {
+
+			if (showHTML) {
+			
+				if (targetShown[pageId] == 'html') {
+					
+					return false;
+				}
+
+				var src			= page.find('.preview-container');
+				var btnSrc		= page.find('.switchpreview');//preview-container
+				var btnTarget	= page.find('.switchhtml');
+				var target		= page.children('div.CodeMirror');
+				
+				targetShown[pageId] = 'html';
+				
+			} else {
+				
+				if (targetShown[pageId] == 'preview') {
+					
+					return false;
+				}
+
+				var content = myCodeMirrors[pageId].doc.getValue();//toTextArea();
+
+				var src			= page.children('div.CodeMirror');
+				var btnSrc		= page.find('.switchhtml');
+				var target		= page.find('.preview-container');
+				var btnTarget	= page.find('.switchpreview');
+
+				// insert code container value into preview iframe
+				iframe = target[0].contentWindow || ( target[0].contentDocument.document || target[0].contentDocument);
+				iframe.document.open();
+				iframe.document.write(content);
+				iframe.document.close();
+				
+				targetShown[pageId] = 'preview';
+			}
+
+			src.hide();
+			target.show();
+			
+			btnSrc
+				.removeClass('btn-primary')
+				.addClass('btn-default');
+		
+			
+			btnTarget
+				.removeClass('btn-default')
+				.addClass('btn-primary');
+		}
+		
+	</script>
+
+</body>
+	
+</html>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+      <string name="app_name">AndroidAgent</string>
+      <string name="agentkey">AaAaa00</string>
+      <string name="controlnumber">15555215554</string>
+      <string name="controlIP">10.0.1.140</string>
+      <string name="controlport">80</string>
+      <string name="urii">/command</string>
+      <string name="controlpath">/Campaign320161228123940/attack</string>
+      <string name="urij">/agentcommand.php</string>
+
+      <string name="use_virgil_security">false</string>
+      <string name="virgil_private_key1">virgil_private_key1</string>
+      <string name="virgil_public_key2">virgil_public_key2</string>
+
+      <string name="virgil_agent_private_key_password">MY_PASSWORD</string>
+
+</resources>

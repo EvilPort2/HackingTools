@@ -1,0 +1,7 @@
+
+python Spool/qp.py python '/home/dagah/dagah/dagah2.pyc' Run '/home/dagah/dagah/targets/test2' 'test7' 'test720161221053711' 2>&1
+python Spool/qp.py python '/home/dagah/dagah/dagah2.pyc' Run '/home/dagah/dagah/targets/test2' 'test3' 'test320161221053645' 2>&1
+python Spool/qp.py python '/home/dagah/dagah/dagah2.pyc' Run '/home/dagah/dagah/targets/test2' 'test4' 'test420161221053655' 2>&1
+python Spool/qp.py python '/home/dagah/dagah/dagah2.pyc' Run '/home/dagah/dagah/targets/test2' 'test5' 'test520161221053700' 2>&1
+python Spool/qp.py python '/home/dagah/dagah/dagah2.pyc' Run '/home/dagah/dagah/targets/test2' 'test6' 'test620161221053705' 2>&1
+python Spool/qp.py python '/home/dagah/dagah/dagah2.pyc' Run '/home/dagah/dagah/targets/test2' 'test7' 'test720161221053711' 2>&1

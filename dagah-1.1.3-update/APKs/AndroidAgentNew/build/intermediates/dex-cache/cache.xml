@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        jar="/Users/georgiaweidman/Library/Android/sdk/extras/android/m2repository/com/android/support/support-annotations/21.0.3/support-annotations-21.0.3.jar"
+        jumboMode="false"
+        revision="23.0.3"
+        sha1="4b74cefe1f0c1b819e7260c8627a14674e37fd35">
+        <dex dex="/Users/georgiaweidman/Desktop/AndroidAgentNew/app/build/intermediates/pre-dexed/debug/support-annotations-21.0.3-cbcfb0dbac86da1423b18dcfe03fb8c56ec47354.jar" />
+    </item>
+    <item
+        jar="/Users/georgiaweidman/.gradle/caches/modules-2/files-2.1/org.apache.httpcomponents/httpclient-android/4.3.5.1/eecbb0b998e77629862a13d957d552b3be58fc4e/httpclient-android-4.3.5.1.jar"
+        jumboMode="false"
+        revision="23.0.3"
+        sha1="eecbb0b998e77629862a13d957d552b3be58fc4e">
+        <dex dex="/Users/georgiaweidman/Desktop/AndroidAgentNew/app/build/intermediates/pre-dexed/debug/httpclient-android-4.3.5.1-0ce1359ee3b29f3509f8a53e15702fb95a9041dc.jar" />
+    </item>
+    <item
+        jar="/Users/georgiaweidman/.gradle/caches/modules-2/files-2.1/com.google.code.gson/gson/2.7/751f548c85fa49f330cecbb1875893f971b33c4e/gson-2.7.jar"
+        jumboMode="false"
+        revision="23.0.3"
+        sha1="751f548c85fa49f330cecbb1875893f971b33c4e">
+        <dex dex="/Users/georgiaweidman/Desktop/AndroidAgentNew/app/build/intermediates/pre-dexed/debug/gson-2.7-bab709b9a2650cf8fb3834d3a1d20bd5c2384db4.jar" />
+    </item>
+    <item
+        jar="/Users/georgiaweidman/Desktop/AndroidAgentNew/app/build/intermediates/exploded-aar/com.android.support/support-v4/21.0.3/jars/libs/internal_impl-21.0.3.jar"
+        jumboMode="false"
+        revision="23.0.3"
+        sha1="01ec05bfbafcc07646ba813000bf2ef11742dd03">
+        <dex dex="/Users/georgiaweidman/Desktop/AndroidAgentNew/app/build/intermediates/pre-dexed/debug/internal_impl-21.0.3-3a5c0bb1b891f334461fbd0e0c5e6d0772d4f0e9.jar" />
+    </item>
+    <item
+        jar="/Users/georgiaweidman/Desktop/AndroidAgentNew/app/build/intermediates/exploded-aar/com.virgilsecurity.sdk/android/4.1.0/jars/classes.jar"
+        jumboMode="false"
+        revision="23.0.3"
+        sha1="09ef0eb91f994dd91d3d651c14cd51c00b38c777">
+        <dex dex="/Users/georgiaweidman/Desktop/AndroidAgentNew/app/build/intermediates/pre-dexed/debug/classes-e28a6b367f31f25a8b90a4d875d0a51fc61bb37b.jar" />
+    </item>
+    <item
+        jar="/Users/georgiaweidman/Desktop/AndroidAgentNew/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/21.0.3/jars/classes.jar"
+        jumboMode="false"
+        revision="23.0.3"
+        sha1="81d42bf983a8741f4888a6e333e454e4a5e0eeb7">
+        <dex dex="/Users/georgiaweidman/Desktop/AndroidAgentNew/app/build/intermediates/pre-dexed/debug/classes-7ebc6edc2bd9250c5e957dbfaf4586acc089d6e9.jar" />
+    </item>
+    <item
+        jar="/Users/georgiaweidman/Desktop/AndroidAgentNew/app/build/intermediates/exploded-aar/com.android.support/support-v4/21.0.3/jars/classes.jar"
+        jumboMode="false"
+        revision="23.0.3"
+        sha1="2c91c949a45a21cdecf26e03951e46c7beec9ad8">
+        <dex dex="/Users/georgiaweidman/Desktop/AndroidAgentNew/app/build/intermediates/pre-dexed/debug/classes-3b53c38b11e6ca95cec79ce1e29dd7415c4fa79a.jar" />
+    </item>
+
+</items>

@@ -1,0 +1,149 @@
+<?php
+    require_once './php/db_creds.php';
+    // check for existing session
+    session_start();
+    date_default_timezone_set('UTC');
+    if (isset($_SESSION['userid'])) {
+        $userID=$_SESSION['userid'];
+        $connection = mysqli_connect($db_hostname, $db_username, $db_password, $db_database);
+        if (mysqli_connect_errno()) {
+            $message = "Failed to connect to MySQL: " . mysqli_connect_error();
+        }
+        $stmt = mysqli_stmt_init($connection);
+        mysqli_stmt_prepare($stmt, 'SELECT Comment, Time, Type FROM notifications WHERE UserID= ? ORDER BY Time DESC');
+        mysqli_stmt_bind_param($stmt, 'i', $userID);
+        mysqli_stmt_execute($stmt);
+        mysqli_stmt_store_result($stmt);
+        mysqli_stmt_bind_result($stmt, $not_comment, $not_time, $not_type);
+        
+    } else {
+        // no session data-- send back to login
+        header('Location:  login.html');
+    }
+?>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Alerts</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="./components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+
+    <!-- MetisMenu CSS -->
+    <link href="./components/metisMenu/dist/metisMenu.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="./css/Dagah.css" rel="stylesheet">
+    <link href="./css/Dagah_custom.css" rel="stylesheet">
+
+    <!-- Custom Fonts -->
+    <link href="./components/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+<body>
+
+    <div id="wrapper">
+
+        <!-- Navigation -->
+        <?php include('dagah_nav.html'); ?>
+		
+        <!-- Page Content -->
+        <div id="page-wrapper">
+            <div class="container-fluid">
+                <!-- /.row -->
+                <div class="row">
+                    <div class="col-lg-8">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <i class="fa fa-bell fa-fw"></i> All Alerts
+                            </div>
+                            <!-- /.panel-heading -->
+                            <div class="panel-body">
+                                <div class="list-group">
+                                    <?php 
+                                        while(mysqli_stmt_fetch($stmt)) {
+                                            $date = date_create($not_time);
+                                            switch ($not_type) {
+                                                case "task":
+                                                    $icon = "fa fa-tasks";
+                                                    break;
+                                                case "account":
+                                                    $icon = "fa fa-user";
+                                                    break;
+                                                case "phone":
+                                                    $icon = "fa fa-phone";
+                                                    break;
+                                                case "campaign":
+                                                    $icon = "fa fa-empire";
+                                                    break;
+                                                case "login":
+                                                    $icon = "glyphicon glyphicon-log-in";
+                                                    break;
+                                                case "logout":
+                                                    $icon = "glyphicon glyphicon-log-out";
+                                                    break;
+                                                case "settings":
+                                                    $icon = "fa fa-gear";
+                                                    break;
+                                            }
+                                            $i = "<i class='" . $icon . " fa-fw'></i> " . $not_comment;
+                                    ?>
+                                    <a href="#" class="list-group-item">
+                                        <?php echo $i ?>
+                                        <span class="pull-right text-muted small">
+                                          <em><?php echo date_format($date, 'M d H:i'); ?></em>
+                                        </span>
+                                        
+                                    </a>
+                                    <?php
+                                        }
+                                    ?>
+                                </div>
+                            </div>
+                            <!-- /.panel-body -->
+                        </div>
+                    </div>
+                    <!-- /.col-lg-4 -->
+                </div>
+            <!-- /.row -->
+
+
+            </div>
+            <!-- /.container-fluid -->
+        </div>
+        <!-- /#page-wrapper -->
+
+    </div>
+    <!-- /#wrapper -->
+
+    <!-- jQuery -->
+    <script src="./components/jquery/dist/jquery.min.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="./components/bootstrap/dist/js/bootstrap.min.js"></script>
+
+    <!-- Metis Menu Plugin JavaScript -->
+    <script src="./components/metisMenu/dist/metisMenu.min.js"></script>
+
+    <!-- Custom Theme JavaScript -->
+    <script src="./js/sb-admin-2.js"></script>
+
+</body>
+
+</html>

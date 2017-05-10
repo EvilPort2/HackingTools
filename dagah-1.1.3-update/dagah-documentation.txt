@@ -1,0 +1,252 @@
+# Shevirah Dagah Mobile Device Penetration Testing Software
+
+You have downloaded the freeware version of the Dagah platform, software designed to automate the penetration testing of mobile devices. Your use of the Dagah software is subject to the terms and conditions of the Dagah End User License Agreement ("EULA"). See the "Dagah_license.txt" file (in /home/dagah/dagah/) for details.
+
+With dagah, penetration testers can design campaigns of penetration test attacks against targets (phone numbers, userids), launch them, and review the results. Available attacks include basic phishing attacks, where targets are prompted to click a link to a benign warning page; harvester attacks, where targets are prompted to click a link to a facsimile of a login page in order to capture their credentials; agent attacks, where targets are prompted to click a link to a simulated malware application for download and install; and profile attacks, where targets are prompted to click a link to a configuration file for iOS (Apple) devices to change their security settings. Each of these attacks can be delivered over Short Message Service (SMS), Quick Response (QR) Codes, Near-Field Communications (NFC), or over Messaging Applications including Twitter and WhatsApp. Future attacks will include Client side (remote) attacks that return a reverse-shell from the target phone.
+
+
+### CONCEPT OF OPERATIONS
+The software consists of four components:
+
+- A server-based engine: which can be interfaced via command-line
+- A web-based GUI: which can be interfaced via a browser
+- A means to bridge the engine to the mobile network for sending SMS messages
+- Agents for targeted phones
+
+A penetration tester designs CAMPAIGNs consisting of ATTACKs and runs them against TARGETs. Targets are phone numbers. Any number of attacks can be run within a campaign and a campaign can be run against a set of targets.
+
+#### Attacks are of a type:
+
+- Basic Phishing: Simulating phishing to draw mobile users into following a link. This emulates how a hacker might trick a user into installing a piece of malware.
+- Harverster: Simulating a phishing attack to draw mobile users to a fake website to harvest their user credentials. This emulates how a hacker might trick a user into providing their credentials to a web service.
+- Agent: Simulating a phishing attack to trick users into side loading a "malicious" application containing a backdoor remote agent. This emulates both how a hacker might trick a user into installing a piece of malware and demonstrates what malware would be able to do on a target's device.
+- Profile: Simulating an iOS (Apple)-specific attack to trick users into installing a new configuration profile. This emulates how a hacker might trick a user into lowering their security settings or installing a new certificate in the trust chain.
+- Client Side: Simulates exploiting mobile devices with client-side vulnerabilities. This will be available in future releases.
+
+#### Each attack can be delivered via five methods:
+
+- SMS: Text messages
+- QR Codes: A graphic image that contains an encoded URI that can be printed and displayed
+- NFC: A broadcast message that can be received by nearby mobile devices taking them to a URI
+- MESSAGING APP: A message sent via a messaging application. Twitter and WhatsApp are currently available via the command line. More will be added in future releases.
+- EXTERNAL: A message delivered outside of dagah such as via emails
+
+Attacks are bundled into Campaigns. A campaign is created, staged, and then run against groups of targets. The same campaign can be run against another group of targets later for A/B testing. Results are reported per campaign.
+
+All attacks using SMS delivery methods require a bridge to the mobile network. There are two choices: Use the Twilio service (https://www.twilio.com) or use the supplied DagahModemBridge Android application. To use Twilio, you'll need a Twilio SID, Password, and Number (see configuration below). For the DagahModemBridge, you'll need an Android Smartphone with a phone number. In the case of Twilio, the Twilio Phone Number will be the origination number for all SMS attacks. For the DagahModemBridge, the phone number of the smartphone running the sapplication will be the originating number for all SMS attacks. Which method is used is determined by the MODEMTYPE configuration item described below.
+
+All attacks usng NFC delivery methods require the use of the DagahModemBridge application.
+
+
+### Command Line Operation:
+
+All commands and configurations are contained in the /home/dagah/dagah directory. 
+
+`
+cd ~dagah/dagah
+`
+
+**The main configuration file is "config"**
+
+`
+vi config 
+`
+
+Most settings should be left to their defaults.  Here are the ones that should be changed:
+
+- IPADDRESS: change this to the IP address of the dagah engine
+- SHELLIPADDRESS: change this to the IP address of the dagah engine.
+- MODEMTYPE: Set to either "app" to use the DagahModemBridge.apk or to "twilio" to use a Twilio account.
+- MODEMNUMBER: set this to the phone number of the device used to run the DagahModemBridge application
+- MODEMKEY: set this to a unique value to distinguish your DagahModemBridge from anyone else's
+- TWILIOSID and TWILIOTOKEN: These need to match your Twilio account to use this feature. You can retrieve or create these at Twilio website: https://www.twilio.com/console/account/settings
+- TWILIONUMBER: Phone number used when using the Twilio service to send SMS messages. Retrieve from Twilio website: https://www.twilio.com/console/phone-numbers/incoming
+- BITLYTOKEN: To shorten the URLs sent in phishing campaigns, the engine uses the bit.ly service. Enter your OATH_AUTH token for your Bit.ly account by retrieving it from here: https://bitly.com/a/oauth_apps
+- TWITTERACCESSTOKEN: To use the Twitter service as a Delivery Method, enter an access token for the originating account. To create an Access Token, follow the instructions below
+- TWITTERACCESSTOKENSECRET: Secret to accompany Twitter access token above.
+- WHATSAPPLOGIN: To use the WhatsApp service as a Delivery Method, enter a login and password value for a valid WhatsApp account. dagah uses the python WhatsApp client.  To create an accont/password, follow the instructions below.
+- WHATSAPPPASSWORD: Password for above account.
+
+
+### Create a Campaign: 
+
+Campaigns are contained in XML files. A number of sample campaign files are delivered with dagah. Review these for ideas. Campaign XML files are structured as follows:
+
+`
+<[basic | harvester | agent | profile] label="[unique attack label (A-Za-z0-9.)]" 
+directory="[directory name on webserver for phishing targets]" 
+page="[phishing attack target file name(A-Za-z0-9.) should end in .html]"
+deliverymethod="[sms | nfc | qrc | external | messagingapp]"> </[basic | harvester | agent]>
+`
+
+
+### Attack specific parameters:
+**Basic:**
+Text to appear on webpage (plain text)
+
+`
+"webpagetext="<text to appear on the destination web page>":
+`
+
+**Harvester:**
+The web login page to clone (URI) (e.g. to clone the login page for salesforce.com, use https://login.salesforce.com/)
+
+`
+"clonepage="<URI to website to be cloned>":
+` 
+
+Experiment with this outside of dagah to get a good page.  Avoid including cgi-arguments in the URI (?something=something) 
+For highly complicated web pages, it is best to download the html for the login page(s), edit away any in-line validation such as javascript, and save the html in a folder corresponding to the website URL in the "templates" directory.  There are examples for gmail and dropbox in the distribution.  If created this way, set the XML to use these templates by setting clonepage="template" and template="<folder name under template directory>"
+
+`
+clonepage="template" template="<foldernamefortemplate>"
+`
+
+**Agent:**
+Directory and file name for android application to backdoor the agent into or enter "none" to simply use the agent as is.
+
+`
+backdoorapp="[none | <path and file name for apk file >]" 
+`
+
+**Profile:**
+Directory and file name for .mobileconfig file generated by the Apple Configurator v2.0 application.
+
+`
+profile_file="<path and file name for .mobileconfig file>"
+`
+
+
+### Delivery Method specific parameters:**
+
+**Text to appear in the text sent to the target (plain text)** 
+
+`
+SMS "smstext="<text to be sent out via SMS>": 
+`
+
+**Messaging application choice**
+
+`
+Messaging App: app ="[twitter | whatsapp]"
+`
+
+Generating the tokens for these applications:
+**Twitter**
+Run the following and answer the prompts to create the twitter application OAUTH token.  Copy them into confg:
+
+`
+python dagah2.pyc Connect twitter
+`
+
+**Whats App**
+Run the following and answer the prompts to generate the WhatsApp account.  Copy them into conifg:
+
+`
+python dagah2.pyc Connect whatsapp <countrycode> <number>
+`
+
+### Staging a Campaign: 
+
+Once the campaign is designed in an XML file, the resources required for the campaign can be generated and staged by running the "Campaign" command. 
+
+
+`
+python dagah2.pyc Campaign <path and name of campaign file.xml>
+`
+
+The campaign XML file will be copied to the "campaigns" directory under a subdirectory matching the unique campaign label used in the file. The resources for the campaign will be copied to the "resources" directory under a subdirectory matching the unique campaign label used in the file.
+
+### Creating a target list: 
+
+The phone numbers to be targeted should be stored in a text file with one target per line in the 
+
+**format:** 
+
+`
+<phonenumber>,[user name or label]/n Multiple lists can be created.
+`
+
+The Free Version is limited to one target per campaign.
+
+### Preparing the dagah Modem Application: 
+
+If SMS or NFC delivery methods are to be used in attacks within campaigns, a bridge to the mobile network is needed. On the penetration tester's mobile phone, navigate via browser to the IPADDRESS of the engine and download 
+DagahModemBridge.apk 
+
+http://[IPADDRESS]/DagahModemBridge.apk Install the application and launch it. 
+
+In the fields, enter the IPADDRESS of the engine, the PATH and the KEY entered in the configuration file above.
+
+### Run a Campaign Against a Target List: 
+
+After a campaign is staged, it can be run against a target list by running the "Run" command. 
+
+`
+python dagah2.pyc Run <path and name of target file> <unique campaign label> [campaignsavedrunlabel, default=unique campaign label+datetimestamp]
+`
+
+For campaigns with SMS delivery methods, ensure either the Twilio service is configured or the DagahModemBridge is connected. For campaigns with NFC delivery methods, ensure the DagahModemBridge application is connected.  To connect the DagahModemBridge, install the apk on an Android phone, launch it, enter the IP address of the Dagah server, the Modem Path (from the config file default '/androidapp'), and the KEY (from MODEMKEY in the config).  When ready to launch an attack that uses the DagahModemBridge, select "Connect" on the application before launching the campaign. 
+
+If QR Code delivery method is included in the attack, the engine will display on the screen the image containing the QR Code.
+
+This will also be saved as an svg file in the "savedruns" directory.
+
+The engine first copies the resources to the webserver directory named in the config file and stored under a directory matching the unique campaign label used in the file plus a timedatestamp (the "run" label) and a subdirectory named in the XML file attack. 
+
+The engine then sends out the attacks contained in the campaign staged under with the campaign XML file included campaign label. It will also create a directory under "savedruns" under a subdirectory matching the "run" label above. The directory will include a copy of the XML file and the targets file so the campaign/targets combination can be re-run. It will also create a subdirectory called "results" which contain all the result data from the attacks.
+
+### Agent Remote Commands: 
+
+If the "agent" attack is included in a campaign, the engine listens for users installing the back-doored application, or the agent. Once a user installs the application, it checks into the engine to check for remote commands. When the application checks in, the engine creates a subdirectory under "results"/"agents" named the phone number of the reporting agent. It also saves a text file called "facts.txt" with basic information about the mobile device where the application was installed. 
+
+** This can be checked with an "Agent" command.**
+
+`
+python dagah2.pyc Agent list <campaignsavedrunlabel>
+`
+
+Once connected, an agent can receive commands. 
+
+**The syntax for a command is:**
+
+`
+python dagah2.pyc Agent command <campaignsavedrunlabel> <agentphone#> <command>
+`
+
+### Available agent commands and arguments: 
+
+- APKS none Get a list of installed apps from the devices and stores them in "APKS.txt" 
+- UAPK apk:apk name (ANDROID ONLY) Retrieves the application from the device 
+- SPAM target:number,message:textmessage (ANDROID ONLY) Send a text 
+- DELE none (ANDROID ONLY) Prompts the User to delete Agent from target phone 
+- DOWN file:todownload Send a file to the phone 
+- UPLD file:toupload Retrieve a file from the phone 
+- GETS none (ANDROID ONLY) Retrieves the security settings from the device and stores them in "settings.txt" 
+- SET setting:tochange,value:toset (ANDROID ONLY) Sets a security setting on the device. 
+
+**For more detail on the SET allowed settings see:**
+
+[Android Device Policy Manager](https://developer.android.com/reference/android/app/admin/DevicePolicyManager.html)
+
+### Results: 
+
+A dump of all results from a campaign can be displayed by running the "Report".
+
+**command:**
+
+`
+python dagah2.pyc Report <campaignsavedrunlabel>
+`
+
+**Results can also be reviewed in the "savedruns" folder under:**
+
+`
+./savedruns/<campaignsavedrunlabel>/results/
+`
+
+* For Basic, Harvester, Profile, and Agent attacks, a file is created containing all of the phone numbers who responded to the attack by visiting the target URI.
+
+* For Harvester attacks, a file is created containing all the user credentials entered on the target URI site. For Agent, the results of commands are stored in the subdirectory corresponding to the phone number of the target which installed the agent.
+
+* For Agent, the results of commands are stored in the subdirectory corresponding to the phone number of the target which installed the agent.

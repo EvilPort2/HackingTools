@@ -1,0 +1,93 @@
+END-USER LICENSE AGREEMENT
+IMPORTANT READ CAREFULLY:  This End-User License Agreement 
+("Agreement") is a binding legal agreement between you 
+(either an individual or a single entity) and Shevirah, Inc. 
+("Shevirah") for the freeware version of the software that 
+accompanies this Agreement and includes "online" or 
+electronic documentation, and Internet-based services ("Software").
+
+BY CLICKING ON THE ÒACCEPTÓ BUTTON DURING THE INSTALLATION 
+PROCESS OR BY OTHERWISE INSTALLING, COPYING, OR USING THE 
+SOFTWARE YOU AGREE TO BE BOUND BY THE TERMS OF THIS AGREEMENT.  
+IF YOU DO NOT AGREE, DO NOT INSTALL, COPY, OR USE THE SOFTWARE.
+TERMS AND CONDITIONS
+1. No Ownership.  This Agreement does not convey to you any 
+intellectual property rights in or to the Software.  You 
+acknowledge and agree that Shevirah retains all right, 
+title and interest in and to the Software and you have no 
+right, title or interest in or to the Software or related 
+documentation, other than the license specified in this Agreement, 
+whether or not you have made any contribution to its development.  
+The Software is the proprietary and confidential information of 
+Shevirah, protected under applicable law.  You agree not to sell, 
+transfer, publish, disclose, display or otherwise make available 
+the Software to others.  You also may not decompile, reverse 
+engineer, disassemble, or otherwise reduce the Software to a 
+different form.  You may not modify the Software or create 
+similar works based upon the Software.  If you have proposed 
+or made any contribution in connection with the Software, you 
+disclaim all rights, title, and interest, including all 
+intellectual property rights, in any such contribution. 
+
+2. License Grant.  Subject to the terms of this Agreement, 
+Shevirah hereby grants to you the royalty-free, non-exclusive, 
+non-transferable license install, display, run, and copy the 
+Software for your internal business operations, as long as any 
+copies you make contain the same copyright and other proprietary 
+notices that appear on or in the Software.  You represent and 
+warrant that you have sufficient rights and permissions to run 
+and use the Software for your internal business operations, 
+including but not limited to, the right and permission to 
+install and run, and to have one or more third parties 
+install and run on your behalf, the Software on your employees' 
+mobile platforms and other devices.
+
+3. DISCLAIMER OF ALL WARRANTIES.  SHEVIRAH PROVIDES THE FREE 
+VERSION OF THE SOFTWARE "AS IS" AND "WITH ALL FAULTS."  
+SHEVIRAH DISCLAIMS ALL WARRANTIES OF ANY KIND WITH RESPECT TO 
+THE SOFTWARE, WHETHER EXPRESS, IMPLIED, STATUTORY OR OTHERWISE, 
+INCLUDING BUT NOT LIMITED TO IMPLIED WARRANTIES OF MERCHANTABILITY, 
+FITNESS FOR A PARTICULAR PURPOSE, QUALITY, ACCURACY, AND 
+NONINFRINGEMENT, ALL OF WHICH YOU AGREE TO WAIVE.  SHEVIRAH DOES 
+NOT WARRANT THAT ANY OPERATION OF THE SOFTWARE WILL BE UNINTERRUPTED 
+OR ERROR-FREE.  YOU ACKNOWLEDGE THAT PROGRAMS AND HARDWARE CAN 
+MALFUNCTION OR BECOME ALTERED, RESULTING IN LOSS OF DATA, AND 
+THAT YOU SHOULD IMPLEMENT PERIODIC BACKUP PROCEDURES AND 
+VERIFICATION OF DATA ACCURACY.  THE EXCLUSION OF IMPLIED WARRANTIES 
+SET FORTH ABOVE SHALL NOT APPLY TO THE EXTENT THAT SUCH EXCLUSION 
+IS PROHIBITED BY APPLICABLE LAW.
+
+4. LIMITATION OF LIABILITY. IN NO EVENT SHALL SHEVIRAH OR ANY 
+OF ITS LICENSORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, 
+SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT 
+LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF 
+USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED 
+AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT 
+LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING 
+IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF 
+THE POSSIBILITY OF SUCH DAMAGE.
+
+5. No Support.  Since you are using the free version of the 
+Software under the terms of this Agreement, Shevirah has no 
+obligation to provide technical support to you.
+
+6. Disputes.  The laws of the Commonwealth of Virginia will 
+govern all issues arising under or related to this Agreement.  
+Any dispute regarding this Agreement shall be litigated in a 
+court of law located in Fairfax County, Virginia.  Each party 
+consents to the exclusive exercise by such courts of personal 
+jurisdiction over it and waives any objection it might otherwise 
+have to venue, personal jurisdiction, inconvenience of forum, 
+and any similar or related doctrine.
+
+7. General Terms.  If a court of competent jurisdiction holds 
+that one section of the Agreement is not lawful, the rest of the 
+Agreement remains valid and in force.  A party's failure to 
+exercise any right under this Agreement will not constitute a waiver 
+of (a) any other terms or conditions of this Agreement, or (b) a 
+right at any time thereafter to require exact and strict compliance 
+with the terms of this Agreement.
+
+
+End-user license agreement (clickwrap - freeware)
+1

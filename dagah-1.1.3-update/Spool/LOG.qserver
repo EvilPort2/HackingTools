@@ -1,0 +1,1942 @@
+nohup: ignoring input
+22 041309 Opening:  /home/dagah/dagah/Spool/pqueue
+22 041309 Opening:  /home/dagah/dagah/Spool/pqueue.ctl
+22 041309 Start Control
+22 041309 Control waiting...
+
+22 041309 Start Schedule
+22 041309 Listening...
+22 041356 ctlserver data: list
+22 041356 State: run
+22 041356 Queue Info:
+22 041356 in 0
+22 041356 wait 0
+22 041356 run 0
+22 041356 ending 0
+22 041356 finish 0
+22 041356
+22 041356 Control waiting...
+
+22 041817 ctlserver data: list
+22 041817 State: run
+22 041817 Queue Info:
+22 041817 in 0
+22 041817 wait 0
+22 041817 run 0
+22 041817 ending 0
+22 041817 finish 0
+22 041817
+22 041817 Control waiting...
+
+('conn,addr', <socket._socketobject object at 0x7f065d8bf2f0>, '')
+22 042031 D CCLIENT.Start: params Q 29072 test7 test720161221053711
+22 042031 D p:  ['Q', '29072', 'test7', 'test720161221053711']
+('conn,addr', <socket._socketobject object at 0x7f065d8bf3d0>, '')
+22 042033 D CCLIENT.Start: params Q 29075 test7 test720161221053711
+22 042033 D p:  ['Q', '29075', 'test7', 'test720161221053711']
+22 042033 D Schedule run > 0
+22 042033 D Schedule runqueue:      1      wait 29072 test7 test720161221053711  
+22 042034 CCLIENT.Run recv:  F
+('conn,addr', <socket._socketobject object at 0x7f065d8bf4b0>, '')
+22 042034 D CCLIENT.Start: params Q 29085 test7 test720161221053711
+22 042034 D p:  ['Q', '29085', 'test7', 'test720161221053711']
+22 042036 running state process change:      1    ending 29072 test7 test720161221053711  
+22 042036 CCLIENT.Finish
+22 042036 new state process :      1    finish 29072 test7 test720161221053711  
+22 042039 D Schedule run > 0
+22 042039 D Schedule runqueue:      2      wait 29075 test7 test720161221053711  
+22 042040 CCLIENT.Run recv:  F
+22 042042 running state process change:      2    ending 29075 test7 test720161221053711  
+22 042042 CCLIENT.Finish
+22 042042 new state process :      2    finish 29075 test7 test720161221053711  
+22 042045 D Schedule run > 0
+22 042045 D Schedule runqueue:      3      wait 29085 test7 test720161221053711  
+22 042046 CCLIENT.Run recv:  F
+22 042048 running state process change:      3    ending 29085 test7 test720161221053711  
+22 042048 CCLIENT.Finish
+22 042048 new state process :      3    finish 29085 test7 test720161221053711  
+('conn,addr', <socket._socketobject object at 0x7f065d8bf520>, '')
+22 042245 D CCLIENT.Start: params Q 29132 test4 test420161221054421
+22 042245 D p:  ['Q', '29132', 'test4', 'test420161221054421']
+22 042248 D Schedule run > 0
+22 042248 D Schedule runqueue:      4      wait 29132 test4 test420161221054421  
+22 042249 CCLIENT.Run recv:  F
+22 042251 running state process change:      4    ending 29132 test4 test420161221054421  
+22 042251 CCLIENT.Finish
+22 042251 new state process :      4    finish 29132 test4 test420161221054421  
+('conn,addr', <socket._socketobject object at 0x7f065d8bf440>, '')
+22 042304 D CCLIENT.Start: params Q 29147 test4 test420161221054421
+22 042304 D p:  ['Q', '29147', 'test4', 'test420161221054421']
+('conn,addr', <socket._socketobject object at 0x7f065d8bf590>, '')
+22 042306 D CCLIENT.Start: params Q 29150 test4 test420161221054421
+22 042306 D p:  ['Q', '29150', 'test4', 'test420161221054421']
+22 042306 D Schedule run > 0
+22 042306 D Schedule runqueue:      5      wait 29147 test4 test420161221054421  
+22 042307 CCLIENT.Run recv:  F
+('conn,addr', <socket._socketobject object at 0x7f065d8bf670>, '')
+22 042307 D CCLIENT.Start: params Q 29165 test4 test420161221054421
+22 042307 D p:  ['Q', '29165', 'test4', 'test420161221054421']
+22 042309 running state process change:      5    ending 29147 test4 test420161221054421  
+22 042309 CCLIENT.Finish
+22 042309 new state process :      5    finish 29147 test4 test420161221054421  
+22 042312 D Schedule run > 0
+22 042312 D Schedule runqueue:      6      wait 29150 test4 test420161221054421  
+22 042313 CCLIENT.Run recv:  F
+22 042315 running state process change:      6    ending 29150 test4 test420161221054421  
+22 042315 CCLIENT.Finish
+22 042315 new state process :      6    finish 29150 test4 test420161221054421  
+22 042318 D Schedule run > 0
+22 042318 D Schedule runqueue:      7      wait 29165 test4 test420161221054421  
+22 042319 CCLIENT.Run recv:  F
+22 042321 running state process change:      7    ending 29165 test4 test420161221054421  
+22 042321 CCLIENT.Finish
+22 042321 new state process :      7    finish 29165 test4 test420161221054421  
+('conn,addr', <socket._socketobject object at 0x7f065d8bf6e0>, '')
+22 042437 D CCLIENT.Start: params Q 29212 test4 test420161221054421
+22 042437 D p:  ['Q', '29212', 'test4', 'test420161221054421']
+22 042439 D Schedule run > 0
+22 042439 D Schedule runqueue:      8      wait 29212 test4 test420161221054421  
+22 042440 CCLIENT.Run recv:  F
+22 042442 running state process change:      8    ending 29212 test4 test420161221054421  
+22 042442 CCLIENT.Finish
+22 042442 new state process :      8    finish 29212 test4 test420161221054421  
+22 042921 ctlserver data: list
+22 042921 State: run
+22 042921 Queue Info:
+22 042921 in 0
+22 042921 wait 0
+22 042921 run 0
+22 042921 ending 0
+22 042921 finish 8
+22 042921 	 8 finish 29212 test4 test420161221054421 
+22 042921 	 7 finish 29165 test4 test420161221054421 
+22 042921 	 6 finish 29150 test4 test420161221054421 
+22 042921 	 5 finish 29147 test4 test420161221054421 
+22 042921 	 4 finish 29132 test4 test420161221054421 
+22 042921 	 3 finish 29085 test7 test720161221053711 
+22 042921 	 2 finish 29075 test7 test720161221053711 
+22 042921 	 1 finish 29072 test7 test720161221053711 
+22 042921
+22 042921 Control waiting...
+
+('conn,addr', <socket._socketobject object at 0x7f065d8bf360>, '')
+22 043727 D CCLIENT.Start: params Q 29993 test5 test520161222043727
+22 043727 D p:  ['Q', '29993', 'test5', 'test520161222043727']
+22 043728 D Schedule run > 0
+22 043728 D Schedule runqueue:      9      wait 29993 test5 test520161222043727  
+22 043859 CCLIENT.Run recv:  F
+22 043901 running state process change:      9    ending 29993 test5 test520161222043727  
+22 043901 CCLIENT.Finish
+22 043901 new state process :      9    finish 29993 test5 test520161222043727  
+('conn,addr', <socket._socketobject object at 0x7f065d8bf750>, '')
+22 044941 D CCLIENT.Start: params Q 30162 sms5 sms520161222044941
+22 044941 D p:  ['Q', '30162', 'sms5', 'sms520161222044941']
+22 044943 D Schedule run > 0
+22 044943 D Schedule runqueue:     10      wait 30162 sms5 sms520161222044941  
+22 045244 CCLIENT.Run recv:  F
+22 045246 running state process change:     10    ending 30162 sms5 sms520161222044941  
+22 045246 CCLIENT.Finish
+22 045246 new state process :     10    finish 30162 sms5 sms520161222044941  
+('conn,addr', <socket._socketobject object at 0x7f065d8bf7c0>, '')
+22 045401 D CCLIENT.Start: params Q 30235 sms5 sms520161222045401
+22 045401 D p:  ['Q', '30235', 'sms5', 'sms520161222045401']
+22 045401 D Schedule run > 0
+22 045401 D Schedule runqueue:     11      wait 30235 sms5 sms520161222045401  
+22 045403 CCLIENT.Run recv:  F
+22 045404 running state process change:     11    ending 30235 sms5 sms520161222045401  
+22 045404 CCLIENT.Finish
+22 045404 new state process :     11    finish 30235 sms5 sms520161222045401  
+('conn,addr', <socket._socketobject object at 0x7f065d8bf830>, '')
+22 045430 D CCLIENT.Start: params Q 30274 test3 test320161222045430
+22 045430 D p:  ['Q', '30274', 'test3', 'test320161222045430']
+22 045431 D Schedule run > 0
+22 045431 D Schedule runqueue:     12      wait 30274 test3 test320161222045430  
+22 045433 CCLIENT.Run recv:  F
+22 045434 running state process change:     12    ending 30274 test3 test320161222045430  
+22 045434 CCLIENT.Finish
+22 045434 new state process :     12    finish 30274 test3 test320161222045430  
+('conn,addr', <socket._socketobject object at 0x7f065d8bf8a0>, '')
+22 045656 D CCLIENT.Start: params Q 30369 sms5 sms520161222045656
+22 045656 D p:  ['Q', '30369', 'sms5', 'sms520161222045656']
+22 045658 D Schedule run > 0
+22 045658 D Schedule runqueue:     13      wait 30369 sms5 sms520161222045656  
+22 045859 CCLIENT.Run recv:  F
+22 045902 running state process change:     13    ending 30369 sms5 sms520161222045656  
+22 045902 CCLIENT.Finish
+22 045902 new state process :     13    finish 30369 sms5 sms520161222045656  
+('conn,addr', <socket._socketobject object at 0x7f065d8bf910>, '')
+22 050128 D CCLIENT.Start: params Q 30455 test4 test420161222050128
+22 050128 D p:  ['Q', '30455', 'test4', 'test420161222050128']
+22 050129 D Schedule run > 0
+22 050129 D Schedule runqueue:     14      wait 30455 test4 test420161222050128  
+nohup: ignoring input
+22 050955 Opening:  /home/dagah/dagah/Spool/pqueue
+22 050955 Opening:  /home/dagah/dagah/Spool/pqueue.ctl
+22 050955 Start Control
+22 050955 Control waiting...
+
+22 050955 Start Schedule
+22 050955 Listening...
+22 051009 ctlserver data: list
+22 051009 State: run
+22 051009 Queue Info:
+22 051009 in 0
+22 051009 wait 0
+22 051009 run 0
+22 051009 ending 0
+22 051009 finish 0
+22 051009
+22 051009 Control waiting...
+
+('conn,addr', <socket._socketobject object at 0x7fbf94d5a360>, '')
+22 051023 D CCLIENT.Start: params Q 2305 test4 test420161222051023
+22 051023 D p:  ['Q', '2305', 'test4', 'test420161222051023']
+22 051025 D Schedule run > 0
+22 051025 D Schedule runqueue:      1      wait  2305 test4 test420161222051023  
+22 051340 CCLIENT.Run recv:  F
+22 051340 running state process change:      1    ending  2305 test4 test420161222051023  
+22 051340 CCLIENT.Finish
+22 051340 new state process :      1    finish  2305 test4 test420161222051023  
+('conn,addr', <socket._socketobject object at 0x7fbf94d5a3d0>, '')
+22 051556 D CCLIENT.Start: params Q 2757 test4 test420161222051556
+22 051556 D p:  ['Q', '2757', 'test4', 'test420161222051556']
+22 051558 D Schedule run > 0
+22 051558 D Schedule runqueue:      2      wait  2757 test4 test420161222051556  
+22 052011 CCLIENT.Run recv:  F
+22 052014 running state process change:      2    ending  2757 test4 test420161222051556  
+22 052014 CCLIENT.Finish
+22 052014 new state process :      2    finish  2757 test4 test420161222051556  
+('conn,addr', <socket._socketobject object at 0x7fbf94d5a440>, '')
+22 052110 D CCLIENT.Start: params Q 3192 test1sms test1sms20161222052110
+22 052110 D p:  ['Q', '3192', 'test1sms', 'test1sms20161222052110']
+22 052111 D Schedule run > 0
+22 052111 D Schedule runqueue:      3      wait  3192 test1sms test1sms20161222052110  
+22 052411 CCLIENT.Run recv:  F
+22 052414 running state process change:      3    ending  3192 test1sms test1sms20161222052110  
+22 052414 CCLIENT.Finish
+22 052414 new state process :      3    finish  3192 test1sms test1sms20161222052110  
+('conn,addr', <socket._socketobject object at 0x7fbf94d5a4b0>, '')
+22 054140 D CCLIENT.Start: params Q 3434 test1sms test1sms20161222054140
+22 054140 D p:  ['Q', '3434', 'test1sms', 'test1sms20161222054140']
+22 054142 D Schedule run > 0
+22 054142 D Schedule runqueue:      4      wait  3434 test1sms test1sms20161222054140  
+22 054442 CCLIENT.Run recv:  F
+22 054445 running state process change:      4    ending  3434 test1sms test1sms20161222054140  
+22 054445 CCLIENT.Finish
+22 054445 new state process :      4    finish  3434 test1sms test1sms20161222054140  
+22 060401 ctlserver data: list
+22 060401 State: run
+22 060401 Queue Info:
+22 060401 in 0
+22 060401 wait 0
+22 060401 run 0
+22 060401 ending 0
+22 060401 finish 4
+22 060401 	 4 finish 3434 test1sms test1sms20161222054140 
+22 060401 	 3 finish 3192 test1sms test1sms20161222052110 
+22 060401 	 2 finish 2757 test4 test420161222051556 
+22 060401 	 1 finish 2305 test4 test420161222051023 
+22 060401
+22 060401 Control waiting...
+
+22 062410 ctlserver data: list
+22 062410 State: run
+22 062410 Queue Info:
+22 062410 in 0
+22 062410 wait 0
+22 062410 run 0
+22 062410 ending 0
+22 062410 finish 4
+22 062410 	 4 finish 3434 test1sms test1sms20161222054140 
+22 062410 	 3 finish 3192 test1sms test1sms20161222052110 
+22 062410 	 2 finish 2757 test4 test420161222051556 
+22 062410 	 1 finish 2305 test4 test420161222051023 
+22 062410
+22 062410 Control waiting...
+
+22 065441 ctlserver data: list
+22 065441 State: run
+22 065441 Queue Info:
+22 065441 in 0
+22 065441 wait 0
+22 065441 run 0
+22 065441 ending 0
+22 065441 finish 4
+22 065441 	 4 finish 3434 test1sms test1sms20161222054140 
+22 065441 	 3 finish 3192 test1sms test1sms20161222052110 
+22 065441 	 2 finish 2757 test4 test420161222051556 
+22 065441 	 1 finish 2305 test4 test420161222051023 
+22 065441
+22 065441 Control waiting...
+
+22 081349 ctlserver data: list
+22 081349 State: run
+22 081349 Queue Info:
+22 081349 in 0
+22 081349 wait 0
+22 081349 run 0
+22 081349 ending 0
+22 081349 finish 4
+22 081349 	 4 finish 3434 test1sms test1sms20161222054140 
+22 081349 	 3 finish 3192 test1sms test1sms20161222052110 
+22 081349 	 2 finish 2757 test4 test420161222051556 
+22 081349 	 1 finish 2305 test4 test420161222051023 
+22 081349
+22 081349 Control waiting...
+
+22 090327 ctlserver data: list
+22 090327 State: run
+22 090327 Queue Info:
+22 090327 in 0
+22 090327 wait 0
+22 090327 run 0
+22 090327 ending 0
+22 090327 finish 4
+22 090327 	 4 finish 3434 test1sms test1sms20161222054140 
+22 090327 	 3 finish 3192 test1sms test1sms20161222052110 
+22 090327 	 2 finish 2757 test4 test420161222051556 
+22 090327 	 1 finish 2305 test4 test420161222051023 
+22 090327
+22 090327 Control waiting...
+
+('conn,addr', <socket._socketobject object at 0x7fbf94d5a2f0>, '')
+22 215648 D CCLIENT.Start: params Q 12683 test1sms test1sms20161222054140
+22 215648 D p:  ['Q', '12683', 'test1sms', 'test1sms20161222054140']
+22 215648 D Schedule run > 0
+22 215648 D Schedule runqueue:      5      wait 12683 test1sms test1sms20161222054140  
+22 215649 CCLIENT.Run recv:  F
+22 215651 running state process change:      5    ending 12683 test1sms test1sms20161222054140  
+22 215651 CCLIENT.Finish
+22 215651 new state process :      5    finish 12683 test1sms test1sms20161222054140  
+('conn,addr', <socket._socketobject object at 0x7fbf94d5a590>, '')
+22 215741 D CCLIENT.Start: params Q 12707 test1sms test1sms20161222054140
+22 215741 D p:  ['Q', '12707', 'test1sms', 'test1sms20161222054140']
+22 215742 D Schedule run > 0
+22 215742 D Schedule runqueue:      6      wait 12707 test1sms test1sms20161222054140  
+('conn,addr', <socket._socketobject object at 0x7fbf94d5a600>, '')
+22 215839 D CCLIENT.Start: params Q 12736 test1sms test1sms20161222054140
+22 215839 D p:  ['Q', '12736', 'test1sms', 'test1sms20161222054140']
+('conn,addr', <socket._socketobject object at 0x7fbf94d5a670>, '')
+22 215857 D CCLIENT.Start: params Q 12740 test1sms test1sms20161222054140
+22 215857 D p:  ['Q', '12740', 'test1sms', 'test1sms20161222054140']
+('conn,addr', <socket._socketobject object at 0x7fbf94d5a6e0>, '')
+22 215900 D CCLIENT.Start: params Q 12744 test1sms test1sms20161222054140
+22 215900 D p:  ['Q', '12744', 'test1sms', 'test1sms20161222054140']
+('conn,addr', <socket._socketobject object at 0x7fbf94d5a750>, '')
+22 215901 D CCLIENT.Start: params Q 12748 test1sms test1sms20161222054140
+22 215901 D p:  ['Q', '12748', 'test1sms', 'test1sms20161222054140']
+('conn,addr', <socket._socketobject object at 0x7fbf94d5a7c0>, '')
+22 215902 D CCLIENT.Start: params Q 12752 test1sms test1sms20161222054140
+22 215902 D p:  ['Q', '12752', 'test1sms', 'test1sms20161222054140']
+('conn,addr', <socket._socketobject object at 0x7fbf94d5a830>, '')
+22 215938 D CCLIENT.Start: params Q 12764 test1sms test1sms20161222054140
+22 215938 D p:  ['Q', '12764', 'test1sms', 'test1sms20161222054140']
+('conn,addr', <socket._socketobject object at 0x7fbf94d5a8a0>, '')
+22 215953 D CCLIENT.Start: params Q 12768 test1sms test1sms20161222054141
+22 215953 D p:  ['Q', '12768', 'test1sms', 'test1sms20161222054141']
+('conn,addr', <socket._socketobject object at 0x7fbf94d5a910>, '')
+22 215959 D CCLIENT.Start: params Q 12772 test1sms test1sms20161222054142
+22 215959 D p:  ['Q', '12772', 'test1sms', 'test1sms20161222054142']
+22 220043 CCLIENT.Run recv:  F
+22 220045 running state process change:      6    ending 12707 test1sms test1sms20161222054140  
+22 220045 CCLIENT.Finish
+22 220045 new state process :      6    finish 12707 test1sms test1sms20161222054140  
+22 220048 D Schedule run > 0
+22 220048 D Schedule runqueue:      7      wait 12736 test1sms test1sms20161222054140  
+22 220349 CCLIENT.Run recv:  F
+22 220352 running state process change:      7    ending 12736 test1sms test1sms20161222054140  
+22 220352 CCLIENT.Finish
+22 220352 new state process :      7    finish 12736 test1sms test1sms20161222054140  
+22 220355 D Schedule run > 0
+22 220355 D Schedule runqueue:      8      wait 12740 test1sms test1sms20161222054140  
+22 220501 ctlserver data: list
+22 220501 State: run
+22 220501 Queue Info:
+22 220501 in 0
+22 220501 wait 6
+22 220501 	 9 wait 12744 test1sms test1sms20161222054140 
+22 220501 	 10 wait 12748 test1sms test1sms20161222054140 
+22 220501 	 11 wait 12752 test1sms test1sms20161222054140 
+22 220501 	 12 wait 12764 test1sms test1sms20161222054140 
+22 220501 	 13 wait 12768 test1sms test1sms20161222054141 
+22 220501 	 14 wait 12772 test1sms test1sms20161222054142 
+22 220501 run 1
+22 220501 	 8 run 12740 test1sms test1sms20161222054140 
+22 220501 ending 0
+22 220501 finish 7
+22 220501 	 7 finish 12736 test1sms test1sms20161222054140 
+22 220501 	 6 finish 12707 test1sms test1sms20161222054140 
+22 220501 	 5 finish 12683 test1sms test1sms20161222054140 
+22 220501 	 4 finish 3434 test1sms test1sms20161222054140 
+22 220501 	 3 finish 3192 test1sms test1sms20161222052110 
+22 220501 	 2 finish 2757 test4 test420161222051556 
+22 220501 	 1 finish 2305 test4 test420161222051023 
+22 220501
+22 220501 Control waiting...
+
+('conn,addr', <socket._socketobject object at 0x7fbf94d5a520>, '')
+22 220533 D CCLIENT.Start: params Q 12966 test1sms test1sms20161222054143
+22 220533 D p:  ['Q', '12966', 'test1sms', 'test1sms20161222054143']
+('conn,addr', <socket._socketobject object at 0x7fbf94d5a9f0>, '')
+22 220539 D CCLIENT.Start: params Q 12970 test1sms test1sms20161222054144
+22 220539 D p:  ['Q', '12970', 'test1sms', 'test1sms20161222054144']
+('conn,addr', <socket._socketobject object at 0x7fbf94d5aa60>, '')
+22 220543 D CCLIENT.Start: params Q 12974 test1sms test1sms20161222054154
+22 220543 D p:  ['Q', '12974', 'test1sms', 'test1sms20161222054154']
+('conn,addr', <socket._socketobject object at 0x7fbf94d5aad0>, '')
+22 220633 D CCLIENT.Start: params Q 12986 test1sms test1sms20161222054155
+22 220633 D p:  ['Q', '12986', 'test1sms', 'test1sms20161222054155']
+('conn,addr', <socket._socketobject object at 0x7fbf94d5ab40>, '')
+22 220645 D CCLIENT.Start: params Q 12991 test1sms test1sms20161222054155
+22 220645 D p:  ['Q', '12991', 'test1sms', 'test1sms20161222054155']
+22 220655 CCLIENT.Run recv:  F
+22 220658 running state process change:      8    ending 12740 test1sms test1sms20161222054140  
+22 220658 CCLIENT.Finish
+22 220658 new state process :      8    finish 12740 test1sms test1sms20161222054140  
+22 220701 D Schedule run > 0
+22 220701 D Schedule runqueue:      9      wait 12744 test1sms test1sms20161222054140  
+22 220756 ctlserver data: list
+22 220756 State: run
+22 220756 Queue Info:
+22 220756 in 0
+22 220756 wait 10
+22 220756 	 10 wait 12748 test1sms test1sms20161222054140 
+22 220756 	 11 wait 12752 test1sms test1sms20161222054140 
+22 220756 	 12 wait 12764 test1sms test1sms20161222054140 
+22 220756 	 13 wait 12768 test1sms test1sms20161222054141 
+22 220756 	 14 wait 12772 test1sms test1sms20161222054142 
+22 220756 	 15 wait 12966 test1sms test1sms20161222054143 
+22 220756 	 16 wait 12970 test1sms test1sms20161222054144 
+22 220756 	 17 wait 12974 test1sms test1sms20161222054154 
+22 220756 	 18 wait 12986 test1sms test1sms20161222054155 
+22 220756 	 19 wait 12991 test1sms test1sms20161222054155 
+22 220756 run 1
+22 220756 	 9 run 12744 test1sms test1sms20161222054140 
+22 220756 ending 0
+22 220756 finish 8
+22 220756 	 8 finish 12740 test1sms test1sms20161222054140 
+22 220756 	 7 finish 12736 test1sms test1sms20161222054140 
+22 220756 	 6 finish 12707 test1sms test1sms20161222054140 
+22 220756 	 5 finish 12683 test1sms test1sms20161222054140 
+22 220756 	 4 finish 3434 test1sms test1sms20161222054140 
+22 220756 	 3 finish 3192 test1sms test1sms20161222052110 
+22 220756 	 2 finish 2757 test4 test420161222051556 
+22 220756 	 1 finish 2305 test4 test420161222051023 
+22 220756
+22 220756 Control waiting...
+
+22 220856 ctlserver data: list
+22 220856 State: run
+22 220856 Queue Info:
+22 220856 in 0
+22 220856 wait 10
+22 220856 	 10 wait 12748 test1sms test1sms20161222054140 
+22 220856 	 11 wait 12752 test1sms test1sms20161222054140 
+22 220856 	 12 wait 12764 test1sms test1sms20161222054140 
+22 220856 	 13 wait 12768 test1sms test1sms20161222054141 
+22 220856 	 14 wait 12772 test1sms test1sms20161222054142 
+22 220856 	 15 wait 12966 test1sms test1sms20161222054143 
+22 220856 	 16 wait 12970 test1sms test1sms20161222054144 
+22 220856 	 17 wait 12974 test1sms test1sms20161222054154 
+22 220856 	 18 wait 12986 test1sms test1sms20161222054155 
+22 220856 	 19 wait 12991 test1sms test1sms20161222054155 
+22 220856 run 1
+22 220856 	 9 run 12744 test1sms test1sms20161222054140 
+22 220856 ending 0
+22 220856 finish 8
+22 220856 	 8 finish 12740 test1sms test1sms20161222054140 
+22 220856 	 7 finish 12736 test1sms test1sms20161222054140 
+22 220856 	 6 finish 12707 test1sms test1sms20161222054140 
+22 220856 	 5 finish 12683 test1sms test1sms20161222054140 
+22 220856 	 4 finish 3434 test1sms test1sms20161222054140 
+22 220856 	 3 finish 3192 test1sms test1sms20161222052110 
+22 220856 	 2 finish 2757 test4 test420161222051556 
+22 220856 	 1 finish 2305 test4 test420161222051023 
+22 220856
+22 220856 Control waiting...
+
+('conn,addr', <socket._socketobject object at 0x7fbf94d5abb0>, '')
+22 220919 D CCLIENT.Start: params Q 13052 test1sms test1sms20161222054156
+22 220919 D p:  ['Q', '13052', 'test1sms', 'test1sms20161222054156']
+('conn,addr', <socket._socketobject object at 0x7fbf94d5ac20>, '')
+22 220929 D CCLIENT.Start: params Q 13065 test1sms test1sms20161222054157
+22 220929 D p:  ['Q', '13065', 'test1sms', 'test1sms20161222054157']
+('conn,addr', <socket._socketobject object at 0x7fbf94d5ac90>, '')
+22 220944 D CCLIENT.Start: params Q 13069 test1sms test1sms20161222054158
+22 220944 D p:  ['Q', '13069', 'test1sms', 'test1sms20161222054158']
+22 221001 CCLIENT.Run recv:  F
+22 221004 running state process change:      9    ending 12744 test1sms test1sms20161222054140  
+22 221004 CCLIENT.Finish
+22 221004 new state process :      9    finish 12744 test1sms test1sms20161222054140  
+22 221007 D Schedule run > 0
+22 221007 D Schedule runqueue:     10      wait 12748 test1sms test1sms20161222054140  
+22 221007 ctlserver data: list
+22 221007 State: run
+22 221007 Queue Info:
+22 221007 in 0
+22 221007 wait 12
+22 221007 	 11 wait 12752 test1sms test1sms20161222054140 
+22 221007 	 12 wait 12764 test1sms test1sms20161222054140 
+22 221007 	 13 wait 12768 test1sms test1sms20161222054141 
+22 221007 	 14 wait 12772 test1sms test1sms20161222054142 
+22 221007 	 15 wait 12966 test1sms test1sms20161222054143 
+22 221007 	 16 wait 12970 test1sms test1sms20161222054144 
+22 221007 	 17 wait 12974 test1sms test1sms20161222054154 
+22 221007 	 18 wait 12986 test1sms test1sms20161222054155 
+22 221007 	 19 wait 12991 test1sms test1sms20161222054155 
+22 221007 	 20 wait 13052 test1sms test1sms20161222054156 
+22 221007 	 21 wait 13065 test1sms test1sms20161222054157 
+22 221007 	 22 wait 13069 test1sms test1sms20161222054158 
+22 221007 run 1
+22 221007 	 10 run 12748 test1sms test1sms20161222054140 
+22 221007 ending 0
+22 221007 finish 9
+22 221007 	 9 finish 12744 test1sms test1sms20161222054140 
+22 221007 	 8 finish 12740 test1sms test1sms20161222054140 
+22 221007 	 7 finish 12736 test1sms test1sms20161222054140 
+22 221007 	 6 finish 12707 test1sms test1sms20161222054140 
+22 221007 	 5 finish 12683 test1sms test1sms20161222054140 
+22 221007 	 4 finish 3434 test1sms test1sms20161222054140 
+22 221007 	 3 finish 3192 test1sms test1sms20161222052110 
+22 221007 	 2 finish 2757 test4 test420161222051556 
+22 221007 	 1 finish 2305 test4 test420161222051023 
+22 221007
+22 221007 Control waiting...
+
+22 221011 ctlserver data: list
+22 221011 State: run
+22 221011 Queue Info:
+22 221011 in 0
+22 221011 wait 12
+22 221011 	 11 wait 12752 test1sms test1sms20161222054140 
+22 221011 	 12 wait 12764 test1sms test1sms20161222054140 
+22 221011 	 13 wait 12768 test1sms test1sms20161222054141 
+22 221011 	 14 wait 12772 test1sms test1sms20161222054142 
+22 221011 	 15 wait 12966 test1sms test1sms20161222054143 
+22 221011 	 16 wait 12970 test1sms test1sms20161222054144 
+22 221011 	 17 wait 12974 test1sms test1sms20161222054154 
+22 221011 	 18 wait 12986 test1sms test1sms20161222054155 
+22 221011 	 19 wait 12991 test1sms test1sms20161222054155 
+22 221011 	 20 wait 13052 test1sms test1sms20161222054156 
+22 221011 	 21 wait 13065 test1sms test1sms20161222054157 
+22 221011 	 22 wait 13069 test1sms test1sms20161222054158 
+22 221011 run 1
+22 221011 	 10 run 12748 test1sms test1sms20161222054140 
+22 221011 ending 0
+22 221011 finish 9
+22 221011 	 9 finish 12744 test1sms test1sms20161222054140 
+22 221011 	 8 finish 12740 test1sms test1sms20161222054140 
+22 221011 	 7 finish 12736 test1sms test1sms20161222054140 
+22 221011 	 6 finish 12707 test1sms test1sms20161222054140 
+22 221011 	 5 finish 12683 test1sms test1sms20161222054140 
+22 221011 	 4 finish 3434 test1sms test1sms20161222054140 
+22 221011 	 3 finish 3192 test1sms test1sms20161222052110 
+22 221011 	 2 finish 2757 test4 test420161222051556 
+22 221011 	 1 finish 2305 test4 test420161222051023 
+22 221011
+22 221011 Control waiting...
+
+22 221308 CCLIENT.Run recv:  F
+22 221310 running state process change:     10    ending 12748 test1sms test1sms20161222054140  
+22 221310 CCLIENT.Finish
+22 221310 new state process :     10    finish 12748 test1sms test1sms20161222054140  
+22 221313 D Schedule run > 0
+22 221313 D Schedule runqueue:     11      wait 12752 test1sms test1sms20161222054140  
+22 221537 ctlserver data: list
+22 221537 State: run
+22 221537 Queue Info:
+22 221537 in 0
+22 221537 wait 11
+22 221537 	 12 wait 12764 test1sms test1sms20161222054140 
+22 221537 	 13 wait 12768 test1sms test1sms20161222054141 
+22 221537 	 14 wait 12772 test1sms test1sms20161222054142 
+22 221537 	 15 wait 12966 test1sms test1sms20161222054143 
+22 221537 	 16 wait 12970 test1sms test1sms20161222054144 
+22 221537 	 17 wait 12974 test1sms test1sms20161222054154 
+22 221537 	 18 wait 12986 test1sms test1sms20161222054155 
+22 221537 	 19 wait 12991 test1sms test1sms20161222054155 
+22 221537 	 20 wait 13052 test1sms test1sms20161222054156 
+22 221537 	 21 wait 13065 test1sms test1sms20161222054157 
+22 221537 	 22 wait 13069 test1sms test1sms20161222054158 
+22 221537 run 1
+22 221537 	 11 run 12752 test1sms test1sms20161222054140 
+22 221537 ending 0
+22 221537 finish 10
+22 221537 	 10 finish 12748 test1sms test1sms20161222054140 
+22 221537 	 9 finish 12744 test1sms test1sms20161222054140 
+22 221537 	 8 finish 12740 test1sms test1sms20161222054140 
+22 221537 	 7 finish 12736 test1sms test1sms20161222054140 
+22 221537 	 6 finish 12707 test1sms test1sms20161222054140 
+22 221537 	 5 finish 12683 test1sms test1sms20161222054140 
+22 221537 	 4 finish 3434 test1sms test1sms20161222054140 
+22 221537 	 3 finish 3192 test1sms test1sms20161222052110 
+22 221537 	 2 finish 2757 test4 test420161222051556 
+22 221537 	 1 finish 2305 test4 test420161222051023 
+22 221537
+22 221537 Control waiting...
+
+22 221614 CCLIENT.Run recv:  F
+22 221616 running state process change:     11    ending 12752 test1sms test1sms20161222054140  
+22 221616 CCLIENT.Finish
+22 221616 new state process :     11    finish 12752 test1sms test1sms20161222054140  
+22 221619 D Schedule run > 0
+22 221619 D Schedule runqueue:     12      wait 12764 test1sms test1sms20161222054140  
+22 221757 ctlserver data: list
+22 221757 State: run
+22 221757 Queue Info:
+22 221757 in 0
+22 221757 wait 10
+22 221757 	 13 wait 12768 test1sms test1sms20161222054141 
+22 221757 	 14 wait 12772 test1sms test1sms20161222054142 
+22 221757 	 15 wait 12966 test1sms test1sms20161222054143 
+22 221757 	 16 wait 12970 test1sms test1sms20161222054144 
+22 221757 	 17 wait 12974 test1sms test1sms20161222054154 
+22 221757 	 18 wait 12986 test1sms test1sms20161222054155 
+22 221757 	 19 wait 12991 test1sms test1sms20161222054155 
+22 221757 	 20 wait 13052 test1sms test1sms20161222054156 
+22 221757 	 21 wait 13065 test1sms test1sms20161222054157 
+22 221757 	 22 wait 13069 test1sms test1sms20161222054158 
+22 221757 run 1
+22 221757 	 12 run 12764 test1sms test1sms20161222054140 
+22 221757 ending 0
+22 221757 finish 11
+22 221757 	 11 finish 12752 test1sms test1sms20161222054140 
+22 221757 	 10 finish 12748 test1sms test1sms20161222054140 
+22 221757 	 9 finish 12744 test1sms test1sms20161222054140 
+22 221757 	 8 finish 12740 test1sms test1sms20161222054140 
+22 221757 	 7 finish 12736 test1sms test1sms20161222054140 
+22 221757 	 6 finish 12707 test1sms test1sms20161222054140 
+22 221757 	 5 finish 12683 test1sms test1sms20161222054140 
+22 221757 	 4 finish 3434 test1sms test1sms20161222054140 
+22 221757 	 3 finish 3192 test1sms test1sms20161222052110 
+22 221757 	 2 finish 2757 test4 test420161222051556 
+22 221757 	 1 finish 2305 test4 test420161222051023 
+22 221757
+22 221757 Control waiting...
+
+22 221920 CCLIENT.Run recv:  F
+22 221922 running state process change:     12    ending 12764 test1sms test1sms20161222054140  
+22 221922 CCLIENT.Finish
+22 221922 new state process :     12    finish 12764 test1sms test1sms20161222054140  
+22 221925 D Schedule run > 0
+22 221925 D Schedule runqueue:     13      wait 12768 test1sms test1sms20161222054141  
+22 222226 CCLIENT.Run recv:  F
+22 222228 running state process change:     13    ending 12768 test1sms test1sms20161222054141  
+22 222228 CCLIENT.Finish
+22 222228 new state process :     13    finish 12768 test1sms test1sms20161222054141  
+22 222231 D Schedule run > 0
+22 222231 D Schedule runqueue:     14      wait 12772 test1sms test1sms20161222054142  
+22 222425 ctlserver data: list
+22 222425 State: run
+22 222425 Queue Info:
+22 222425 in 0
+22 222425 wait 8
+22 222425 	 15 wait 12966 test1sms test1sms20161222054143 
+22 222425 	 16 wait 12970 test1sms test1sms20161222054144 
+22 222425 	 17 wait 12974 test1sms test1sms20161222054154 
+22 222425 	 18 wait 12986 test1sms test1sms20161222054155 
+22 222425 	 19 wait 12991 test1sms test1sms20161222054155 
+22 222425 	 20 wait 13052 test1sms test1sms20161222054156 
+22 222425 	 21 wait 13065 test1sms test1sms20161222054157 
+22 222425 	 22 wait 13069 test1sms test1sms20161222054158 
+22 222425 run 1
+22 222425 	 14 run 12772 test1sms test1sms20161222054142 
+22 222425 ending 0
+22 222425 finish 13
+22 222425 	 13 finish 12768 test1sms test1sms20161222054141 
+22 222425 	 12 finish 12764 test1sms test1sms20161222054140 
+22 222425 	 11 finish 12752 test1sms test1sms20161222054140 
+22 222425 	 10 finish 12748 test1sms test1sms20161222054140 
+22 222425 	 9 finish 12744 test1sms test1sms20161222054140 
+22 222425 	 8 finish 12740 test1sms test1sms20161222054140 
+22 222425 	 7 finish 12736 test1sms test1sms20161222054140 
+22 222425 	 6 finish 12707 test1sms test1sms20161222054140 
+22 222425 	 5 finish 12683 test1sms test1sms20161222054140 
+22 222425 	 4 finish 3434 test1sms test1sms20161222054140 
+22 222425 	 3 finish 3192 test1sms test1sms20161222052110 
+22 222425 	 2 finish 2757 test4 test420161222051556 
+22 222425 	 1 finish 2305 test4 test420161222051023 
+22 222425
+22 222425 Control waiting...
+
+22 222532 CCLIENT.Run recv:  F
+22 222535 running state process change:     14    ending 12772 test1sms test1sms20161222054142  
+22 222535 CCLIENT.Finish
+22 222535 new state process :     14    finish 12772 test1sms test1sms20161222054142  
+22 222538 D Schedule run > 0
+22 222538 D Schedule runqueue:     15      wait 12966 test1sms test1sms20161222054143  
+22 222838 CCLIENT.Run recv:  F
+22 222841 running state process change:     15    ending 12966 test1sms test1sms20161222054143  
+22 222841 CCLIENT.Finish
+22 222841 new state process :     15    finish 12966 test1sms test1sms20161222054143  
+22 222844 D Schedule run > 0
+22 222844 D Schedule runqueue:     16      wait 12970 test1sms test1sms20161222054144  
+('conn,addr', <socket._socketobject object at 0x7fbf94d5a980>, '')
+22 223136 D CCLIENT.Start: params Q 13412 test3 test320161222223136
+22 223136 D p:  ['Q', '13412', 'test3', 'test320161222223136']
+22 223144 CCLIENT.Run recv:  F
+22 223147 running state process change:     16    ending 12970 test1sms test1sms20161222054144  
+22 223147 CCLIENT.Finish
+22 223147 new state process :     16    finish 12970 test1sms test1sms20161222054144  
+22 223150 D Schedule run > 0
+22 223150 D Schedule runqueue:     17      wait 12974 test1sms test1sms20161222054154  
+22 223450 CCLIENT.Run recv:  F
+22 223453 running state process change:     17    ending 12974 test1sms test1sms20161222054154  
+22 223453 CCLIENT.Finish
+22 223453 new state process :     17    finish 12974 test1sms test1sms20161222054154  
+22 223456 D Schedule run > 0
+22 223456 D Schedule runqueue:     18      wait 12986 test1sms test1sms20161222054155  
+22 223527 ctlserver data: list
+22 223527 State: run
+22 223527 Queue Info:
+22 223527 in 0
+22 223527 wait 5
+22 223527 	 19 wait 12991 test1sms test1sms20161222054155 
+22 223527 	 20 wait 13052 test1sms test1sms20161222054156 
+22 223527 	 21 wait 13065 test1sms test1sms20161222054157 
+22 223527 	 22 wait 13069 test1sms test1sms20161222054158 
+22 223527 	 23 wait 13412 test3 test320161222223136 
+22 223527 run 1
+22 223527 	 18 run 12986 test1sms test1sms20161222054155 
+22 223527 ending 0
+22 223527 finish 17
+22 223527 	 17 finish 12974 test1sms test1sms20161222054154 
+22 223527 	 16 finish 12970 test1sms test1sms20161222054144 
+22 223527 	 15 finish 12966 test1sms test1sms20161222054143 
+22 223527 	 14 finish 12772 test1sms test1sms20161222054142 
+22 223527 	 13 finish 12768 test1sms test1sms20161222054141 
+22 223527 	 12 finish 12764 test1sms test1sms20161222054140 
+22 223527 	 11 finish 12752 test1sms test1sms20161222054140 
+22 223527 	 10 finish 12748 test1sms test1sms20161222054140 
+22 223527 	 9 finish 12744 test1sms test1sms20161222054140 
+22 223527 	 8 finish 12740 test1sms test1sms20161222054140 
+22 223527 	 7 finish 12736 test1sms test1sms20161222054140 
+22 223527 	 6 finish 12707 test1sms test1sms20161222054140 
+22 223527 	 5 finish 12683 test1sms test1sms20161222054140 
+22 223527 	 4 finish 3434 test1sms test1sms20161222054140 
+22 223527 	 3 finish 3192 test1sms test1sms20161222052110 
+22 223527 	 2 finish 2757 test4 test420161222051556 
+22 223527 	 1 finish 2305 test4 test420161222051023 
+22 223527
+22 223527 Control waiting...
+
+22 223756 CCLIENT.Run recv:  F
+22 223759 running state process change:     18    ending 12986 test1sms test1sms20161222054155  
+22 223759 CCLIENT.Finish
+22 223759 new state process :     18    finish 12986 test1sms test1sms20161222054155  
+22 223802 D Schedule run > 0
+22 223802 D Schedule runqueue:     19      wait 12991 test1sms test1sms20161222054155  
+22 224102 CCLIENT.Run recv:  F
+22 224105 running state process change:     19    ending 12991 test1sms test1sms20161222054155  
+22 224105 CCLIENT.Finish
+22 224105 new state process :     19    finish 12991 test1sms test1sms20161222054155  
+22 224108 D Schedule run > 0
+22 224108 D Schedule runqueue:     20      wait 13052 test1sms test1sms20161222054156  
+22 224409 CCLIENT.Run recv:  F
+22 224411 running state process change:     20    ending 13052 test1sms test1sms20161222054156  
+22 224411 CCLIENT.Finish
+22 224411 new state process :     20    finish 13052 test1sms test1sms20161222054156  
+22 224414 D Schedule run > 0
+22 224414 D Schedule runqueue:     21      wait 13065 test1sms test1sms20161222054157  
+22 224715 CCLIENT.Run recv:  F
+22 224717 running state process change:     21    ending 13065 test1sms test1sms20161222054157  
+22 224717 CCLIENT.Finish
+22 224717 new state process :     21    finish 13065 test1sms test1sms20161222054157  
+22 224720 D Schedule run > 0
+22 224720 D Schedule runqueue:     22      wait 13069 test1sms test1sms20161222054158  
+22 225021 CCLIENT.Run recv:  F
+22 225023 running state process change:     22    ending 13069 test1sms test1sms20161222054158  
+22 225023 CCLIENT.Finish
+22 225023 new state process :     22    finish 13069 test1sms test1sms20161222054158  
+22 225026 D Schedule run > 0
+22 225026 D Schedule runqueue:     23      wait 13412 test3 test320161222223136  
+22 225042 ctlserver data: list
+22 225042 State: run
+22 225042 Queue Info:
+22 225042 in 0
+22 225042 wait 0
+22 225042 run 1
+22 225042 	 23 run 13412 test3 test320161222223136 
+22 225042 ending 0
+22 225042 finish 22
+22 225042 	 22 finish 13069 test1sms test1sms20161222054158 
+22 225042 	 21 finish 13065 test1sms test1sms20161222054157 
+22 225042 	 20 finish 13052 test1sms test1sms20161222054156 
+22 225042 	 19 finish 12991 test1sms test1sms20161222054155 
+22 225042 	 18 finish 12986 test1sms test1sms20161222054155 
+22 225042 	 17 finish 12974 test1sms test1sms20161222054154 
+22 225042 	 16 finish 12970 test1sms test1sms20161222054144 
+22 225042 	 15 finish 12966 test1sms test1sms20161222054143 
+22 225042 	 14 finish 12772 test1sms test1sms20161222054142 
+22 225042 	 13 finish 12768 test1sms test1sms20161222054141 
+22 225042 	 12 finish 12764 test1sms test1sms20161222054140 
+22 225042 	 11 finish 12752 test1sms test1sms20161222054140 
+22 225042 	 10 finish 12748 test1sms test1sms20161222054140 
+22 225042 	 9 finish 12744 test1sms test1sms20161222054140 
+22 225042 	 8 finish 12740 test1sms test1sms20161222054140 
+22 225042 	 7 finish 12736 test1sms test1sms20161222054140 
+22 225042 	 6 finish 12707 test1sms test1sms20161222054140 
+22 225042 	 5 finish 12683 test1sms test1sms20161222054140 
+22 225042 	 4 finish 3434 test1sms test1sms20161222054140 
+22 225042 	 3 finish 3192 test1sms test1sms20161222052110 
+22 225042 	 2 finish 2757 test4 test420161222051556 
+22 225042 	 1 finish 2305 test4 test420161222051023 
+22 225042
+22 225042 Control waiting...
+
+22 225209 ctlserver data: list
+22 225209 State: run
+22 225209 Queue Info:
+22 225209 in 0
+22 225209 wait 0
+22 225209 run 1
+22 225209 	 23 run 13412 test3 test320161222223136 
+22 225209 ending 0
+22 225209 finish 22
+22 225209 	 22 finish 13069 test1sms test1sms20161222054158 
+22 225209 	 21 finish 13065 test1sms test1sms20161222054157 
+22 225209 	 20 finish 13052 test1sms test1sms20161222054156 
+22 225209 	 19 finish 12991 test1sms test1sms20161222054155 
+22 225209 	 18 finish 12986 test1sms test1sms20161222054155 
+22 225209 	 17 finish 12974 test1sms test1sms20161222054154 
+22 225209 	 16 finish 12970 test1sms test1sms20161222054144 
+22 225209 	 15 finish 12966 test1sms test1sms20161222054143 
+22 225209 	 14 finish 12772 test1sms test1sms20161222054142 
+22 225209 	 13 finish 12768 test1sms test1sms20161222054141 
+22 225209 	 12 finish 12764 test1sms test1sms20161222054140 
+22 225209 	 11 finish 12752 test1sms test1sms20161222054140 
+22 225209 	 10 finish 12748 test1sms test1sms20161222054140 
+22 225209 	 9 finish 12744 test1sms test1sms20161222054140 
+22 225209 	 8 finish 12740 test1sms test1sms20161222054140 
+22 225209 	 7 finish 12736 test1sms test1sms20161222054140 
+22 225209 	 6 finish 12707 test1sms test1sms20161222054140 
+22 225209 	 5 finish 12683 test1sms test1sms20161222054140 
+22 225209 	 4 finish 3434 test1sms test1sms20161222054140 
+22 225209 	 3 finish 3192 test1sms test1sms20161222052110 
+22 225209 	 2 finish 2757 test4 test420161222051556 
+22 225209 	 1 finish 2305 test4 test420161222051023 
+22 225209
+22 225209 Control waiting...
+
+22 225327 CCLIENT.Run recv:  F
+22 225330 running state process change:     23    ending 13412 test3 test320161222223136  
+22 225330 CCLIENT.Finish
+22 225330 new state process :     23    finish 13412 test3 test320161222223136  
+('conn,addr', <socket._socketobject object at 0x7fbf94d5ad00>, '')
+22 225410 D CCLIENT.Start: params Q 14481 test3 test320161222225410
+22 225410 D p:  ['Q', '14481', 'test3', 'test320161222225410']
+22 225412 D Schedule run > 0
+22 225412 D Schedule runqueue:     24      wait 14481 test3 test320161222225410  
+22 225417 CCLIENT.Run recv:  F
+22 225418 running state process change:     24    ending 14481 test3 test320161222225410  
+22 225418 CCLIENT.Finish
+22 225418 new state process :     24    finish 14481 test3 test320161222225410  
+22 225443 ctlserver data: list
+22 225443 State: run
+22 225443 Queue Info:
+22 225443 in 0
+22 225443 wait 0
+22 225443 run 0
+22 225443 ending 0
+22 225443 finish 24
+22 225443 	 24 finish 14481 test3 test320161222225410 
+22 225443 	 23 finish 13412 test3 test320161222223136 
+22 225443 	 22 finish 13069 test1sms test1sms20161222054158 
+22 225443 	 21 finish 13065 test1sms test1sms20161222054157 
+22 225443 	 20 finish 13052 test1sms test1sms20161222054156 
+22 225443 	 19 finish 12991 test1sms test1sms20161222054155 
+22 225443 	 18 finish 12986 test1sms test1sms20161222054155 
+22 225443 	 17 finish 12974 test1sms test1sms20161222054154 
+22 225443 	 16 finish 12970 test1sms test1sms20161222054144 
+22 225443 	 15 finish 12966 test1sms test1sms20161222054143 
+22 225443 	 14 finish 12772 test1sms test1sms20161222054142 
+22 225443 	 13 finish 12768 test1sms test1sms20161222054141 
+22 225443 	 12 finish 12764 test1sms test1sms20161222054140 
+22 225443 	 11 finish 12752 test1sms test1sms20161222054140 
+22 225443 	 10 finish 12748 test1sms test1sms20161222054140 
+22 225443 	 9 finish 12744 test1sms test1sms20161222054140 
+22 225443 	 8 finish 12740 test1sms test1sms20161222054140 
+22 225443 	 7 finish 12736 test1sms test1sms20161222054140 
+22 225443 	 6 finish 12707 test1sms test1sms20161222054140 
+22 225443 	 5 finish 12683 test1sms test1sms20161222054140 
+22 225443 	 4 finish 3434 test1sms test1sms20161222054140 
+22 225443 	 3 finish 3192 test1sms test1sms20161222052110 
+22 225443 	 2 finish 2757 test4 test420161222051556 
+22 225443 	 1 finish 2305 test4 test420161222051023 
+22 225443
+22 225443 Control waiting...
+
+('conn,addr', <socket._socketobject object at 0x7fbf94d5ad70>, '')
+22 225519 D CCLIENT.Start: params Q 14532 test3 test320161222225519
+22 225519 D p:  ['Q', '14532', 'test3', 'test320161222225519']
+22 225521 D Schedule run > 0
+22 225521 D Schedule runqueue:     25      wait 14532 test3 test320161222225519  
+22 225551 CCLIENT.Run recv:  F
+22 225554 running state process change:     25    ending 14532 test3 test320161222225519  
+22 225554 CCLIENT.Finish
+22 225554 new state process :     25    finish 14532 test3 test320161222225519  
+('conn,addr', <socket._socketobject object at 0x7fbf94d5ae50>, '')
+22 230009 D CCLIENT.Start: params Q 14608 test3 test320161222230009
+22 230009 D p:  ['Q', '14608', 'test3', 'test320161222230009']
+22 230009 D Schedule run > 0
+22 230009 D Schedule runqueue:     26      wait 14608 test3 test320161222230009  
+22 230039 CCLIENT.Run recv:  F
+22 230042 running state process change:     26    ending 14608 test3 test320161222230009  
+22 230042 CCLIENT.Finish
+22 230042 new state process :     26    finish 14608 test3 test320161222230009  
+22 230558 ctlserver data: list
+22 230558 State: run
+22 230558 Queue Info:
+22 230558 in 0
+22 230558 wait 0
+22 230558 run 0
+22 230558 ending 0
+22 230558 finish 26
+22 230558 	 26 finish 14608 test3 test320161222230009 
+22 230558 	 25 finish 14532 test3 test320161222225519 
+22 230558 	 24 finish 14481 test3 test320161222225410 
+22 230558 	 23 finish 13412 test3 test320161222223136 
+22 230558 	 22 finish 13069 test1sms test1sms20161222054158 
+22 230558 	 21 finish 13065 test1sms test1sms20161222054157 
+22 230558 	 20 finish 13052 test1sms test1sms20161222054156 
+22 230558 	 19 finish 12991 test1sms test1sms20161222054155 
+22 230558 	 18 finish 12986 test1sms test1sms20161222054155 
+22 230558 	 17 finish 12974 test1sms test1sms20161222054154 
+22 230558 	 16 finish 12970 test1sms test1sms20161222054144 
+22 230558 	 15 finish 12966 test1sms test1sms20161222054143 
+22 230558 	 14 finish 12772 test1sms test1sms20161222054142 
+22 230558 	 13 finish 12768 test1sms test1sms20161222054141 
+22 230558 	 12 finish 12764 test1sms test1sms20161222054140 
+22 230558 	 11 finish 12752 test1sms test1sms20161222054140 
+22 230558 	 10 finish 12748 test1sms test1sms20161222054140 
+22 230558 	 9 finish 12744 test1sms test1sms20161222054140 
+22 230558 	 8 finish 12740 test1sms test1sms20161222054140 
+22 230558 	 7 finish 12736 test1sms test1sms20161222054140 
+22 230558 	 6 finish 12707 test1sms test1sms20161222054140 
+22 230558 	 5 finish 12683 test1sms test1sms20161222054140 
+22 230558 	 4 finish 3434 test1sms test1sms20161222054140 
+22 230558 	 3 finish 3192 test1sms test1sms20161222052110 
+22 230558 	 2 finish 2757 test4 test420161222051556 
+22 230558 	 1 finish 2305 test4 test420161222051023 
+22 230558
+22 230558 Control waiting...
+
+('conn,addr', <socket._socketobject object at 0x7fbf94d5ade0>, '')
+22 231121 D CCLIENT.Start: params Q 14811 test3 test320161222231121
+22 231121 D p:  ['Q', '14811', 'test3', 'test320161222231121']
+22 231121 D Schedule run > 0
+22 231121 D Schedule runqueue:     27      wait 14811 test3 test320161222231121  
+22 231242 CCLIENT.Run recv:  F
+22 231242 running state process change:     27    ending 14811 test3 test320161222231121  
+22 231242 CCLIENT.Finish
+22 231242 new state process :     27    finish 14811 test3 test320161222231121  
+22 233423 ctlserver data: list
+22 233423 State: run
+22 233423 Queue Info:
+22 233423 in 0
+22 233423 wait 0
+22 233423 run 0
+22 233423 ending 0
+22 233423 finish 27
+22 233423 	 27 finish 14811 test3 test320161222231121 
+22 233423 	 26 finish 14608 test3 test320161222230009 
+22 233423 	 25 finish 14532 test3 test320161222225519 
+22 233423 	 24 finish 14481 test3 test320161222225410 
+22 233423 	 23 finish 13412 test3 test320161222223136 
+22 233423 	 22 finish 13069 test1sms test1sms20161222054158 
+22 233423 	 21 finish 13065 test1sms test1sms20161222054157 
+22 233423 	 20 finish 13052 test1sms test1sms20161222054156 
+22 233423 	 19 finish 12991 test1sms test1sms20161222054155 
+22 233423 	 18 finish 12986 test1sms test1sms20161222054155 
+22 233423 	 17 finish 12974 test1sms test1sms20161222054154 
+22 233423 	 16 finish 12970 test1sms test1sms20161222054144 
+22 233423 	 15 finish 12966 test1sms test1sms20161222054143 
+22 233423 	 14 finish 12772 test1sms test1sms20161222054142 
+22 233423 	 13 finish 12768 test1sms test1sms20161222054141 
+22 233423 	 12 finish 12764 test1sms test1sms20161222054140 
+22 233423 	 11 finish 12752 test1sms test1sms20161222054140 
+22 233423 	 10 finish 12748 test1sms test1sms20161222054140 
+22 233423 	 9 finish 12744 test1sms test1sms20161222054140 
+22 233423 	 8 finish 12740 test1sms test1sms20161222054140 
+22 233423 	 7 finish 12736 test1sms test1sms20161222054140 
+22 233423 	 6 finish 12707 test1sms test1sms20161222054140 
+22 233423 	 5 finish 12683 test1sms test1sms20161222054140 
+22 233423 	 4 finish 3434 test1sms test1sms20161222054140 
+22 233423 	 3 finish 3192 test1sms test1sms20161222052110 
+22 233423 	 2 finish 2757 test4 test420161222051556 
+22 233423 	 1 finish 2305 test4 test420161222051023 
+22 233423
+22 233423 Control waiting...
+
+22 233430 ctlserver data: list
+22 233430 State: run
+22 233430 Queue Info:
+22 233430 in 0
+22 233430 wait 0
+22 233430 run 0
+22 233430 ending 0
+22 233430 finish 27
+22 233430 	 27 finish 14811 test3 test320161222231121 
+22 233430 	 26 finish 14608 test3 test320161222230009 
+22 233430 	 25 finish 14532 test3 test320161222225519 
+22 233430 	 24 finish 14481 test3 test320161222225410 
+22 233430 	 23 finish 13412 test3 test320161222223136 
+22 233430 	 22 finish 13069 test1sms test1sms20161222054158 
+22 233430 	 21 finish 13065 test1sms test1sms20161222054157 
+22 233430 	 20 finish 13052 test1sms test1sms20161222054156 
+22 233430 	 19 finish 12991 test1sms test1sms20161222054155 
+22 233430 	 18 finish 12986 test1sms test1sms20161222054155 
+22 233430 	 17 finish 12974 test1sms test1sms20161222054154 
+22 233430 	 16 finish 12970 test1sms test1sms20161222054144 
+22 233430 	 15 finish 12966 test1sms test1sms20161222054143 
+22 233430 	 14 finish 12772 test1sms test1sms20161222054142 
+22 233430 	 13 finish 12768 test1sms test1sms20161222054141 
+22 233430 	 12 finish 12764 test1sms test1sms20161222054140 
+22 233430 	 11 finish 12752 test1sms test1sms20161222054140 
+22 233430 	 10 finish 12748 test1sms test1sms20161222054140 
+22 233430 	 9 finish 12744 test1sms test1sms20161222054140 
+22 233430 	 8 finish 12740 test1sms test1sms20161222054140 
+22 233430 	 7 finish 12736 test1sms test1sms20161222054140 
+22 233430 	 6 finish 12707 test1sms test1sms20161222054140 
+22 233430 	 5 finish 12683 test1sms test1sms20161222054140 
+22 233430 	 4 finish 3434 test1sms test1sms20161222054140 
+22 233430 	 3 finish 3192 test1sms test1sms20161222052110 
+22 233430 	 2 finish 2757 test4 test420161222051556 
+22 233430 	 1 finish 2305 test4 test420161222051023 
+22 233430
+22 233430 Control waiting...
+
+22 233431 ctlserver data: list
+22 233431 State: run
+22 233431 Queue Info:
+22 233431 in 0
+22 233431 wait 0
+22 233431 run 0
+22 233431 ending 0
+22 233431 finish 27
+22 233431 	 27 finish 14811 test3 test320161222231121 
+22 233431 	 26 finish 14608 test3 test320161222230009 
+22 233431 	 25 finish 14532 test3 test320161222225519 
+22 233431 	 24 finish 14481 test3 test320161222225410 
+22 233431 	 23 finish 13412 test3 test320161222223136 
+22 233431 	 22 finish 13069 test1sms test1sms20161222054158 
+22 233431 	 21 finish 13065 test1sms test1sms20161222054157 
+22 233431 	 20 finish 13052 test1sms test1sms20161222054156 
+22 233431 	 19 finish 12991 test1sms test1sms20161222054155 
+22 233431 	 18 finish 12986 test1sms test1sms20161222054155 
+22 233431 	 17 finish 12974 test1sms test1sms20161222054154 
+22 233431 	 16 finish 12970 test1sms test1sms20161222054144 
+22 233431 	 15 finish 12966 test1sms test1sms20161222054143 
+22 233431 	 14 finish 12772 test1sms test1sms20161222054142 
+22 233431 	 13 finish 12768 test1sms test1sms20161222054141 
+22 233431 	 12 finish 12764 test1sms test1sms20161222054140 
+22 233431 	 11 finish 12752 test1sms test1sms20161222054140 
+22 233431 	 10 finish 12748 test1sms test1sms20161222054140 
+22 233431 	 9 finish 12744 test1sms test1sms20161222054140 
+22 233431 	 8 finish 12740 test1sms test1sms20161222054140 
+22 233431 	 7 finish 12736 test1sms test1sms20161222054140 
+22 233431 	 6 finish 12707 test1sms test1sms20161222054140 
+22 233431 	 5 finish 12683 test1sms test1sms20161222054140 
+22 233431 	 4 finish 3434 test1sms test1sms20161222054140 
+22 233431 	 3 finish 3192 test1sms test1sms20161222052110 
+22 233431 	 2 finish 2757 test4 test420161222051556 
+22 233431 	 1 finish 2305 test4 test420161222051023 
+22 233431
+22 233431 Control waiting...
+
+22 233822 ctlserver data: list
+22 233822 State: run
+22 233822 Queue Info:
+22 233822 in 0
+22 233822 wait 0
+22 233822 run 0
+22 233822 ending 0
+22 233822 finish 27
+22 233822 	 27 finish 14811 test3 test320161222231121 
+22 233822 	 26 finish 14608 test3 test320161222230009 
+22 233822 	 25 finish 14532 test3 test320161222225519 
+22 233822 	 24 finish 14481 test3 test320161222225410 
+22 233822 	 23 finish 13412 test3 test320161222223136 
+22 233822 	 22 finish 13069 test1sms test1sms20161222054158 
+22 233822 	 21 finish 13065 test1sms test1sms20161222054157 
+22 233822 	 20 finish 13052 test1sms test1sms20161222054156 
+22 233822 	 19 finish 12991 test1sms test1sms20161222054155 
+22 233822 	 18 finish 12986 test1sms test1sms20161222054155 
+22 233822 	 17 finish 12974 test1sms test1sms20161222054154 
+22 233822 	 16 finish 12970 test1sms test1sms20161222054144 
+22 233822 	 15 finish 12966 test1sms test1sms20161222054143 
+22 233822 	 14 finish 12772 test1sms test1sms20161222054142 
+22 233822 	 13 finish 12768 test1sms test1sms20161222054141 
+22 233822 	 12 finish 12764 test1sms test1sms20161222054140 
+22 233822 	 11 finish 12752 test1sms test1sms20161222054140 
+22 233822 	 10 finish 12748 test1sms test1sms20161222054140 
+22 233822 	 9 finish 12744 test1sms test1sms20161222054140 
+22 233822 	 8 finish 12740 test1sms test1sms20161222054140 
+22 233822 	 7 finish 12736 test1sms test1sms20161222054140 
+22 233822 	 6 finish 12707 test1sms test1sms20161222054140 
+22 233822 	 5 finish 12683 test1sms test1sms20161222054140 
+22 233822 	 4 finish 3434 test1sms test1sms20161222054140 
+22 233822 	 3 finish 3192 test1sms test1sms20161222052110 
+22 233822 	 2 finish 2757 test4 test420161222051556 
+22 233822 	 1 finish 2305 test4 test420161222051023 
+22 233822
+22 233822 Control waiting...
+
+('conn,addr', <socket._socketobject object at 0x7fbf94d5af30>, '')
+22 233828 D CCLIENT.Start: params Q 15098 test3 test320161222233828
+22 233828 D p:  ['Q', '15098', 'test3', 'test320161222233828']
+22 233831 D Schedule run > 0
+22 233831 D Schedule runqueue:     28      wait 15098 test3 test320161222233828  
+22 233834 ctlserver data: list
+22 233834 State: run
+22 233834 Queue Info:
+22 233834 in 0
+22 233834 wait 0
+22 233834 run 1
+22 233834 	 28 run 15098 test3 test320161222233828 
+22 233834 ending 0
+22 233834 finish 27
+22 233834 	 27 finish 14811 test3 test320161222231121 
+22 233834 	 26 finish 14608 test3 test320161222230009 
+22 233834 	 25 finish 14532 test3 test320161222225519 
+22 233834 	 24 finish 14481 test3 test320161222225410 
+22 233834 	 23 finish 13412 test3 test320161222223136 
+22 233834 	 22 finish 13069 test1sms test1sms20161222054158 
+22 233834 	 21 finish 13065 test1sms test1sms20161222054157 
+22 233834 	 20 finish 13052 test1sms test1sms20161222054156 
+22 233834 	 19 finish 12991 test1sms test1sms20161222054155 
+22 233834 	 18 finish 12986 test1sms test1sms20161222054155 
+22 233834 	 17 finish 12974 test1sms test1sms20161222054154 
+22 233834 	 16 finish 12970 test1sms test1sms20161222054144 
+22 233834 	 15 finish 12966 test1sms test1sms20161222054143 
+22 233834 	 14 finish 12772 test1sms test1sms20161222054142 
+22 233834 	 13 finish 12768 test1sms test1sms20161222054141 
+22 233834 	 12 finish 12764 test1sms test1sms20161222054140 
+22 233834 	 11 finish 12752 test1sms test1sms20161222054140 
+22 233834 	 10 finish 12748 test1sms test1sms20161222054140 
+22 233834 	 9 finish 12744 test1sms test1sms20161222054140 
+22 233834 	 8 finish 12740 test1sms test1sms20161222054140 
+22 233834 	 7 finish 12736 test1sms test1sms20161222054140 
+22 233834 	 6 finish 12707 test1sms test1sms20161222054140 
+22 233834 	 5 finish 12683 test1sms test1sms20161222054140 
+22 233834 	 4 finish 3434 test1sms test1sms20161222054140 
+22 233834 	 3 finish 3192 test1sms test1sms20161222052110 
+22 233834 	 2 finish 2757 test4 test420161222051556 
+22 233834 	 1 finish 2305 test4 test420161222051023 
+22 233834
+22 233834 Control waiting...
+
+22 233951 CCLIENT.Run recv:  F
+22 233952 running state process change:     28    ending 15098 test3 test320161222233828  
+22 233952 CCLIENT.Finish
+22 233952 new state process :     28    finish 15098 test3 test320161222233828  
+22 234004 ctlserver data: list
+22 234004 State: run
+22 234004 Queue Info:
+22 234004 in 0
+22 234004 wait 0
+22 234004 run 0
+22 234004 ending 0
+22 234004 finish 28
+22 234004 	 28 finish 15098 test3 test320161222233828 
+22 234004 	 27 finish 14811 test3 test320161222231121 
+22 234004 	 26 finish 14608 test3 test320161222230009 
+22 234004 	 25 finish 14532 test3 test320161222225519 
+22 234004 	 24 finish 14481 test3 test320161222225410 
+22 234004 	 23 finish 13412 test3 test320161222223136 
+22 234004 	 22 finish 13069 test1sms test1sms20161222054158 
+22 234004 	 21 finish 13065 test1sms test1sms20161222054157 
+22 234004 	 20 finish 13052 test1sms test1sms20161222054156 
+22 234004 	 19 finish 12991 test1sms test1sms20161222054155 
+22 234004 	 18 finish 12986 test1sms test1sms20161222054155 
+22 234004 	 17 finish 12974 test1sms test1sms20161222054154 
+22 234004 	 16 finish 12970 test1sms test1sms20161222054144 
+22 234004 	 15 finish 12966 test1sms test1sms20161222054143 
+22 234004 	 14 finish 12772 test1sms test1sms20161222054142 
+22 234004 	 13 finish 12768 test1sms test1sms20161222054141 
+22 234004 	 12 finish 12764 test1sms test1sms20161222054140 
+22 234004 	 11 finish 12752 test1sms test1sms20161222054140 
+22 234004 	 10 finish 12748 test1sms test1sms20161222054140 
+22 234004 	 9 finish 12744 test1sms test1sms20161222054140 
+22 234004 	 8 finish 12740 test1sms test1sms20161222054140 
+22 234004 	 7 finish 12736 test1sms test1sms20161222054140 
+22 234004 	 6 finish 12707 test1sms test1sms20161222054140 
+22 234004 	 5 finish 12683 test1sms test1sms20161222054140 
+22 234004 	 4 finish 3434 test1sms test1sms20161222054140 
+22 234004 	 3 finish 3192 test1sms test1sms20161222052110 
+22 234004 	 2 finish 2757 test4 test420161222051556 
+22 234004 	 1 finish 2305 test4 test420161222051023 
+22 234004
+22 234004 Control waiting...
+
+('conn,addr', <socket._socketobject object at 0x7fbf94d5afa0>, '')
+22 235728 D CCLIENT.Start: params Q 15348 camp test
+22 235728 D p:  ['Q', '15348', 'camp', 'test']
+22 235729 D Schedule run > 0
+22 235729 D Schedule runqueue:     29      wait 15348 camp test  
+22 235815 CCLIENT.Run recv:  F
+22 235817 running state process change:     29    ending 15348 camp test  
+22 235817 CCLIENT.Finish
+22 235817 new state process :     29    finish 15348 camp test  
+('conn,addr', <socket._socketobject object at 0x2202050>, '')
+22 235900 D CCLIENT.Start: params Q 15362 camp 1
+22 235900 D p:  ['Q', '15362', 'camp', '1']
+22 235902 D Schedule run > 0
+22 235902 D Schedule runqueue:     30      wait 15362 camp 1  
+22 235947 ctlserver data: list
+22 235947 State: run
+22 235947 Queue Info:
+22 235947 in 0
+22 235947 wait 0
+22 235947 run 1
+22 235947 	 30 run 15362 camp 1 
+22 235947 ending 0
+22 235947 finish 29
+22 235947 	 29 finish 15348 camp test 
+22 235947 	 28 finish 15098 test3 test320161222233828 
+22 235947 	 27 finish 14811 test3 test320161222231121 
+22 235947 	 26 finish 14608 test3 test320161222230009 
+22 235947 	 25 finish 14532 test3 test320161222225519 
+22 235947 	 24 finish 14481 test3 test320161222225410 
+22 235947 	 23 finish 13412 test3 test320161222223136 
+22 235947 	 22 finish 13069 test1sms test1sms20161222054158 
+22 235947 	 21 finish 13065 test1sms test1sms20161222054157 
+22 235947 	 20 finish 13052 test1sms test1sms20161222054156 
+22 235947 	 19 finish 12991 test1sms test1sms20161222054155 
+22 235947 	 18 finish 12986 test1sms test1sms20161222054155 
+22 235947 	 17 finish 12974 test1sms test1sms20161222054154 
+22 235947 	 16 finish 12970 test1sms test1sms20161222054144 
+22 235947 	 15 finish 12966 test1sms test1sms20161222054143 
+22 235947 	 14 finish 12772 test1sms test1sms20161222054142 
+22 235947 	 13 finish 12768 test1sms test1sms20161222054141 
+22 235947 	 12 finish 12764 test1sms test1sms20161222054140 
+22 235947 	 11 finish 12752 test1sms test1sms20161222054140 
+22 235947 	 10 finish 12748 test1sms test1sms20161222054140 
+22 235947 	 9 finish 12744 test1sms test1sms20161222054140 
+22 235947 	 8 finish 12740 test1sms test1sms20161222054140 
+22 235947 	 7 finish 12736 test1sms test1sms20161222054140 
+22 235947 	 6 finish 12707 test1sms test1sms20161222054140 
+22 235947 	 5 finish 12683 test1sms test1sms20161222054140 
+22 235947 	 4 finish 3434 test1sms test1sms20161222054140 
+22 235947 	 3 finish 3192 test1sms test1sms20161222052110 
+22 235947 	 2 finish 2757 test4 test420161222051556 
+22 235947 	 1 finish 2305 test4 test420161222051023 
+22 235947
+22 235947 Control waiting...
+
+22 235953 ctlserver data: clear
+22 235953 Control waiting...
+
+23 000004 CCLIENT.Run recv:  F
+23 000005 running state process change:     30    ending 15362 camp 1  
+23 000005 CCLIENT.Finish
+23 000005 new state process :     30    finish 15362 camp 1  
+('conn,addr', <socket._socketobject object at 0x7fbf94d5afa0>, '')
+23 000225 D CCLIENT.Start: params Q 15427 camp 1
+23 000225 D p:  ['Q', '15427', 'camp', '1']
+23 000226 D Schedule run > 0
+23 000226 D Schedule runqueue:     31      wait 15427 camp 1  
+23 000230 ctlserver data: list
+23 000230 State: run
+23 000230 Queue Info:
+23 000230 in 0
+23 000230 wait 0
+23 000230 run 1
+23 000230 	 31 run 15427 camp 1 
+23 000230 ending 0
+23 000230 finish 1
+23 000230 	 30 finish 15362 camp 1 
+23 000230
+23 000230 Control waiting...
+
+('conn,addr', <socket._socketobject object at 0x7fbf94d5aec0>, '')
+23 000325 D CCLIENT.Start: params Q 15445 camp 1
+23 000325 D p:  ['Q', '15445', 'camp', '1']
+23 000335 ctlserver data: list
+23 000335 State: run
+23 000335 Queue Info:
+23 000335 in 0
+23 000335 wait 1
+23 000335 	 32 wait 15445 camp 1 
+23 000335 run 1
+23 000335 	 31 run 15427 camp 1 
+23 000335 ending 0
+23 000335 finish 1
+23 000335 	 30 finish 15362 camp 1 
+23 000335
+23 000335 Control waiting...
+
+23 000336 CCLIENT.Run recv:  F
+23 000338 running state process change:     31    ending 15427 camp 1  
+23 000338 CCLIENT.Finish
+23 000338 new state process :     31    finish 15427 camp 1  
+23 000341 D Schedule run > 0
+23 000341 D Schedule runqueue:     32      wait 15445 camp 1  
+23 000459 CCLIENT.Run recv:  F
+23 000459 running state process change:     32    ending 15445 camp 1  
+23 000459 CCLIENT.Finish
+23 000459 new state process :     32    finish 15445 camp 1  
+('conn,addr', <socket._socketobject object at 0x7fbf94d5af30>, '')
+23 001331 D CCLIENT.Start: params Q 15555 camp 1
+23 001331 D p:  ['Q', '15555', 'camp', '1']
+23 001333 D Schedule run > 0
+23 001333 D Schedule runqueue:     33      wait 15555 camp 1  
+23 001425 ctlserver data: list
+23 001425 State: run
+23 001425 Queue Info:
+23 001425 in 0
+23 001425 wait 0
+23 001425 run 1
+23 001425 	 33 run 15555 camp 1 
+23 001425 ending 0
+23 001425 finish 3
+23 001425 	 32 finish 15445 camp 1 
+23 001425 	 31 finish 15427 camp 1 
+23 001425 	 30 finish 15362 camp 1 
+23 001425
+23 001425 Control waiting...
+
+23 001438 CCLIENT.Run recv:  F
+23 001439 running state process change:     33    ending 15555 camp 1  
+23 001439 CCLIENT.Finish
+23 001439 new state process :     33    finish 15555 camp 1  
+('conn,addr', <socket._socketobject object at 0x7fbf94d5a980>, '')
+23 001552 D CCLIENT.Start: params Q 15583 camp 1
+23 001552 D p:  ['Q', '15583', 'camp', '1']
+23 001554 D Schedule run > 0
+23 001554 D Schedule runqueue:     34      wait 15583 camp 1  
+23 001611 CCLIENT.Run recv:  F
+23 001612 running state process change:     34    ending 15583 camp 1  
+23 001612 CCLIENT.Finish
+23 001612 new state process :     34    finish 15583 camp 1  
+('conn,addr', <socket._socketobject object at 0x7fbf94d5ae50>, '')
+23 001819 D CCLIENT.Start: params Q 15642 camp 1
+23 001819 D p:  ['Q', '15642', 'camp', '1']
+23 001821 D Schedule run > 0
+23 001821 D Schedule runqueue:     35      wait 15642 camp 1  
+23 001836 CCLIENT.Run recv:  F
+23 001839 running state process change:     35    ending 15642 camp 1  
+23 001839 CCLIENT.Finish
+23 001839 new state process :     35    finish 15642 camp 1  
+('conn,addr', <socket._socketobject object at 0x7fbf94d5ad70>, '')
+23 002033 D CCLIENT.Start: params Q 15678 test3 test320161223002033
+23 002033 D p:  ['Q', '15678', 'test3', 'test320161223002033']
+23 002036 D Schedule run > 0
+23 002036 D Schedule runqueue:     36      wait 15678 test3 test320161223002033  
+23 002053 ctlserver data: list
+23 002053 State: run
+23 002053 Queue Info:
+23 002053 in 0
+23 002053 wait 0
+23 002053 run 1
+23 002053 	 36 run 15678 test3 test320161223002033 
+23 002053 ending 0
+23 002053 finish 6
+23 002053 	 35 finish 15642 camp 1 
+23 002053 	 34 finish 15583 camp 1 
+23 002053 	 33 finish 15555 camp 1 
+23 002053 	 32 finish 15445 camp 1 
+23 002053 	 31 finish 15427 camp 1 
+23 002053 	 30 finish 15362 camp 1 
+23 002053
+23 002053 Control waiting...
+
+23 002156 CCLIENT.Run recv:  F
+23 002157 running state process change:     36    ending 15678 test3 test320161223002033  
+23 002157 CCLIENT.Finish
+23 002157 new state process :     36    finish 15678 test3 test320161223002033  
+('conn,addr', <socket._socketobject object at 0x7fbf94d5ad00>, '')
+23 002929 D CCLIENT.Start: params Q 15807 test3 test320161223002929
+23 002929 D p:  ['Q', '15807', 'test3', 'test320161223002929']
+23 002930 D Schedule run > 0
+23 002930 D Schedule runqueue:     37      wait 15807 test3 test320161223002929  
+23 002939 ctlserver data: list
+23 002939 State: run
+23 002939 Queue Info:
+23 002939 in 0
+23 002939 wait 0
+23 002939 run 1
+23 002939 	 37 run 15807 test3 test320161223002929 
+23 002939 ending 0
+23 002939 finish 7
+23 002939 	 36 finish 15678 test3 test320161223002033 
+23 002939 	 35 finish 15642 camp 1 
+23 002939 	 34 finish 15583 camp 1 
+23 002939 	 33 finish 15555 camp 1 
+23 002939 	 32 finish 15445 camp 1 
+23 002939 	 31 finish 15427 camp 1 
+23 002939 	 30 finish 15362 camp 1 
+23 002939
+23 002939 Control waiting...
+
+23 003051 CCLIENT.Run recv:  F
+23 003051 running state process change:     37    ending 15807 test3 test320161223002929  
+23 003051 CCLIENT.Finish
+23 003051 new state process :     37    finish 15807 test3 test320161223002929  
+23 003053 ctlserver data: list
+23 003053 State: run
+23 003053 Queue Info:
+23 003053 in 0
+23 003053 wait 0
+23 003053 run 0
+23 003053 ending 0
+23 003053 finish 8
+23 003053 	 37 finish 15807 test3 test320161223002929 
+23 003053 	 36 finish 15678 test3 test320161223002033 
+23 003053 	 35 finish 15642 camp 1 
+23 003053 	 34 finish 15583 camp 1 
+23 003053 	 33 finish 15555 camp 1 
+23 003053 	 32 finish 15445 camp 1 
+23 003053 	 31 finish 15427 camp 1 
+23 003053 	 30 finish 15362 camp 1 
+23 003053
+23 003053 Control waiting...
+
+('conn,addr', <socket._socketobject object at 0x7fbf94d5ac20>, '')
+23 003203 D CCLIENT.Start: params Q 15852 test3 test320161223003203
+23 003203 D p:  ['Q', '15852', 'test3', 'test320161223003203']
+23 003203 D Schedule run > 0
+23 003203 D Schedule runqueue:     38      wait 15852 test3 test320161223003203  
+23 003324 CCLIENT.Run recv:  F
+23 003324 running state process change:     38    ending 15852 test3 test320161223003203  
+23 003324 CCLIENT.Finish
+23 003324 new state process :     38    finish 15852 test3 test320161223003203  
+23 003430 ctlserver data: list
+23 003430 State: run
+23 003430 Queue Info:
+23 003430 in 0
+23 003430 wait 0
+23 003430 run 0
+23 003430 ending 0
+23 003430 finish 9
+23 003430 	 38 finish 15852 test3 test320161223003203 
+23 003430 	 37 finish 15807 test3 test320161223002929 
+23 003430 	 36 finish 15678 test3 test320161223002033 
+23 003430 	 35 finish 15642 camp 1 
+23 003430 	 34 finish 15583 camp 1 
+23 003430 	 33 finish 15555 camp 1 
+23 003430 	 32 finish 15445 camp 1 
+23 003430 	 31 finish 15427 camp 1 
+23 003430 	 30 finish 15362 camp 1 
+23 003430
+23 003430 Control waiting...
+
+('conn,addr', <socket._socketobject object at 0x7fbf94d5ade0>, '')
+23 003443 D CCLIENT.Start: params Q 15902 test3 test320161223003443
+23 003443 D p:  ['Q', '15902', 'test3', 'test320161223003443']
+23 003445 D Schedule run > 0
+23 003445 D Schedule runqueue:     39      wait 15902 test3 test320161223003443  
+23 003606 CCLIENT.Run recv:  F
+23 003607 running state process change:     39    ending 15902 test3 test320161223003443  
+23 003607 CCLIENT.Finish
+23 003607 new state process :     39    finish 15902 test3 test320161223003443  
+('conn,addr', <socket._socketobject object at 0x7fbf94d5abb0>, '')
+23 003727 D CCLIENT.Start: params Q 15977 test3 test320161223003727
+23 003727 D p:  ['Q', '15977', 'test3', 'test320161223003727']
+23 003728 D Schedule run > 0
+23 003728 D Schedule runqueue:     40      wait 15977 test3 test320161223003727  
+23 003848 CCLIENT.Run recv:  F
+23 003849 running state process change:     40    ending 15977 test3 test320161223003727  
+23 003849 CCLIENT.Finish
+23 003849 new state process :     40    finish 15977 test3 test320161223003727  
+('conn,addr', <socket._socketobject object at 0x7fbf94d5ab40>, '')
+23 004616 D CCLIENT.Start: params Q 16090 test3 test320161223004616
+23 004616 D p:  ['Q', '16090', 'test3', 'test320161223004616']
+23 004619 D Schedule run > 0
+23 004619 D Schedule runqueue:     41      wait 16090 test3 test320161223004616  
+23 004739 CCLIENT.Run recv:  F
+23 004740 running state process change:     41    ending 16090 test3 test320161223004616  
+23 004740 CCLIENT.Finish
+23 004740 new state process :     41    finish 16090 test3 test320161223004616  
+('conn,addr', <socket._socketobject object at 0x7fbf94d5aad0>, '')
+23 004929 D CCLIENT.Start: params Q 16153 test3 test320161223004929
+23 004929 D p:  ['Q', '16153', 'test3', 'test320161223004929']
+23 004931 D Schedule run > 0
+23 004931 D Schedule runqueue:     42      wait 16153 test3 test320161223004929  
+23 005051 CCLIENT.Run recv:  F
+23 005052 running state process change:     42    ending 16153 test3 test320161223004929  
+23 005052 CCLIENT.Finish
+23 005052 new state process :     42    finish 16153 test3 test320161223004929  
+('conn,addr', <socket._socketobject object at 0x7fbf94d5aa60>, '')
+23 005215 D CCLIENT.Start: params Q 16210 test3 test320161223005215
+23 005215 D p:  ['Q', '16210', 'test3', 'test320161223005215']
+23 005216 D Schedule run > 0
+23 005216 D Schedule runqueue:     43      wait 16210 test3 test320161223005215  
+23 005336 CCLIENT.Run recv:  F
+23 005337 running state process change:     43    ending 16210 test3 test320161223005215  
+23 005337 CCLIENT.Finish
+23 005337 new state process :     43    finish 16210 test3 test320161223005215  
+('conn,addr', <socket._socketobject object at 0x7fbf94d5a9f0>, '')
+23 005354 D CCLIENT.Start: params Q 16255 test3 test320161223005354
+23 005354 D p:  ['Q', '16255', 'test3', 'test320161223005354']
+23 005355 D Schedule run > 0
+23 005355 D Schedule runqueue:     44      wait 16255 test3 test320161223005354  
+23 005515 CCLIENT.Run recv:  F
+23 005516 running state process change:     44    ending 16255 test3 test320161223005354  
+23 005516 CCLIENT.Finish
+23 005516 new state process :     44    finish 16255 test3 test320161223005354  
+23 011711 ctlserver data: list
+23 011711 State: run
+23 011711 Queue Info:
+23 011711 in 0
+23 011711 wait 0
+23 011711 run 0
+23 011711 ending 0
+23 011711 finish 15
+23 011711 	 44 finish 16255 test3 test320161223005354 
+23 011711 	 43 finish 16210 test3 test320161223005215 
+23 011711 	 42 finish 16153 test3 test320161223004929 
+23 011711 	 41 finish 16090 test3 test320161223004616 
+23 011711 	 40 finish 15977 test3 test320161223003727 
+23 011711 	 39 finish 15902 test3 test320161223003443 
+23 011711 	 38 finish 15852 test3 test320161223003203 
+23 011711 	 37 finish 15807 test3 test320161223002929 
+23 011711 	 36 finish 15678 test3 test320161223002033 
+23 011711 	 35 finish 15642 camp 1 
+23 011711 	 34 finish 15583 camp 1 
+23 011711 	 33 finish 15555 camp 1 
+23 011711 	 32 finish 15445 camp 1 
+23 011711 	 31 finish 15427 camp 1 
+23 011711 	 30 finish 15362 camp 1 
+23 011711
+23 011711 Control waiting...
+
+23 011717 ctlserver data: disable
+23 011717 Control waiting...
+
+23 011720 ctlserver data: list
+23 011720 State: disable
+23 011720 Queue Info:
+23 011720 in 0
+23 011720 wait 0
+23 011720 run 0
+23 011720 ending 0
+23 011720 finish 15
+23 011720 	 44 finish 16255 test3 test320161223005354 
+23 011720 	 43 finish 16210 test3 test320161223005215 
+23 011720 	 42 finish 16153 test3 test320161223004929 
+23 011720 	 41 finish 16090 test3 test320161223004616 
+23 011720 	 40 finish 15977 test3 test320161223003727 
+23 011720 	 39 finish 15902 test3 test320161223003443 
+23 011720 	 38 finish 15852 test3 test320161223003203 
+23 011720 	 37 finish 15807 test3 test320161223002929 
+23 011720 	 36 finish 15678 test3 test320161223002033 
+23 011720 	 35 finish 15642 camp 1 
+23 011720 	 34 finish 15583 camp 1 
+23 011720 	 33 finish 15555 camp 1 
+23 011720 	 32 finish 15445 camp 1 
+23 011720 	 31 finish 15427 camp 1 
+23 011720 	 30 finish 15362 camp 1 
+23 011720
+23 011720 Control waiting...
+
+('conn,addr', <socket._socketobject object at 0x7fbf94d5ac90>, '')
+23 011725 D CCLIENT.Start: params Q 16524 test3 test320161223011725
+23 011725 D p:  ['Q', '16524', 'test3', 'test320161223011725']
+23 011922 ctlserver data: list
+23 011922 State: disable
+23 011922 Queue Info:
+23 011922 in 0
+23 011922 wait 1
+23 011922 	 45 wait 16524 test3 test320161223011725 
+23 011922 run 0
+23 011922 ending 0
+23 011922 finish 15
+23 011922 	 44 finish 16255 test3 test320161223005354 
+23 011922 	 43 finish 16210 test3 test320161223005215 
+23 011922 	 42 finish 16153 test3 test320161223004929 
+23 011922 	 41 finish 16090 test3 test320161223004616 
+23 011922 	 40 finish 15977 test3 test320161223003727 
+23 011922 	 39 finish 15902 test3 test320161223003443 
+23 011922 	 38 finish 15852 test3 test320161223003203 
+23 011922 	 37 finish 15807 test3 test320161223002929 
+23 011922 	 36 finish 15678 test3 test320161223002033 
+23 011922 	 35 finish 15642 camp 1 
+23 011922 	 34 finish 15583 camp 1 
+23 011922 	 33 finish 15555 camp 1 
+23 011922 	 32 finish 15445 camp 1 
+23 011922 	 31 finish 15427 camp 1 
+23 011922 	 30 finish 15362 camp 1 
+23 011922
+23 011922 Control waiting...
+
+23 011923 ctlserver data: list
+23 011923 State: disable
+23 011923 Queue Info:
+23 011923 in 0
+23 011923 wait 1
+23 011923 	 45 wait 16524 test3 test320161223011725 
+23 011923 run 0
+23 011923 ending 0
+23 011923 finish 15
+23 011923 	 44 finish 16255 test3 test320161223005354 
+23 011923 	 43 finish 16210 test3 test320161223005215 
+23 011923 	 42 finish 16153 test3 test320161223004929 
+23 011923 	 41 finish 16090 test3 test320161223004616 
+23 011923 	 40 finish 15977 test3 test320161223003727 
+23 011923 	 39 finish 15902 test3 test320161223003443 
+23 011923 	 38 finish 15852 test3 test320161223003203 
+23 011923 	 37 finish 15807 test3 test320161223002929 
+23 011923 	 36 finish 15678 test3 test320161223002033 
+23 011923 	 35 finish 15642 camp 1 
+23 011923 	 34 finish 15583 camp 1 
+23 011923 	 33 finish 15555 camp 1 
+23 011923 	 32 finish 15445 camp 1 
+23 011923 	 31 finish 15427 camp 1 
+23 011923 	 30 finish 15362 camp 1 
+23 011923
+23 011923 Control waiting...
+
+23 012234 ctlserver data: list
+23 012234 State: disable
+23 012234 Queue Info:
+23 012234 in 0
+23 012234 wait 1
+23 012234 	 45 wait 16524 test3 test320161223011725 
+23 012234 run 0
+23 012234 ending 0
+23 012234 finish 15
+23 012234 	 44 finish 16255 test3 test320161223005354 
+23 012234 	 43 finish 16210 test3 test320161223005215 
+23 012234 	 42 finish 16153 test3 test320161223004929 
+23 012234 	 41 finish 16090 test3 test320161223004616 
+23 012234 	 40 finish 15977 test3 test320161223003727 
+23 012234 	 39 finish 15902 test3 test320161223003443 
+23 012234 	 38 finish 15852 test3 test320161223003203 
+23 012234 	 37 finish 15807 test3 test320161223002929 
+23 012234 	 36 finish 15678 test3 test320161223002033 
+23 012234 	 35 finish 15642 camp 1 
+23 012234 	 34 finish 15583 camp 1 
+23 012234 	 33 finish 15555 camp 1 
+23 012234 	 32 finish 15445 camp 1 
+23 012234 	 31 finish 15427 camp 1 
+23 012234 	 30 finish 15362 camp 1 
+23 012234
+23 012234 Control waiting...
+
+23 012846 ctlserver data: list
+23 012846 State: disable
+23 012846 Queue Info:
+23 012846 in 0
+23 012846 wait 1
+23 012846 	 45 wait 16524 test3 test320161223011725 
+23 012846 run 0
+23 012846 ending 0
+23 012846 finish 15
+23 012846 	 44 finish 16255 test3 test320161223005354 
+23 012846 	 43 finish 16210 test3 test320161223005215 
+23 012846 	 42 finish 16153 test3 test320161223004929 
+23 012846 	 41 finish 16090 test3 test320161223004616 
+23 012846 	 40 finish 15977 test3 test320161223003727 
+23 012846 	 39 finish 15902 test3 test320161223003443 
+23 012846 	 38 finish 15852 test3 test320161223003203 
+23 012846 	 37 finish 15807 test3 test320161223002929 
+23 012846 	 36 finish 15678 test3 test320161223002033 
+23 012846 	 35 finish 15642 camp 1 
+23 012846 	 34 finish 15583 camp 1 
+23 012846 	 33 finish 15555 camp 1 
+23 012846 	 32 finish 15445 camp 1 
+23 012846 	 31 finish 15427 camp 1 
+23 012846 	 30 finish 15362 camp 1 
+23 012846
+23 012846 Control waiting...
+
+23 012850 ctlserver data: run
+23 012850 Control waiting...
+
+23 012853 D Schedule run > 0
+23 012853 D Schedule runqueue:     45      wait 16524 test3 test320161223011725  
+23 013014 CCLIENT.Run recv:  F
+23 013014 running state process change:     45    ending 16524 test3 test320161223011725  
+23 013014 CCLIENT.Finish
+23 013014 new state process :     45    finish 16524 test3 test320161223011725  
+('conn,addr', <socket._socketobject object at 0x7fbf94d5a520>, '')
+23 013241 D CCLIENT.Start: params Q 16707 test3 test320161223013241
+23 013241 D p:  ['Q', '16707', 'test3', 'test320161223013241']
+23 013242 D Schedule run > 0
+23 013242 D Schedule runqueue:     46      wait 16707 test3 test320161223013241  
+23 013317 ctlserver data: list
+23 013317 State: run
+23 013317 Queue Info:
+23 013317 in 0
+23 013317 wait 0
+23 013317 run 1
+23 013317 	 46 run 16707 test3 test320161223013241 
+23 013317 ending 0
+23 013317 finish 16
+23 013317 	 45 finish 16524 test3 test320161223011725 
+23 013317 	 44 finish 16255 test3 test320161223005354 
+23 013317 	 43 finish 16210 test3 test320161223005215 
+23 013317 	 42 finish 16153 test3 test320161223004929 
+23 013317 	 41 finish 16090 test3 test320161223004616 
+23 013317 	 40 finish 15977 test3 test320161223003727 
+23 013317 	 39 finish 15902 test3 test320161223003443 
+23 013317 	 38 finish 15852 test3 test320161223003203 
+23 013317 	 37 finish 15807 test3 test320161223002929 
+23 013317 	 36 finish 15678 test3 test320161223002033 
+23 013317 	 35 finish 15642 camp 1 
+23 013317 	 34 finish 15583 camp 1 
+23 013317 	 33 finish 15555 camp 1 
+23 013317 	 32 finish 15445 camp 1 
+23 013317 	 31 finish 15427 camp 1 
+23 013317 	 30 finish 15362 camp 1 
+23 013317
+23 013317 Control waiting...
+
+23 013402 CCLIENT.Run recv:  F
+23 013403 running state process change:     46    ending 16707 test3 test320161223013241  
+23 013403 CCLIENT.Finish
+23 013403 new state process :     46    finish 16707 test3 test320161223013241  
+23 041910 ctlserver data: list
+23 041910 State: run
+23 041910 Queue Info:
+23 041910 in 0
+23 041910 wait 0
+23 041910 run 0
+23 041910 ending 0
+23 041910 finish 17
+23 041910 	 46 finish 16707 test3 test320161223013241 
+23 041910 	 45 finish 16524 test3 test320161223011725 
+23 041910 	 44 finish 16255 test3 test320161223005354 
+23 041910 	 43 finish 16210 test3 test320161223005215 
+23 041910 	 42 finish 16153 test3 test320161223004929 
+23 041910 	 41 finish 16090 test3 test320161223004616 
+23 041910 	 40 finish 15977 test3 test320161223003727 
+23 041910 	 39 finish 15902 test3 test320161223003443 
+23 041910 	 38 finish 15852 test3 test320161223003203 
+23 041910 	 37 finish 15807 test3 test320161223002929 
+23 041910 	 36 finish 15678 test3 test320161223002033 
+23 041910 	 35 finish 15642 camp 1 
+23 041910 	 34 finish 15583 camp 1 
+23 041910 	 33 finish 15555 camp 1 
+23 041910 	 32 finish 15445 camp 1 
+23 041910 	 31 finish 15427 camp 1 
+23 041910 	 30 finish 15362 camp 1 
+23 041910
+23 041910 Control waiting...
+
+23 041921 ctlserver data: stats
+23 041921 Stat finish:  46
+23 041921 Stat run:  46
+23 041921 Stat err:  0
+23 041921 Stat stop:  0
+23 041921 Stat inqueue:  46
+23 041921 Stat in:  46
+23 041921 Stat wait:  46
+23 041921
+23 041921 Control waiting...
+
+23 041939 ctlserver data: list
+23 041939 State: run
+23 041939 Queue Info:
+23 041939 in 0
+23 041939 wait 0
+23 041939 run 0
+23 041939 ending 0
+23 041939 finish 17
+23 041939 	 46 finish 16707 test3 test320161223013241 
+23 041939 	 45 finish 16524 test3 test320161223011725 
+23 041939 	 44 finish 16255 test3 test320161223005354 
+23 041939 	 43 finish 16210 test3 test320161223005215 
+23 041939 	 42 finish 16153 test3 test320161223004929 
+23 041939 	 41 finish 16090 test3 test320161223004616 
+23 041939 	 40 finish 15977 test3 test320161223003727 
+23 041939 	 39 finish 15902 test3 test320161223003443 
+23 041939 	 38 finish 15852 test3 test320161223003203 
+23 041939 	 37 finish 15807 test3 test320161223002929 
+23 041939 	 36 finish 15678 test3 test320161223002033 
+23 041939 	 35 finish 15642 camp 1 
+23 041939 	 34 finish 15583 camp 1 
+23 041939 	 33 finish 15555 camp 1 
+23 041939 	 32 finish 15445 camp 1 
+23 041939 	 31 finish 15427 camp 1 
+23 041939 	 30 finish 15362 camp 1 
+23 041939
+23 041939 Control waiting...
+
+23 043800 ctlserver data: list
+23 043800 State: run
+23 043800 Queue Info:
+23 043800 in 0
+23 043800 wait 0
+23 043800 run 0
+23 043800 ending 0
+23 043800 finish 17
+23 043800 	 46 finish 16707 test3 test320161223013241 
+23 043800 	 45 finish 16524 test3 test320161223011725 
+23 043800 	 44 finish 16255 test3 test320161223005354 
+23 043800 	 43 finish 16210 test3 test320161223005215 
+23 043800 	 42 finish 16153 test3 test320161223004929 
+23 043800 	 41 finish 16090 test3 test320161223004616 
+23 043800 	 40 finish 15977 test3 test320161223003727 
+23 043800 	 39 finish 15902 test3 test320161223003443 
+23 043800 	 38 finish 15852 test3 test320161223003203 
+23 043800 	 37 finish 15807 test3 test320161223002929 
+23 043800 	 36 finish 15678 test3 test320161223002033 
+23 043800 	 35 finish 15642 camp 1 
+23 043800 	 34 finish 15583 camp 1 
+23 043800 	 33 finish 15555 camp 1 
+23 043800 	 32 finish 15445 camp 1 
+23 043800 	 31 finish 15427 camp 1 
+23 043800 	 30 finish 15362 camp 1 
+23 043800
+23 043800 Control waiting...
+
+23 210649 ctlserver data: quit
+23 210649 State: quit
+23 210649 Queue Info:
+23 210649 in 0
+23 210649 wait 0
+23 210649 run 0
+23 210649 ending 0
+23 210649 finish 17
+23 210649 	 46 finish 16707 test3 test320161223013241 
+23 210649 	 45 finish 16524 test3 test320161223011725 
+23 210649 	 44 finish 16255 test3 test320161223005354 
+23 210649 	 43 finish 16210 test3 test320161223005215 
+23 210649 	 42 finish 16153 test3 test320161223004929 
+23 210649 	 41 finish 16090 test3 test320161223004616 
+23 210649 	 40 finish 15977 test3 test320161223003727 
+23 210649 	 39 finish 15902 test3 test320161223003443 
+23 210649 	 38 finish 15852 test3 test320161223003203 
+23 210649 	 37 finish 15807 test3 test320161223002929 
+23 210649 	 36 finish 15678 test3 test320161223002033 
+23 210649 	 35 finish 15642 camp 1 
+23 210649 	 34 finish 15583 camp 1 
+23 210649 	 33 finish 15555 camp 1 
+23 210649 	 32 finish 15445 camp 1 
+23 210649 	 31 finish 15427 camp 1 
+23 210649 	 30 finish 15362 camp 1 
+23 210649
+23 210649 Stat finish:  46
+23 210649 Stat run:  46
+23 210649 Stat err:  0
+23 210649 Stat stop:  0
+23 210649 Stat inqueue:  46
+23 210649 Stat in:  46
+23 210649 Stat wait:  46
+23 210649
+23 210649 Control Finishing
+23 210649 Control Bye
+23 210652 Ending
+23 210652 Bye
+23 210713 Opening:  /home/dagah/dagah/Spool/pqueue
+23 210713 Opening:  /home/dagah/dagah/Spool/pqueue.ctl
+23 210713 Start Control
+23 210713 Control waiting...
+
+23 210713 Start Schedule
+23 210713 Listening...
+23 210739 Opening:  /home/dagah/dagah/Spool/pqueue
+23 210739 Opening:  /home/dagah/dagah/Spool/pqueue.ctl
+23 210739 Start Control
+23 210739 Control waiting...
+
+23 210739 Start Schedule
+23 210739 Listening...
+23 210800 ctlserver data: list
+23 210800 State: run
+23 210800 Queue Info:
+23 210800 in 0
+23 210800 wait 0
+23 210800 run 0
+23 210800 ending 0
+23 210800 finish 0
+23 210800
+23 210800 Control waiting...
+
+23 210811 ctlserver data: quit
+23 210811 State: quit
+23 210811 Queue Info:
+23 210811 in 0
+23 210811 wait 0
+23 210811 run 0
+23 210811 ending 0
+23 210811 finish 0
+23 210811
+23 210811 Stat finish:  0
+23 210811 Stat run:  0
+23 210811 Stat err:  0
+23 210811 Stat stop:  0
+23 210811 Stat inqueue:  0
+23 210811 Stat in:  0
+23 210811 Stat wait:  0
+23 210811
+23 210811 Control Finishing
+23 210811 Control Bye
+23 210812 Ending
+23 210812 Bye
+23 220240 Opening:  /home/dagah/dagah/Spool/pqueue
+23 220240 Opening:  /home/dagah/dagah/Spool/pqueue.ctl
+23 220240 Start Control
+23 220240 Control waiting...
+
+23 220240 Start Schedule
+23 220240 Listening...
+23 220443 ctlserver data: list
+23 220443 State: run
+23 220443 Queue Info:
+23 220443 in 0
+23 220443 wait 0
+23 220443 run 0
+23 220443 ending 0
+23 220443 finish 0
+23 220443
+23 220443 Control waiting...
+
+23 220516 ctlserver data: quit
+23 220516 State: quit
+23 220516 Queue Info:
+23 220516 in 0
+23 220516 wait 0
+23 220516 run 0
+23 220516 ending 0
+23 220516 finish 0
+23 220516
+23 220516 Stat finish:  0
+23 220516 Stat run:  0
+23 220516 Stat err:  0
+23 220516 Stat stop:  0
+23 220516 Stat inqueue:  0
+23 220516 Stat in:  0
+23 220516 Stat wait:  0
+23 220516
+23 220516 Control Finishing
+23 220516 Control Bye
+23 220930 Opening:  /home/dagah/dagah/Spool/pqueue
+23 220930 Opening:  /home/dagah/dagah/Spool/pqueue.ctl
+23 220930 Start Control
+23 220930 Control waiting...
+
+23 220930 Start Schedule
+23 220930 Listening...
+23 220939 ctlserver data: list
+23 220939 State: run
+23 220939 Queue Info:
+23 220939 in 0
+23 220939 wait 0
+23 220939 run 0
+23 220939 ending 0
+23 220939 finish 0
+23 220939
+23 220939 Control waiting...
+
+01 214323 ctlserver data: quit
+01 214323 State: quit
+01 214323 Queue Info:
+01 214323 in 0
+01 214323 wait 0
+01 214323 run 0
+01 214323 ending 0
+01 214323 finish 0
+01 214323
+01 214323 Stat finish:  0
+01 214323 Stat run:  0
+01 214323 Stat err:  0
+01 214323 Stat stop:  0
+01 214323 Stat inqueue:  0
+01 214323 Stat in:  0
+01 214323 Stat wait:  0
+01 214323
+01 214323 Control Finishing
+01 214323 Control Bye

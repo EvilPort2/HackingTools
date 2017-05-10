@@ -1,0 +1,32 @@
+.siteLogo {
+	width: 55px;
+	
+}
+
+.shevirahLogo {
+	width: 100px;
+}
+
+H1 {
+	color:#00568a;
+}
+
+.navbar-brand {
+	color: #0097D0 !important;
+}
+
+.navbar-brand:hover {
+	color:#00568a !important;
+}
+
+.username {
+    padding: 3px 20px;
+}
+
+.container-fluid {
+    padding-top: 5px;
+}
+
+.modal-dialog-large {
+    width: 1200px !important;
+}

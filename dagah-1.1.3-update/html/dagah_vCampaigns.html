@@ -1,0 +1,232 @@
+<?php
+    require_once './php/db_creds.php';
+    session_start();
+    date_default_timezone_set('UTC');
+    if (isset($_SESSION['message'])) {
+        $message = $_SESSION['message'];
+        unset($_SESSION['message']);
+    }
+    if (isset($_SESSION['userid'])) {
+        $userID = $_SESSION['userid'];
+        $connection = mysqli_connect($db_hostname, $db_username, $db_password, $db_database);
+        $stmt = mysqli_stmt_init($connection);
+        mysqli_stmt_prepare($stmt, 'SELECT ID, Name, Created FROM campaigns WHERE UserID=? ORDER BY Created DESC');
+        mysqli_stmt_bind_param($stmt,'i',$userID);
+        mysqli_stmt_execute($stmt);
+        mysqli_stmt_store_result($stmt);
+        mysqli_stmt_bind_result($stmt, $campaignID, $campaignName, $campaignCreated);
+
+    } else {
+        // no session data-- send back to login
+        header('Location:  login.html');
+    }
+
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>View Campaigns</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="./components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+
+    <!-- MetisMenu CSS -->
+    <link href="./components/metisMenu/dist/metisMenu.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="./css/Dagah.css" rel="stylesheet">
+    <link href="./css/Dagah_custom.css" rel="stylesheet">
+
+    <!-- Custom Fonts -->
+    <link href="./components/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+<body>
+
+    <div id="wrapper">
+
+        <!-- Navigation -->
+        <?php include('dagah_nav.html'); ?>
+		
+        <!-- Page Content -->
+        <div id="page-wrapper">
+            <div class="container-fluid">
+				
+				<?php echo $message ?>
+				
+                <h2><i class="fa fa-list fa-fw"></i> View Campaigns</h2>
+                <div class="row">
+                <!-- /.col-lg-6 -->
+                <div class="col-lg-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            Current Campaign List
+                        </div>
+                        <!-- /.panel-heading -->
+                        <div class="panel-body">
+                            <div class="table-responsive">
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Name</th>
+                                            <th>Created</th>
+                                            <th>Attack(s)</th>
+                                            <th style="width: 0px;"></th>
+                                            <th>Staging</th>
+                                            <th style="width: 0px;"></th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    <?php
+                                    while(mysqli_stmt_fetch($stmt)) {
+                                        $get_created = date_create($campaignCreated);
+                                        $created = date_format($get_created, 'M d, Y  H:i');
+                                ?>
+                                        <tr>
+                                            <td><?php echo $campaignID ?></td>
+                                            <td><?php echo $campaignName ?></td>
+                                            <td><?php echo $created ?></td>
+                                            <td><button data-target="#<?php echo str_replace(' ','_',$campaignName) ?>" data-toggle="modal" class="btn btn-primary btn-xs">View Attacks</button></td>   
+                                            <td>
+                                                <div aria-hidden="true" aria-labelledby="myModalLabel" role="dialog" tabindex="-1" id="<?php echo str_replace(' ','_',$campaignName) ?>" class="modal fade">
+                                                    <div class="modal-dialog">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <button aria-hidden="true" data-dismiss="modal" class="close" type="button">x</button>
+                                                                <h4 id="myModalLabel" class="modal-title">Campaign Label: <?php echo $campaignName ?></h4>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                <?php 
+                                                                    // query to get attributes
+                                                                    $attack_list = "";
+                                                                    $stmt_att = mysqli_stmt_init($connection);
+                                                                    mysqli_stmt_prepare($stmt_att, 'SELECT Label, attacks.ID FROM attacks INNER JOIN linkcampaignsattacks ON attacks.ID = linkcampaignsattacks.AttackID WHERE linkcampaignsattacks.CampaignID =?');
+                                                                    mysqli_stmt_bind_param($stmt_att,'i',$campaignID);
+                                                                    mysqli_stmt_execute($stmt_att);
+                                                                    mysqli_stmt_store_result($stmt_att);
+                                                                    mysqli_stmt_bind_result($stmt_att, $attackLabel, $attackID);
+
+                                                                    $table_html = '';
+                                                                    while(mysqli_stmt_fetch($stmt_att)) {
+                                                                        // form table
+                                                                        $table_html .='<div class="panel panel-default"><div class="panel-heading">Attack Label: ' . $attackLabel . '</div><div class="panel-body"><div class="table-responsive"><table class="table table-striped"><thead><tr><th>Attribute</th><th>Value</th></tr></thead><tbody>';
+                                                                         
+                                                                        // get attack parameters
+                                                                        $stmt_ack = mysqli_stmt_init($connection);
+                                                                        mysqli_stmt_prepare($stmt_ack, 'SELECT Attribute, Value FROM attack_attributes WHERE AttackID=?');
+                                                                        mysqli_stmt_bind_param($stmt_ack,'i',$attackID);
+                                                                        mysqli_stmt_execute($stmt_ack);
+                                                                        mysqli_stmt_store_result($stmt_ack);
+                                                                        mysqli_stmt_bind_result($stmt_ack, $attack_att, $attack_val);
+
+                                                                        while(mysqli_stmt_fetch($stmt_ack)) {
+                                                                            if ($attack_att != "XML") {
+                                                                                $table_html .= '<tr><td>' . $attack_att . '</td><td>' . htmlentities($attack_val) . '</td></tr>';
+                                                                            }
+                                                                        }    
+                                                                        // end table
+                                                                        $table_html .= '</tbody></table></div></div></div>';
+                                                                    }
+                                                                    echo $table_html;
+                                                                ?>
+                                                            </div>
+                                                        </div>
+                                                        <!-- /.modal-content -->
+                                                    </div>
+                                                    <!-- /.modal-dialog -->
+                                                </div>
+
+                                            </td>
+                                            <td><button data-target="#staging<?php echo str_replace(' ','_',$attackLabel) ?>" data-toggle="modal" class="btn btn-primary btn-xs">View Staging Output</button></td>
+                                            <td>
+                                                <div aria-hidden="true" aria-labelledby="myModalLabel" role="dialog" tabindex="-1" id="staging<?php echo str_replace(' ','_',$attackLabel) ?>" class="modal fade">
+                                                    <div class="modal-dialog">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <button aria-hidden="true" data-dismiss="modal" class="close" type="button">x</button>
+                                                                <h4 id="myModalLabel" class="modal-title"><?php echo $attackLabel ?> Staging Output</h4>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                <?php 
+                                                                    // query to get staging output
+                                                                    $stmt_ack = mysqli_stmt_init($connection);
+                                                                    mysqli_stmt_prepare($stmt_ack, 'SELECT StagingOutput FROM campaigns WHERE ID =? LIMIT 1');
+                                                                    mysqli_stmt_bind_param($stmt_ack,'i',$campaignID);
+                                                                    mysqli_stmt_execute($stmt_ack);
+                                                                    mysqli_stmt_store_result($stmt_ack);
+                                                                    mysqli_stmt_bind_result($stmt_ack, $stagingOutput);
+
+                                                                    while(mysqli_stmt_fetch($stmt_ack)) {
+                                                                        $stage_list = $stagingOutput . "<br />";
+                                                                    }
+                                                                    echo html_entity_decode($stage_list);
+                                                                ?>
+                                                            </div>
+                                                        </div>
+                                                        <!-- /.modal-content -->
+                                                    </div>
+                                                    <!-- /.modal-dialog -->
+                                                </div>
+                                            </td>
+                                            <td>
+												<button class="btn btn-primary btn-xs" onclick="window.location='dagah_dCampaigns.html?id=<?php echo $campaignID ?>';">Edit Campaign</button>&nbsp;&nbsp;&nbsp;
+												<a href="dagah_DeleteCampaign.html?id=<?php echo $campaignID ?>"><div class="fa fa-trash-o"></div></a>
+											</td>
+                                        </tr>
+                                <?php } ?>
+
+                                       
+                                    </tbody>
+                                </table>
+                            </div>
+                            <!-- /.table-responsive -->
+                        </div>
+                        <!-- /.panel-body -->
+                    </div>
+                    <!-- /.panel -->
+                </div>
+                <!-- /.col-lg-6 -->
+                
+            </div>
+            </div>
+            <!-- /.container-fluid -->
+        </div>
+        <!-- /#page-wrapper -->
+
+    </div>
+    <!-- /#wrapper -->
+
+    <!-- jQuery -->
+    <script src="./components/jquery/dist/jquery.min.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="./components/bootstrap/dist/js/bootstrap.min.js"></script>
+
+    <!-- Metis Menu Plugin JavaScript -->
+    <script src="./components/metisMenu/dist/metisMenu.min.js"></script>
+
+    <!-- Custom Theme JavaScript -->
+    <script src="./js/sb-admin-2.js"></script>
+
+</body>
+
+</html>

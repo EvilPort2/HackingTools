@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    android:versionCode="1"
+    android:versionName="1.0"
+    package="com.shevirah.androidagent">
+
+    <uses-sdk android:minSdkVersion="23"/>
+
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.SEND_SMS"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.WRITE_SETTINGS" />
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+    <application
+        android:icon="@drawable/shevirah"
+        android:label="@string/app_name">
+        <service android:name="com.shevirah.androidagent.SMSService"/>
+        <service android:name="com.shevirah.androidagent.CommandHandlerService"/>
+        <service android:name="com.shevirah.androidagent.HttpPollingService"/>
+        <service android:name="com.shevirah.androidagent.WebUploadService"/>
+        <service android:name="com.shevirah.androidagent.DownloadService"/>
+        <service android:name="com.shevirah.androidagent.CheckinService"/>
+        <activity android:name="com.shevirah.androidagent.StagerActivity"/>
+        <activity android:name="com.shevirah.androidagent.AndroidAgentActivity"><intent-filter><action android:name="android.intent.action.MAIN"/><category android:name="android.intent.category.LAUNCHER"/></intent-filter></activity>
+	<service android:name="com.shevirah.androidagent.BlueToothScanner"/>
+        <receiver android:name="com.shevirah.androidagent.ServiceAutoStarter"><intent-filter><action android:name="android.intent.action.BOOT_COMPLETED"></action></intent-filter></receiver>
+        <receiver android:name="com.shevirah.androidagent.AdminReceiver" android:permission="android.permission.BIND_DEVICE_ADMIN"><intent-filter><action android:name="android.app.action.DEVICE_ADMIN_ENABLED"/></intent-filter><meta-data android:name="android.app.device_admin" android:resource="@xml/device_admin_sample"/></receiver>
+
+    </application>
+
+</manifest>

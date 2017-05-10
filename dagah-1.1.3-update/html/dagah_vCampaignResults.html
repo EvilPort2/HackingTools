@@ -1,0 +1,349 @@
+<?php
+require_once './php/db_creds.php';
+require_once './php/Dagah/CampaignRunFactory.php';
+require_once './php/Dagah/TargetFactory.php';
+
+if (session_status() !== PHP_SESSION_ACTIVE) {
+    session_start();
+}
+if (!isset($_SESSION['userid'])) {
+    header('Location:  login.html');
+}
+$userId = $_SESSION['userid'];
+$connection = mysqli_connect($db_hostname, $db_username, $db_password, $db_database);
+
+if (!empty($_GET['id']) && is_int((int) $_GET['id'])) {
+	
+	$campaignRunId = (int) $_GET['id'];
+    $campaignRun = CampaignRunFactory::getById($connection, $userId, $campaignRunId);
+	
+	$campaignId = $campaignRun->campaignId;
+
+    if (empty($campaignRun)) {
+        header('Location:  dagah_error_404.html');
+    }
+	
+	// NOW THIS IS ONLY TARGETS THAT REPLIED!
+    $targets = TargetFactory::getForCampaign($connection, $campaignRun);
+	
+	// TARGETS, AIMED AT CAMPAIGN RUN
+	$targetsAimed = TargetFactory::getTotalAttackedListByRunId($campaignRun->id);
+	
+	$attackedTargetsList = TargetFactory::getTotalAttackedList($connection, $userId, $campaignId);
+	$respondedTargetsList = TargetFactory::getResponsedList($connection, $userId, $campaignId);
+} else {
+    $campaignRunsList = CampaignRunFactory::getList($connection, $userId, ['agent'], 'NOT IN');
+	
+	$attackedTargetsList = TargetFactory::getTotalAttackedList($connection, $userId);
+	$respondedTargetsList = TargetFactory::getResponsedList($connection, $userId);
+}
+
+$notRespondedNumbersCnt = count($respondedTargetsList) > count($attackedTargetsList)
+	? 0
+	: count($attackedTargetsList) - count($respondedTargetsList);
+$respondedNumbersCnt = count($respondedTargetsList);
+//_d([$notRespondedNumbersCnt, $respondedNumbersCnt]);
+
+?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>View Campaign Results | Dagah</title>
+    <link href="./components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+    <link href="./components/metisMenu/dist/metisMenu.min.css" rel="stylesheet">
+    <link href="./css/Dagah.css" rel="stylesheet">
+    <link href="./css/Dagah_custom.css" rel="stylesheet">
+    <link href="./components/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+<div id="wrapper">
+<?php include('dagah_nav.html'); ?>
+<div id="page-wrapper">
+<div class="container-fluid">
+<h2><i class="fa fa-crosshairs fa-fw"></i> View <?= !empty($campaignRun) ? ('"' . $campaignRun->runDirectory . '" ') : '' ?>Campaign Results</h2>
+<div class="row">
+<!--   List View   -->
+<?php if (isset($campaignRunsList)) : ?>
+    <div class="col-lg-8">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Label</th>
+                                <th>Type</th>
+                                <th>Phone Group</th>
+                                <th>Run Time</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        <?php foreach ($campaignRunsList as $run) : ?>
+                            <tr>
+                                <td><?= $run->id ?></td>
+                                <td><a href="dagah_vCampaignResults.html?id=<?= $run->id ?>"><?= $run->runDirectory ?></a></td>
+                                <td><?= $run->attackType ?></td>
+                                <td><?= $run->phoneGroup ?></td>
+                                <td><?= $run->runTime ?></td>
+                            </tr>
+                        <?php endforeach ?>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+	<div class="col-lg-4">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <b>Campaigns attacks results statistics</b><br/><br/>
+                <div class="table-responsive">
+					<canvas id="myChart" width="25%" height="25%"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+<!--   Single View   -->
+<?php else : ?>
+    <div class="col-lg-8">
+        <div class="panel panel-primary">
+            <div class="panel-heading">Aimed Targets</div>
+            <div class="panel-body">
+            <?php if (!empty($_SESSION['page_errors'])) {
+                echo '<div class="alert alert-danger">' . $_SESSION['page_errors'] . '</div>';
+                unset($_SESSION['page_errors']);
+            } else { ?>
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th style="width: 150px;">ID</th>
+                                <th style="width: 150px;">Number</th>
+                                <th style="width: 150px;">Name</th>
+								<th style="width: 150px;">Phone Group</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        <?php foreach ($targetsAimed as $target) : ?>
+                            <tr>
+                                <td><?= $target->ID ?></td>
+                                <td><?= $target->Number ?></td>
+                                <td><?= $target->Name ?></td>
+                                <td><?= $target->PhoneGroup ?></td>
+                            </tr>
+                        <?php endforeach ?>
+                        </tbody>
+                    </table>
+                </div>
+                <?php } ?>
+            </div>
+			
+		</div>
+		<div class="panel panel-primary">
+			
+			<div class="panel-heading">Replied Targets</div>
+            <div class="panel-body">
+            <?php if (!empty($_SESSION['page_errors'])) {
+                echo '<div class="alert alert-danger">' . $_SESSION['page_errors'] . '</div>';
+                unset($_SESSION['page_errors']);
+            } else { ?>
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th style="width: 150px;">Run Time</th>
+                                <th style="width: 150px;">Number</th>
+                                <th style="width: 150px;">User ID</th>
+                                <th>Result</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        <?php foreach ($targets as $target) : ?>
+                            <tr>
+                                <td><?= $target->runTime ?></td>
+                                <td><?= $target->number ?></td>
+                                <td><?= $target->userId ?></td>
+                                <td><?= $target->resultsString ?></td>
+                            </tr>
+                        <?php endforeach ?>
+                        </tbody>
+                    </table>
+                </div>
+                <?php } ?>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <div class="panel panel-primary">
+            <div class="panel-heading">Results Information</div>
+            <div class="panel-body">
+                <ul>
+                    <li>Campaign Run ID: <?= $campaignRun->id ?></li>
+                    <li>Campaign ID: <?= $campaignRun->campaignId ?></li>
+                    <li>Campaign Saved: <?= $campaignRun->createdTime ?></li>
+                    <li>Run Time: <?= $campaignRun->runTime ?></li>
+                </ul>
+            </div>
+			<div class="panel panel-default">
+				<div class="panel-body">
+					<b>Campaigns attacks results statistics</b><br/><br/>
+					<div class="table-responsive">
+						<canvas id="myChart" width="25%" height="25%"></canvas>
+					</div>
+				</div>
+			</div>
+		</div>
+    </div>
+<?php endif ?>
+
+</div>
+
+
+</div>
+</div>
+</div>
+
+<script src="./components/jquery/dist/jquery.min.js"></script>
+<script src="./components/bootstrap/dist/js/bootstrap.min.js"></script>
+<script src="./components/metisMenu/dist/metisMenu.min.js"></script>
+<script src="./js/sb-admin-2.js"></script>
+<script src="./js/chartjs/Chart.js"></script>
+<script type="text/javascript">
+	
+	// And for a doughnut chart
+	var ctx = document.getElementById('myChart');
+	//ctx.canvas = document.getElementById('myChart');
+	//Chart.defaults.global.tooltips.enabled = false;
+	//Chart.defaults.global.showTooltips = false;
+	
+	var myDoughnutChart = new Chart(ctx, {
+		type: 'doughnut',
+		data:  {
+			labels: [
+				"No response",
+				"Responded"
+			],
+			datasets: [
+				{
+					data: [<?= $notRespondedNumbersCnt ?>, <?= $respondedNumbersCnt ?>],
+					backgroundColor: [
+						
+						"#FFCE56",
+						"#36A2EB",
+					],
+					hoverBackgroundColor: [
+						
+						"#FFCE56",
+						"#36A2EB",
+					]
+				}
+			]
+		},
+		options: {
+			
+			legend: {display: false},
+			tooltips: { enabled: false },
+			//showTooltips: false,
+			hover: false,
+			animation: {
+				duration: 0,
+				onComplete: function () {
+					
+					//this.showTooltip(this.segments, true);
+					
+				  var self = this,
+					  chartInstance = this.chart,
+					  ctx = chartInstance.ctx;
+
+				  ctx.font = '8px Arial';
+				  ctx.textAlign = "center";
+				  ctx.fillStyle = "#FFFFFF";
+
+				  Chart.helpers.each(self.data.datasets.forEach((dataset, datasetIndex) => {
+					  var meta = self.getDatasetMeta(datasetIndex),
+						  total = 0, //total values to compute fraction
+						  labelxy = [],
+						  offset = Math.PI / 2, //start sector from top
+						  radius,
+						  centerx,
+						  centery, 
+						  lastend = 0; //prev arc's end line: starting with 0
+
+					  for (var val of dataset.data) { total += val; } 
+
+					  Chart.helpers.each(meta.data.forEach((element, index) => {
+						  radius = 0.9 * element._model.outerRadius - element._model.innerRadius;
+						  centerx = element._model.x;
+						  centery = element._model.y;
+						  var thispart = dataset.data[index],
+							  arcsector = Math.PI * (2 * thispart / total);
+						  if (element.hasValue() && dataset.data[index] > 0) {
+							labelxy.push(lastend + arcsector / 2 + Math.PI + offset);
+						  }
+						  else {
+							labelxy.push(-1);
+						  }
+						  lastend += arcsector;
+					  }), self)
+
+					  var lradius = radius * 1.8;
+					  ctx.font = Math.round(radius / 5) + 'px Arial';
+					  for (var idx in labelxy) {
+						
+						if (labelxy[idx] === -1) continue;
+						var langle = labelxy[idx],
+							dx = centerx + lradius * Math.cos(langle),
+							dy = centery + lradius * Math.sin(langle),
+							val = self.data.labels[idx];
+						
+						var responded = (self.data.labels[idx] == 'Responded');
+						
+						
+						
+						if ( Math.round(dataset.data[idx] / total * 100) < (responded ? 10 : 11)) { 
+						
+							var border = Math.round(radius * 0.02);
+							ctx.fillStyle = "#FFFFFF";
+							ctx.fillRect(dx - Math.round(radius * 0.65) - border, dy - Math.round(radius * 0.2) - border, Math.round(radius * 1.3) + 2 * border, Math.round(radius * 0.5) + 2 * border);
+							ctx.fillStyle = !responded ? "#FFCE56" : "#36A2EB";
+							ctx.fillRect(dx - Math.round(radius * 0.65), dy - Math.round(radius * 0.2), Math.round(radius * 1.3), Math.round(radius * 0.5));
+						}
+						
+						ctx.fillStyle = responded ? "#FFFFFF" : "#000000";
+						ctx.fillText(val, dx, dy);
+						ctx.fillText("(" + dataset.data[idx] + ")", dx, dy + Math.round(radius * 0.22));
+						
+						if (responded) {
+
+							var val = Math.round(dataset.data[idx] / total * 100);
+							var dx = centerx;
+							var dy = centery;
+							ctx.font =  Math.round(radius * 0.3) + 'px Arial';
+							ctx.textAlign = "center";
+							ctx.fillStyle = "#000000";
+							ctx.fillText(val + '%', dx + Math.round(radius * 0.05), dy + Math.round(radius * 0.05));
+						}	
+					  }
+
+				  }), self);
+				}
+			}
+		}
+	});
+	
+</script>
+</body>
+
+</html>

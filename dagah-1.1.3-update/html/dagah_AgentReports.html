@@ -1,0 +1,412 @@
+<?php
+
+require_once './php/db_creds.php';
+require_once './php/Dagah/CampaignRunFactory.php';
+require_once './php/Dagah/TargetFactory.php';
+
+if (session_status() !== PHP_SESSION_ACTIVE) {
+    session_start();
+}
+if (!isset($_SESSION['userid'])) {
+    header('Location:  login.html');
+}
+$userId = $_SESSION['userid'];
+$connection = mysqli_connect($db_hostname, $db_username, $db_password, $db_database);
+
+if (!empty($_GET['id']) && is_int((int) $_GET['id'])) {
+
+    // Get Campaign Run Info
+    $stmt = mysqli_stmt_init($connection);
+    $id = (int) $_GET['id'];
+    mysqli_stmt_prepare($stmt, 'SELECT CampaignID, Date, RunTime, RunDirectory FROM campaign_runs WHERE ID=? AND UserID=? LIMIT 1');
+    mysqli_stmt_bind_param($stmt, 'ii', $id,  $userId);
+    mysqli_stmt_execute($stmt);
+    mysqli_stmt_store_result($stmt);
+    mysqli_stmt_bind_result($stmt, $campaignRunCID, $campaignRunDate, $campaignRunTime, $campaignRunDir);
+	mysqli_stmt_fetch($stmt);
+    // Get Attack Info
+    $stmt_ack = mysqli_stmt_init($connection);
+    mysqli_stmt_prepare($stmt_ack, 'SELECT Label, attacks.ID FROM attacks inner join linkcampaignsattacks on linkcampaignsattacks.AttackID = attacks.ID WHERE linkcampaignsattacks.CampaignID = ?');
+    mysqli_stmt_bind_param($stmt_ack,'i',$campaignRunCID);
+    mysqli_stmt_execute($stmt_ack);
+    mysqli_stmt_store_result($stmt_ack);
+    mysqli_stmt_bind_result($stmt_ack, $attackLabel, $attackID);
+    $attack_rows = array();
+    while(mysqli_stmt_fetch($stmt_ack)) {
+        array_push($attack_rows, array('label' => $attackLabel, 'ID' => $attackID));
+    }
+	
+	if (isset($_GET['showTargets']) && $_GET['showTargets']) {
+
+		$campaignRunId = (int) $_GET['id'];
+		$campaignRun = CampaignRunFactory::getById($connection, $userId, $campaignRunId);
+		$campaignId = $campaignRun->campaignId;
+
+		if (empty($campaignRun)) {
+			header('Location:  dagah_error_404.html');
+		}
+		$resultsRunsList = TargetFactory::getForCampaign($connection, $campaignRun);
+		//_d($resultsRunsList);
+	}
+
+    // Save Path Info
+    $run_path = $_SESSION['dagah_dir'] . $_SESSION['savedruns_dir'] . $campaignRunDir . $_SESSION['results_dir'] . $_SESSION['agent_dir'];
+    $qrc_path = $_SESSION['dagah_dir'] . $_SESSION['savedruns_dir'] . $campaignRunDir . $_SESSION['results_dir'];
+} else {
+    
+    $campaignRunsList = CampaignRunFactory::getList($connection, $userId, ['agent']);
+}
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Reports</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="./components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" type="text/css"n
+
+    <!-- MetisMenu CSS -->
+    <link href="./components/metisMenu/dist/metisMenu.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="./css/Dagah.css" rel="stylesheet">
+    <link href="./css/Dagah_custom.css" rel="stylesheet">
+
+    <!-- Custom Fonts -->
+    <link href="./components/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+<body>
+
+<div id="wrapper">
+
+<!-- Navigation -->
+<?php include('dagah_nav.html'); ?>
+		
+<!-- Page Content -->
+<div id="page-wrapper">
+<div class="container-fluid">
+<h2><i class="fa fa-crosshairs fa-fw"></i> View <?= !empty($campaignRun) ? ('"' . $campaignRun->runDirectory . '" ') : '' ?>
+	Agent<?= !empty($resultsRunsList) ? ' Targets' : '' ?> Results</h2>
+<div class="row">
+<!--   List View   -->
+<?php if (isset($campaignRunsList)) : ?>
+    <div class="col-lg-12">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Label</th>
+								<th></th>
+                                <th>Type</th>
+                                <th>Phone Group</th>
+                                <th>Run Time</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        <?php foreach ($campaignRunsList as $run) : ?>
+                            <tr>
+                                <td><?= $run->id ?></td>
+                                <td><a href="dagah_AgentReports.html?id=<?= $run->id ?>"><?= $run->runDirectory ?></a></td>
+								<td><a href="dagah_AgentReports.html?id=<?= $run->id ?>&showTargets=true">Show targets</a></td>
+                                <td><?= $run->attackType ?></td>
+                                <td><?= $run->phoneGroup ?></td>
+                                <td><?= $run->runTime ?></td>
+                            </tr>
+                        <?php endforeach ?>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<!-- Targets View   -->
+<?php elseif ($resultsRunsList) : ?>
+	<div class="col-lg-12">
+        <div class="panel panel-primary">
+            <div class="panel-heading">Targets</div>
+            <div class="panel-body">
+            <?php if (!empty($_SESSION['page_errors'])) {
+                echo '<div class="alert alert-danger">' . $_SESSION['page_errors'] . '</div>';
+                unset($_SESSION['page_errors']);
+            } else { ?>
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th style="width: 150px;">Run Time</th>
+                                <th style="width: 150px;">Number</th>
+                                <th style="width: 150px;">User ID</th>
+                                <th>Result</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        <?php foreach ($resultsRunsList as $target) : ?>
+                            <tr>
+                                <td><?= $target->runTime ?></td>
+                                <td><?= $target->number ?></td>
+                                <td><?= $target->userId ?></td>
+                                <td><?= $target->resultsString ?></td>
+                            </tr>
+                        <?php endforeach ?>
+                        </tbody>
+                    </table>
+                </div>
+                <?php } ?>
+            </div>
+        </div>
+    </div>
+<?php else : ?>
+
+<!--   Single View   -->
+<div class="row">
+    <div class="col-lg-12">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                Campaign Results (<?php echo $run_path ?>)
+            </div>
+            <div class="panel-body">
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Phone Number</th>
+                                <th>Facts</th>
+                                <th>Available Commands</th>
+                                <th>Available Output</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php
+                                $agent_row = "<tr>"; 
+                                $phone = "";
+                                $APKS = "";
+                                $Settings = "";
+                                $phoneResults = false;
+                                if ($handle = opendir($run_path)) {
+                                    while (false !== ($entry = readdir($handle))) {
+                                       if (!(fnmatch("*-agentkeys",$entry)) && $entry != "." & $entry != "..") {
+                                            // found phone number
+                                            $phoneResults = true;
+                                            $phone = $entry;
+                                            $APKS = file_get_contents($run_path . $entry . "/APKS.txt");
+                                            $Settings = file_get_contents($run_path . $entry . "/Settings.txt");
+                                            $Facts = file_get_contents($run_path . $entry . "/facts.txt");
+                                            $agent_row .= "<td>" . $entry . "</td><td>" . $Facts . "</td>";
+                                            $agent_row .= "<td><a href='dagah_AgentCommand.html?return=".$id."&cmd=apks&campaign=".$campaignRunDir."&phone=" . $phone . "' class='btn btn-primary btn-xs' title='Retrieve a list of applications installed on target device'>APK</a>";
+                                            $agent_row .= " <button class='btn btn-primary btn-xs' type='button' data-target='#uapk_".$phone."' title='ANDROID ONLY: Retrieve an application installed on target device' data-toggle='modal'>UAPK</button>";
+                                            $agent_row .= " <button class='btn btn-primary btn-xs' type='button' data-target='#spam_".$phone."' title='ANDROID ONLY: Send a text message from the target device to another phone number' data-toggle='modal'>SPAM</button>";
+                                            $agent_row .= " <button class='btn btn-primary btn-xs' type='button' data-target='#down_".$phone."' title='Push a file to the target device'>DOWN</button>";
+                                            $agent_row .= " <button class='btn btn-primary btn-xs' data-target='#upld_".$phone."' type='button' title='Retrieve a file from the target device' data-toggle='modal'>UPLD</button>";
+                                            $agent_row .= " <a href='dagah_AgentCommand.html?return=".$id."&cmd=gets&campaign=".$campaignRunDir."&phone=" . $phone . "' class='btn btn-primary btn-xs' title='ANDROID ONLY: Retrieve the security settings on the target device'>GETS</a>";
+                                            $agent_row .= " <button class='btn btn-primary btn-xs' type='button' data-target='#sets_".$phone."' title='ANDROID ONLY: Set security settings on the target device' data-toggle='modal'>SETS</button>";
+                                            $agent_row .= " <a href='dagah_AgentCommand.html?return=".$id."&cmd=dele&campaign=".$campaignRunDir."&phone=" . $phone . "' class='btn btn-primary btn-xs' title='ANDROID ONLY: Prompt the user to delete the dagah agent'>DELE</a></td>";
+                                             // add outputs
+                                            $agent_row .= "<td><button class='btn btn-primary btn-xs' data-target='#apks_".$phone."' data-toggle='modal'>APKS</button> <button class='btn btn-primary btn-xs' data-target='#gets_".$phone."' data-toggle='modal'>GETS</button></td>";                                                           
+                                            $agent_row .= "</tr>";
+                                            echo $agent_row;
+                                            $agent_row = "<tr>";
+                                            // APKS
+                                            $dialogs = "<div id='apks_".$phone."' class='modal fade' aria-hidden='true' role='dialog' aria-labelledby='apks'><div class='modal-dialog'><div class='modal-content'><div class='modal-header'><button class='close' aria-hidden='true' data-dismiss='modal' type='button'>x</button><h4 id='APKSlabel' class='modal-title'>APKS (Applications) Output</h4></div><div class='modal-body'>".$APKS."</div></div></div></div>";
+                                            // GETS
+                                            $dialogs .= "<div id='gets_".$phone."' class='modal fade' aria-hidden='true' role='dialog' aria-labelledby='apks'><div class='modal-dialog'><div class='modal-content'><div class='modal-header'><button class='close' aria-hidden='true' data-dismiss='modal' type='button'>x</button><h4 id='GETSlabel' class='modal-title'>GETS (Settings) Output</h4></div><div class='modal-body'>".$Settings."</div></div></div></div>";
+
+                                           // SPAM
+                                           $dialogs .= "<div id='spam_".$phone."' class='modal fade' aria-hidden='true' role='dialog' aria-labelledby='apks'><div class='modal-dialog'><div class='modal-content'><div class='modal-header'><button class='close' aria-hidden='true' data-dismiss='modal' type='button'>x</button><h4 id='GETSlabel' class='modal-title'>SMS Text to Send from Target Phone to second target (".$phone.")</h4></div><div class='modal-body'>SMS Text to Send: <input type='text' name='sms_text' required pattern='[^A-Za-z0-9\,\!\_ \.\-\\\\]'/><br />Phone To Send SMS To: <input type='number' name='sms_phone' pattern='[0-9]*'/><br /><input type='button' value='Launch' onclick='SubmitCommand(\"spam\",\"".$id."\",\"".$campaignRunDir."\", \"".$phone."\");' /></div></div></div></div>";
+
+                                           // SETS
+                                           $dialogs .= "<div id='sets_".$phone."' class='modal fade' aria-hidden='true' role='dialog' aria-labelledby='apks'><div class='modal-dialog'><div class='modal-content'><div class='modal-header'><button class='close' aria-hidden='true' data-dismiss='modal' type='button'>x</button><h4 id='GETSlabel' class='modal-title'>Security Setting for  (".$phone.")</h4></div><div class='modal-body'>Setting:: <input type='text' name='sets_setting' required pattern='[^A-Za-z0-9\,\!\_ \.\-\\\\]'/><br />Value:: <input type='text' name='sets_value' pattern='[^A-Za-z0-9\,\!\_ \.\-\\\\]'/><br /><input type='button' value='Launch' onclick='SubmitCommand(\"sets\",\"".$id."\",\"".$campaignRunDir."\", \"".$phone."\");' /></div></div></div></div>";
+
+                                          // UAPK
+                                          $dialogs .= "<div id='uapk_".$phone."' class='modal fade' aria-hidden='true' role='dialog' aria-labelledby='apks'><div class='modal-dialog'><div class='modal-content'><div class='modal-header'><button class='close' aria-hidden='true' data-dismiss='modal' type='button'>x</button><h4 id='GETSlabel' class='modal-title'>Package name of application to retrieve from Target Phone (".$phone.")</h4></div><div class='modal-body'>Package Name: <input type='text' name='package' required pattern='[^A-Za-z0-9\_\.\-\\\\]' /><br /><input type='button' value='Launch' onclick='SubmitCommand(\"uapk\",\"".$id."\",\"".$campaignRunDir."\", \"".$phone."\");' /></div></div></div></div>";
+
+                                           // UPLD
+                                          $dialogs .= "<div id='upld_".$phone."' class='modal fade' aria-hidden='true' role='dialog' aria-labelledby='apks'><div class='modal-dialog'><div class='modal-content'><div class='modal-header'><button class='close' aria-hidden='true' data-dismiss='modal' type='button'>x</button><h4 id='GETSlabel' class='modal-title'>Path and file name to retrieve from Target Phone (".$phone.")</h4></div><div class='modal-body'>Full Path and Filename: <input type='text' name='filepath' required pattern='[^A-Za-z0-9\_\.\-\\\\]' /><br /><input type='button' value='Launch' onclick='SubmitCommand(\"upld\",\"".$id."\",\"".$campaignRunDir."\", \"".$phone."\");' /></div></div></div></div>";
+
+                                         echo $dialogs;
+                                         $dialogs = "";
+
+                                        } 
+                                    }
+                                    if (!$phoneResults) {
+                                       // No results yet
+                                       $agent_row .= "<td></td><td></td></tr>";
+                                       echo $agent_row;
+                                    }
+                                } else {
+                                    // cant access directory
+                                    $agent_row = "<tr><td colspan='2'>Can't open directory: " . $run_path . "</td></tr>";
+                                    echo $agent_row;
+                                }
+
+                            ?>
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-8">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                Attack(s) Information
+            </div>
+            <div class="panel-body">
+                <ul class="nav nav-tabs">
+                    <?php 
+                      foreach ($attack_rows as $value) {
+                         echo "<li class='active'><a data-toggle='tab' href='#" . $value['label'] . "' aria-expanded='true'>" . $value['label'] . "</a></li>"; 
+                      } 
+                    ?>
+                </ul>
+                <div class="tab-content">
+                    <?php 
+                    foreach ($attack_rows as $value) {
+                        $attributes_output = "<div id='" . $value['label'] . "'><div class='table-responsive'><table class='table table-striped'><thead><tr><th>Attribute</th><th>Value</th></tr></thead><tbody>";
+                        // Get Attack Attributes
+                        $stmt_att = mysqli_stmt_init($connection);
+                        mysqli_stmt_prepare($stmt_att, 'SELECT Attribute, Value FROM attack_attributes WHERE AttackID =?');
+                        mysqli_stmt_bind_param($stmt_att,'i',$value['ID']);
+                        mysqli_stmt_execute($stmt_att);
+                        mysqli_stmt_store_result($stmt_att);
+                        mysqli_stmt_bind_result($stmt_att, $attackAtt, $attackVal);
+
+                        $qrc = false;
+                        $backdoor = false;
+                        while(mysqli_stmt_fetch($stmt_att)) {
+                            if ($attackAtt == "XML") {
+                                $attributes_output .= "<tr><td>" . $attackAtt . "</td><td>" . htmlentities($attackVal) . "</td></tr>";
+                            } else if ($attackAtt == "Delivery_Method" && $attackVal == "qrc") {
+                                $qrc = true;
+                                $attributes_output .= "<tr><td>" . $attackAtt . "</td><td>" . htmlentities($attackVal) . "</td></tr>";
+                            } else if ($attackAtt == "Backdoor_App") {
+                                $backdoor = true;
+                                $attributes_output .= "<tr><td>" . $attackAtt . "</td><td>" . htmlentities($attackVal) . "</td></tr>";
+                                $fileArray = explode('/', $attackVal);
+                                $index = count($fileArray);
+                                --$index;
+                                $backdoor_app_file = $fileArray[$index];
+                            } else {
+                                $attributes_output .= "<tr><td>" . $attackAtt . "</td><td>" . $attackVal . "</td></tr>";
+                            }
+                        }
+                        $attributes_output .= "</tbody></table></div></div>";
+                        echo $attributes_output; 
+                    }  
+                    ?>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                Results Information
+            </div>
+            <div class="panel-body">
+                <ul>
+                    <li>Campaign Run ID: <?php echo $id ?></li>
+                    <li>Campaign ID: <?php echo $campaignRunCID ?></li>
+                    <li>Campaign Saved: <?php echo $campaignRunDate ?></li>
+                    <li>Run Time: <?php echo $campaignRunTime ?></li>
+                    <?php 
+                        if (!empty($qrc)) {
+                            $image_path = $qrc_path . "index.html.svg";
+                            $qr_image = file_get_contents($image_path);
+                            header('Content-type: image/svg');
+                            echo "<li>QRC image: " . $qr_image . "</li>";
+                        }
+
+                        ?>
+                </ul>
+				<a href="dagah_AgentReports.html?id=<?= $id ?>&showTargets=true">Show targets</a>
+            </div>
+        </div>
+    </div>
+
+</div>
+<?php endif ?>
+
+</div>
+<!-- /.container-fluid -->
+</div>
+<!-- /#page-wrapper -->
+
+</div>
+<!-- /#wrapper -->
+
+<script type="text/javascript">
+        function SubmitCommand(command, ret_val, campaign, phone) {
+            switch (command) {
+                case 'spam':
+                    var sms_text = $('input[name=sms_text]').val();
+                    var sms_phone = $('input[name=sms_phone]').val();
+                    var window_path = "dagah_AgentCommand.html?return=" + ret_val + "&cmd=" + command + "&campaign=" + campaign + "&phone=" + phone + "&sms=" + sms_text + "&target=" + sms_phone;
+                    window.location.href = window_path;
+                    break;
+                case 'upld':
+                    var filename_path = $('input[name=filepath]').val();
+                    var window_path = "dagah_AgentCommand.html?return=" + ret_val + "&cmd=" + command + "&campaign=" + campaign + "&phone=" + phone + "&file=" + filename_path;
+                    window.location.href = window_path;
+                    break;
+                case 'uapk':
+                    var package_name = $('input[name=package]').val();
+                    var window_path = "dagah_AgentCommand.html?return=" + ret_val + "&cmd=" + command + "&campaign=" + campaign + "&phone=" + phone + "&package=" + package_name;
+                    window.location.href = window_path;
+                    break;
+                case 'sets':
+                    var setsetting = $('input[name=sets_setting]').val();
+                    var setvalue = $('input[name=sets_value]').val();
+                    var window_path = "dagah_AgentCommand.html?return=" + ret_val + "&cmd=" + command + "&campaign=" + campaign + "&phone=" + phone + "&setting=" + setsetting + "&value=" + setvalue;
+                    window.location.href = window_path;
+                    break;
+
+
+            }
+            
+        }
+
+
+</script>
+
+
+<!-- jQuery -->
+<script src="./components/jquery/dist/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="./components/bootstrap/dist/js/bootstrap.min.js"></script>
+
+<!-- Metis Menu Plugin JavaScript -->
+<script src="./components/metisMenu/dist/metisMenu.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="./js/sb-admin-2.js"></script>
+
+</body>
+
+</html>

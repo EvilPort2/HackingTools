@@ -1,0 +1,523 @@
+<?php
+    require_once './php/db_creds.php';
+    session_start();
+    date_default_timezone_set('UTC');
+    if (!isset($_SESSION['userid'])) {
+		
+		// no session data-- send back to login
+        header('Location:  login.html');
+		exit;
+	}
+	
+	if (empty($_GET['id'])) {
+		
+		$newCampaign = true;
+	} else {
+		
+		$newCampaign = false;
+		$id = $_GET['id'];
+	}
+	
+	$connection = mysqli_connect($db_hostname, $db_username, $db_password, $db_database);
+	$userID = $_SESSION['userid'];
+	// Get the Attacks to paint on screen
+	$stmt = mysqli_stmt_init($connection);
+	mysqli_stmt_prepare($stmt, 'SELECT ID, Label FROM attacks WHERE UserID=? ORDER BY created DESC');
+	mysqli_stmt_bind_param($stmt,'i',$userID);
+	mysqli_stmt_execute($stmt);
+	mysqli_stmt_store_result($stmt);
+	mysqli_stmt_bind_result($stmt, $attackID, $attackLabel);
+	$attacksList = [];
+	$dataReceived = false;
+	while(mysqli_stmt_fetch($stmt)) {
+		
+		$attacksList[$attackID] = ['id' => $attackID, 'label' => $attackLabel, 'chosen' => false];
+	}
+	foreach($_POST as $key => $val) {
+		
+		if (strpos($key, "attack_") !== false) {
+			
+			if (isset($attacksList[$val])) {
+				
+				$attacksList[$val]['chosen'] = true;
+			}
+		}
+	}
+
+		
+	
+
+	if (count($_POST)>0) {
+		
+		// set user values flag to true
+		$dataReceived = true;
+			
+		$fail = false;
+		// Check variables for command injection
+		$characterpattern = '/[^A-Za-z0-9 \/\_.\-\\\\]/i';
+		$patternnospace = '/[^A-Za-z0-9\/\_.\-\\\\]/i';
+		if (preg_match($patternnospace, $_POST['Campaign_Label'])) {
+		   // Someone mucking with campaign
+		   $fail = true;
+		   $campaign_error = "<div class='alert alert-danger'>Campaign Label contains unallowed characters.</div>";
+		} else if (preg_match($patternnospace, $_SESSION['dagah_dir'])) {
+		   // Someone mucking with dagahlog
+		   $fail = true;
+		   $campaign_error = "<div class='alert alert-danger'>DAGAHLOC contains unallowed characters.</div>";
+		} else if (preg_match($patternnospace, $_SESSION['campaign_dir'])) {
+		   // Someone mucking with campaigns dir
+		   $fail = true;
+		   $campaign_error = "<div class='alert alert-danger'>CAMPAIGNDIR contains unallowed characters.</div>";
+		}
+		// Check to see if Campaign already exists
+		$campaignLabel = substr(trim($_POST['Campaign_Label']), 0, 255);
+		$stmt_campaign = mysqli_stmt_init($connection);
+		mysqli_stmt_prepare($stmt_campaign, 'SELECT NAME FROM campaigns WHERE Name = ?');
+		mysqli_stmt_bind_param($stmt_campaign, 's', $campaignLabel);
+		mysqli_stmt_execute($stmt_campaign);
+		mysqli_stmt_store_result($stmt_campaign);
+
+		// campaign allready exists
+		if (mysqli_stmt_num_rows($stmt_campaign) > 0) {
+
+			// check if we are allowed to use already existent campaign label
+			if (empty($_POST['forceName'])) {
+
+				$fail = true;
+				$campaign_error = '<div class="alert alert-danger">Campaign Name is already in use. Please choose another</div>';
+			} else {	
+
+				// check if we need to add suffix to non unique campaign label
+				if (!empty($_POST['nameSuffix'])) {
+
+					if (strlen($campaignLabel) > (255 - strlen($_POST['nameSuffix']))) {
+
+						$campaignLabel = substr($campaignLabel, 0, 255 - strlen($_POST['nameSuffix']) - 3) . '...';
+					}
+
+					$campaignLabel .= $_POST['nameSuffix'];
+				}
+			}
+		} elseif (count($_POST) < 3) {
+			// no campaign chosen
+			$fail = true;
+			$campaign_error = '<div class="alert alert-danger">No attacks chosen. Please choose at least one attack.</div>';
+		}
+
+		if (!$fail) {
+			// Everything is cool
+			// campaign name unique proceed
+			$xml = htmlentities("<campaign name=\"" . $_POST['Campaign_Label'] . "\">");
+			
+			if ($id) {
+			
+				$stmt_campaign = mysqli_stmt_init($connection);
+				mysqli_stmt_prepare($stmt_campaign, 'SELECT Name FROM campaigns WHERE ID = ?');
+				mysqli_stmt_bind_param($stmt_campaign, 'i', $id);
+				mysqli_stmt_execute($stmt_campaign);
+				mysqli_stmt_store_result($stmt_campaign);
+				mysqli_stmt_bind_result($stmt_campaign, $oldCampaignName);
+				mysqli_stmt_fetch($stmt_campaign);
+				
+				if ($oldCampaignName) {
+					
+					
+				}
+			}
+			
+			// update campaign table entry
+			if ($id) {
+				
+				$stmt_campaign = mysqli_stmt_init($connection);
+				mysqli_stmt_prepare($stmt_campaign, 'UPDATE campaigns SET Name = ?, UserID = ? WHERE ID = ?');
+				mysqli_stmt_bind_param($stmt_campaign, 'sii', $campaignLabel, $userID, $id);
+				mysqli_stmt_execute($stmt_campaign);
+				mysqli_stmt_store_result($stmt_campaign);
+				$campaign_id = $id;
+			} else {
+			
+				// create campaign table entry
+			
+				$stmt_campaign = mysqli_stmt_init($connection);
+				mysqli_stmt_prepare($stmt_campaign, 'INSERT INTO campaigns (Name, Created, UserID) VALUES (?, (now() - interval 4 hour),?)');
+				mysqli_stmt_bind_param($stmt_campaign,'si',$campaignLabel, $userID);
+				mysqli_stmt_execute($stmt_campaign);
+				mysqli_stmt_store_result($stmt_campaign);
+				// Get Campaign ID
+				$campaign_id=mysqli_stmt_insert_id($stmt_campaign);
+			}
+			
+			// if editing the existant campaign - need to remove all the old binded attacks
+			if ($id) {
+				
+				$stmt_campaign = mysqli_stmt_init($connection);
+				mysqli_stmt_prepare($stmt_campaign, 'DELETE FROM linkcampaignsattacks WHERE CampaignID = ?');
+				mysqli_stmt_bind_param($stmt_campaign, 'i', $campaign_id);
+				mysqli_stmt_execute($stmt_campaign);
+			}
+			
+			// Add the linkage to attacks
+			// loop for each attack selected
+			foreach($_POST as $key => $val) {
+				if(strpos($key, "attack_") !== false) {
+					// attack selected, save link
+					$stmt_campaign = mysqli_stmt_init($connection);
+					mysqli_stmt_prepare($stmt_campaign, 'INSERT INTO linkcampaignsattacks (CampaignID, AttackID) VALUES (?,?)');
+					mysqli_stmt_bind_param($stmt_campaign,'ii',$campaign_id, $val);
+					mysqli_stmt_execute($stmt_campaign);
+					mysqli_stmt_store_result($stmt_campaign);
+					
+					 // get attack XML to add to overall
+					$stmt_campaign = mysqli_stmt_init($connection);
+					mysqli_stmt_prepare($stmt_campaign, 'SELECT XML FROM attacks WHERE ID=? LIMIT 1');
+					mysqli_stmt_bind_param($stmt_campaign,'i',$val);
+					mysqli_stmt_execute($stmt_campaign);
+					mysqli_stmt_store_result($stmt_campaign);
+					mysqli_stmt_bind_result($stmt_campaign, $attackXML);
+					while(mysqli_stmt_fetch($stmt_campaign)) {
+						 $xml .= htmlentities($attackXML);
+					}
+
+				}
+			}
+			// close out </campaign> xml
+			$xml .= htmlentities("</campaign>");
+			$xml_convert = html_entity_decode($xml);
+			// save xml (update)
+			$stmt_campaign = mysqli_stmt_init($connection);
+			mysqli_stmt_prepare($stmt_campaign, 'UPDATE campaigns SET XML=? WHERE ID=?');
+			mysqli_stmt_bind_param($stmt_campaign,'si',$xml,$campaign_id);
+			mysqli_stmt_execute($stmt_campaign);
+
+			// save campaigns xml file to filesystem
+			// if editing existant campaign - need to remove the old xml first
+			if ($id) {
+				
+				@unlink($_SESSION['dagah_dir'] . $_SESSION['campaign_dir'] . $oldCampaignName . ".xml");
+			}
+			if (!file_put_contents($_SESSION['dagah_dir'] . $_SESSION['campaign_dir'] . $_POST['Campaign_Label'] . ".xml", $xml_convert)) {
+				
+				$error = true;
+			};
+			if ($error) {
+				
+				$err = date('m/d/Y H:i:s') . ": File Creation Error (Campaign)... " . $_SESSION['dagah_dir'] . $_SESSION['campaign_dir'] . $_POST['Campaign_Label'] . ".xml\n";
+				file_put_contents($_SESSION['dagah_dir'] . "/error_log.txt", $err, FILE_APPEND);
+				echo "XML File Creation Error: " . $_SESSION['dagah_dir'] . $_SESSION['campaign_dir'] . $_POST['Campaign_Label'] . ".xml";
+			} else {
+				
+				// save notification
+				$Comment = "Campaign Created " . $campaignLabel;
+				$Type = "campaign";
+				$userID = $_SESSION['userid'];
+				$stmt_not = mysqli_stmt_init($connection);
+				mysqli_stmt_prepare($stmt_not, 'INSERT INTO notifications (Comment, Time, Type, UserID) VALUES (?,(now() - interval 4 hour),?,?)');
+				mysqli_stmt_bind_param($stmt_not, 'ssi',$Comment,$Type,$userID);
+				mysqli_stmt_execute($stmt_not);
+				mysqli_stmt_store_result($stmt_not);
+
+				// escape characters to avoid command injection
+				$dagah_cmd = $_SESSION['dagah_dir'] . "/dagah2.pyc";
+				$arg_dagah_cmd = escapeshellarg($dagah_cmd);
+				$campaign_str = $_SESSION['dagah_dir'] . $_SESSION['campaign_dir'] . $_POST['Campaign_Label'] . ".xml";
+				$agr_campaign_label = escapeshellarg($campaign_str); 
+				// execute campaign staging
+				$stage_command = "python " . $arg_dagah_cmd . " Campaign " . $agr_campaign_label . " 2>&1";
+
+				// save staging output to campaign record (first just command to capture if command is being run but erroring out)
+				$stagingOutput = $stage_command . ": Initial Save";
+				$stmt_campaign = mysqli_stmt_init($connection);
+				mysqli_stmt_prepare($stmt_campaign, 'UPDATE campaigns SET StagingOutput=? WHERE ID=?');
+				mysqli_stmt_bind_param($stmt_campaign,'si',$stagingOutput,$campaign_id);
+				mysqli_stmt_execute($stmt_campaign);
+
+				$curDir = getcwd();
+				chdir($_SESSION['dagah_dir']);
+				exec($stage_command, $staging_output, $result);           
+
+				// save staging output to campaign record
+				// format output
+				$output = "";
+				$showError = false;
+				if ($result != 0) {
+
+					$showError = true;
+				} else {
+
+					foreach ($staging_output as $value) {
+
+						if (strpos($value, '[Errno') !== false) {
+
+							$showError = true;
+							break;
+						}
+					}
+				}
+
+				if ($showError) {
+
+					if ($id) {
+						
+						$_SESSION['message'] = "<div class='alert alert-danger'>Error! Campaign creation failed. <br>" . implode(' ', $staging_output) . "</div>";
+						header('Location: dagah_vCampaigns.html');
+						exit;
+					}
+					$campaign_error = "<div class='alert alert-danger'>Error! Campaign creation failed. <br>" . implode(' ', $staging_output) . "</div>";
+					chdir($curDir);
+				} else {
+
+					foreach ($staging_output as $value) {
+						$output .= $value . "<br />";
+					}
+					$for_output = htmlentities($output);
+					$stagingOutput = "<b>" . $stage_command . ":</b><br /> " . $for_output;
+					$stmt_campaign = mysqli_stmt_init($connection);
+					mysqli_stmt_prepare($stmt_campaign, 'UPDATE campaigns SET StagingOutput=? WHERE ID=?');
+					mysqli_stmt_bind_param($stmt_campaign,'si',$stagingOutput,$campaign_id);
+					mysqli_stmt_execute($stmt_campaign);
+
+					if ($id) {
+						
+						$_SESSION['message'] = '<div class="alert alert-success">Campaign was saved successfully.</div>';
+						header('Location: dagah_vCampaigns.html');
+						exit;
+					} else {
+					
+						$campaign_error = "<div class='alert alert-success alert-dismissable'>Campaign was saved successfully.</div>";
+						chdir($curDir);
+					}
+				}
+			}
+		}     
+	} // end POST count > 0
+	
+	// get campaign data from db
+	if (!$newCampaign) {
+
+		// get the saved values
+		if (!$dataReceived) {
+			
+			$stmt_campaign = mysqli_stmt_init($connection);
+			mysqli_stmt_prepare($stmt_campaign, 'SELECT Name FROM campaigns WHERE ID = ?');
+			mysqli_stmt_bind_param($stmt_campaign, 'i', $id);
+			mysqli_stmt_execute($stmt_campaign);
+			mysqli_stmt_store_result($stmt_campaign);
+			mysqli_stmt_bind_result($stmt_campaign, $campaignName);
+			mysqli_stmt_fetch($stmt_campaign);
+			
+			$campaignLabel = $campaignName;
+			
+			$stmt_campaign = mysqli_stmt_init($connection);
+			mysqli_stmt_prepare($stmt_campaign, 'SELECT AttackID FROM linkcampaignsattacks WHERE CampaignID = ?');
+			mysqli_stmt_bind_param($stmt_campaign,'i', $id);
+			mysqli_stmt_execute($stmt_campaign);
+			mysqli_stmt_store_result($stmt_campaign);
+			mysqli_stmt_bind_result($stmt_campaign, $attackId);
+			while(mysqli_stmt_fetch($stmt_campaign)) {
+			
+				$attacksList[$attackId]['chosen'] = true;
+			}
+		} else {
+			
+			//$campaignLabel = $name;
+		}
+	}
+	
+	// gloabal variable to detect wether we need to proceed with showing html page
+	// or just return the save campaign operation result
+	if (!empty($returnCampaignSaveResult)) {
+		
+		if (!$showError) {
+			
+			return null;
+		}
+		
+		return $campaign_error;
+	}
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Executed Campaigns</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="./components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+
+    <!-- MetisMenu CSS -->
+    <link href="./components/metisMenu/dist/metisMenu.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="./css/Dagah.css" rel="stylesheet">
+    <link href="./css/Dagah_custom.css" rel="stylesheet">
+
+    <!-- Custom Fonts -->
+    <link href="./components/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+<body>
+
+    <div id="wrapper">
+
+        <!-- Navigation -->
+        <?php include('dagah_nav.html'); ?>
+		
+        <!-- Page Content -->
+        <div id="page-wrapper">
+            <div class="container-fluid">
+               <?php echo $campaign_error ?>
+               <h2><i class="fa fa-bolt fa-fw"></i> <?php if ($newCampaign): ?>Design a Campaign<?php else: ?>Edit Campaign<?php endif; ?></h2>
+               <form role="form" method="post">
+                <div class="row">
+                 <div class="col-lg-12">
+                     <div class="panel panel-default">
+                        <div class="panel-heading">
+                            Name
+                        </div>
+                        <div class="panel-body">
+                            <div class="form-group">
+                            <input id="Campaign_Label" value="<?= $campaignLabel ?>" name="Campaign_Label" class="form-control" title="alphanumeric w/ underscores no spaces" required="required" pattern="[A-Za-z0-9\_\-]+"/>
+                            <p class="help-block">Unique Campaign Label</p>
+                         </div>
+                        </div>
+                 </div>
+                     </div>
+                 <div class="col-lg-8">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            Select Attack(s)
+                        </div>
+                        <!-- /.panel-heading -->
+                        <div class="panel-body">
+                            <div class="table-responsive">
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th></th>
+                                            <th>ID</th>
+                                            <th>Name</th>
+                                            <th>Show Attributes</th>
+                                            <th style="width: 0px;"></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php
+                                            foreach ($attacksList as $attackID => $attack) {
+                                        ?>
+                                        <tr>
+                                            <td><input type="checkbox" id="attack_<?php echo $attackID ?>" name="attack_<?php echo $attackID ?>" value="<?php echo $attackID ?>" <?php if ($attack['chosen']) echo 'checked="checked"'; ?>/></td>
+                                            <td><?php echo $attackID ?></td>
+                                            <td><?php echo $attack['label'] ?></td>
+                                            <td><button type="button" data-target="#<?php echo $attackID ?>" data-toggle="modal" class="btn btn-primary btn-xs">View Attributes</button></td>   
+                                            <td>
+                                                <div aria-hidden="true" aria-labelledby="myModalLabel2" role="dialog" tabindex="-1" id="<?php echo $attackID ?>" class="modal fade">
+                                                    <div class="modal-dialog">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <button aria-hidden="true" data-dismiss="modal" class="close" type="button">x</button>
+                                                                <h4 id="myModalLabel2" class="modal-title"><?php echo $attack['label'] ?></h4>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                </div><div class="panel-body"><div class="table-responsive"><table class="table table-striped"><thead><tr><th>Attribute</th><th>Value</th></tr></thead><tbody>
+                                                                <?php 
+                                                                    // query to get attributes
+                                                                    $attribute_list = "";
+                                                                    $stmt_att = mysqli_stmt_init($connection);
+                                                                    mysqli_stmt_prepare($stmt_att, 'SELECT Attribute, Value FROM attack_attributes WHERE AttackID =?');
+                                                                    mysqli_stmt_bind_param($stmt_att,'i', $attackID);
+                                                                    mysqli_stmt_execute($stmt_att);
+                                                                    mysqli_stmt_store_result($stmt_att);
+                                                                    mysqli_stmt_bind_result($stmt_att, $attack_att, $attack_val);
+                                                                    while(mysqli_stmt_fetch($stmt_att)) {
+                                                                        if ($attack_att != "XML") { 
+                                                                           $attribute_list .= "<tr><td>" . $attack_att . "</td><td>" .  htmlentities($attack_val) . "</td></tr>";
+                                                                        }
+                                                                    }
+                                                                    echo $attribute_list;
+                                                                ?>
+                                                                </tbody></table></div>
+                                                            </div>
+                                                        </div>
+                                                        <!-- /.modal-content -->
+                                                    </div>
+                                                    <!-- /.modal-dialog -->
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <?php } ?>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <!-- /.table-responsive -->
+                        </div>
+                        <!-- /.panel-body -->
+                    </div>
+                    <!-- /.panel -->
+                </div>
+                <!-- /.col-lg-4 -->
+                <div class="col-lg-4">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            Save Campaign
+                        </div>
+                        <!-- /.panel-heading -->
+                        <div class="panel-body">
+                            <input type="submit" class="btn btn-block btn-primary" name="submit" value="Save Campaign" />
+                            <input type="button" class="btn btn-block btn-primary" value="Cancel" onclick="location.href='dagah_home.html'" />
+                        </div>
+                        <!-- /.panel-body -->
+                    </div>
+                    <!-- /.panel -->
+                </div>
+                <!-- /.col-lg-4 -->
+            </div>
+               </form>
+            </div>
+            <!-- /.container-fluid -->
+        </div>
+        <!-- /#page-wrapper -->
+
+    </div>
+    <!-- /#wrapper -->
+
+    <!-- jQuery -->
+    <script src="./components/jquery/dist/jquery.min.js"></script>
+
+    <!-- DatePicker -->
+    <script src="./components/datetimepicker/datetimepicker_css.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="./components/bootstrap/dist/js/bootstrap.min.js"></script>
+
+    <!-- Metis Menu Plugin JavaScript -->
+    <script src="./components/metisMenu/dist/metisMenu.min.js"></script>
+
+    <!-- Custom Theme JavaScript -->
+    <script src="./js/sb-admin-2.js"></script>
+
+    <!-- Custom JS -->
+    <script type="text/javascript">
+        function SavedRun() {
+            $('input[name=runNow]').prop('checked', false);
+        }
+
+    </script>
+</body>
+
+</html>

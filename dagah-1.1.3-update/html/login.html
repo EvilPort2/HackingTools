@@ -1,0 +1,247 @@
+<?php 
+    $message = "";
+    date_default_timezone_set('UTC');
+    require_once './php/db_creds.php';
+    $connection = mysqli_connect($db_hostname, $db_username, $db_password, $db_database);
+    // check connection
+    if (mysqli_connect_errno()) {
+       $message = "Failed to connect to MySQL: " . mysqli_connect_error();
+    }
+    if(count($_POST)>0) {
+        //something typed in
+        $date=date('Y-m-d H:i:s');
+        $connection = mysqli_connect($db_hostname, $db_username, $db_password, $db_database);
+        // check connection
+        if (mysqli_connect_errno()) {
+            $message = "Failed to connect to MySQL: " . mysqli_connect_error();
+        }
+	$user_name = $_POST['user_login']; 
+	$user_password = $_POST['user_password'];
+	if($user_name && $user_password)
+	{
+                // First check the password
+		$stmt = mysqli_stmt_init($connection);
+                mysqli_stmt_prepare($stmt, 'SELECT Password, Username,RealName,Company,ID,Admin,ServerAdmin,Acceptance FROM users WHERE Username = ?');
+                mysqli_stmt_bind_param($stmt,'s', $user_name);
+                mysqli_stmt_execute($stmt);
+                mysqli_stmt_store_result($stmt);
+                mysqli_stmt_bind_result($stmt, $password_hash, $username, $realname,$company,$id,$admin,$serveradmin,$acceptance);
+                mysqli_stmt_fetch($stmt);
+                if (password_verify($user_password, $password_hash)) {
+                   // good to go.  Set session variables
+			session_start();
+            		$_SESSION['username'] = $username;
+           		$_SESSION['name'] = $realname;
+            		$_SESSION['company'] = $company;
+            		$_SESSION['userid'] = $id;
+            		$_SESSION['admin'] = $admin;
+		        if ($admin == 1) {
+                		$_SESSION['serverAdmin']=1;
+            		} else {
+                		$_SESSION['serverAdmin']=0;
+            		}
+					
+                        $stmt = mysqli_stmt_init($connection);
+                        mysqli_stmt_prepare($stmt, 'SELECT licType, licAgent, licClientSide, licMsgApp FROM license_attribs');
+                        mysqli_stmt_execute($stmt);
+                        mysqli_stmt_store_result($stmt);
+                        mysqli_stmt_bind_result($stmt, $licType, $licAgent, $licClientSide, $licMsgApp);
+                        mysqli_stmt_fetch($stmt);
+
+                        if ($licType === NULL || $licType == 'free') {
+                        // set as free license
+                                $_SESSION['license']="Community";
+                        } else {
+                                $_SESSION['license']=$licType;
+                        }
+                        $_SESSION['licAgent']=$licAgent;
+                        $_SESSION['licClientSide']=$licClientSide;
+                        $_SESSION['licMsgApp']=$licMsgApp;
+
+
+				// check user last login field
+				$stmt = mysqli_stmt_init($connection);
+				mysqli_stmt_prepare($stmt, 'SELECT LastLogin FROM users WHERE ID=? LIMIT 1');
+				mysqli_stmt_bind_param($stmt, 'i', $id);
+				mysqli_stmt_execute($stmt);
+				mysqli_stmt_store_result($stmt);
+				mysqli_stmt_bind_result($stmt, $lastLogin);
+				mysqli_stmt_fetch($stmt);
+
+				// add session param to let the home page detect if this users logs for the first time
+				if (!$lastLogin) {
+					
+					$_SESSION['first_time_login'] = true;
+				}
+
+                        // Set the Configuration Settings as Session Variables
+
+                        $config_stmt = mysqli_stmt_init($connection);
+                        mysqli_stmt_prepare($config_stmt, 'SELECT KeyText, ValueText FROM configuration WHERE UserID = ?');
+                        mysqli_stmt_bind_param($config_stmt, 'i', $id);
+                        mysqli_stmt_execute($config_stmt);
+                        mysqli_stmt_store_result($config_stmt);
+                        mysqli_stmt_bind_result($config_stmt, $KeyText, $ValueText);
+                        while(mysqli_stmt_fetch($config_stmt)) {
+                              switch ($KeyText) {
+                                 case "CAMPAIGNSDIRECTORY":
+                                    $_SESSION['campaign_dir'] = $ValueText;
+                                    break;
+                                 case "DAGAHLOC":
+                                    $_SESSION['dagah_dir'] = $ValueText;
+                                    break;
+                                 case "TARGETDIR":
+                                    $_SESSION['target_dir'] = $ValueText;
+                                    break;
+                                 case "RESULTSDIRECTORY":
+                                    $_SESSION['results_dir'] = $ValueText;
+                                    break;
+                                 case "MODEMDIRECTORY":
+                                    $_SESSION['modem_dir'] = $ValueText;
+                                    break;
+                                 case "WEBSERVER":
+                                    $_SESSION['web_dir'] = $ValueText;
+                                    break;
+                                 case "IPADDRESS":
+                                    $_SESSION['ip_addr'] = $ValueText;
+                                    break;
+                                 case "MODEMKEY":
+                                    $_SESSION['key'] = $ValueText;
+                                    break;
+                                 case "AGENTSDIRECTORY":
+                                    $_SESSION['agent_dir'] = $ValueText;
+                                    break;
+                                 case "SAVEDRUNSDIRECTORY":
+                                    $_SESSION['savedruns_dir'] = $ValueText;
+                                    break;
+                                 case "PROFILESLOC":
+                                    $_SESSION['profiles_dir'] = $ValueText;
+                                    break;
+                                 case "MODEMTYPE":
+                                    $_SESSION['MODEMTYPE'] = $ValueText;
+                                    break;
+                                 default:
+                                    $_SESSION[$KeyText] = $ValueText;
+                               }
+                        }
+
+			if ($acceptance === NULL) {
+                		header('Location:  dagah_license.html');
+            		} else {
+                		// license agreed to previously
+                                // save notification
+                                $Comment = "Login " . $username;
+                                $Type = "login";
+                                $stmt_log = mysqli_stmt_init($connection);
+                                mysqli_stmt_prepare($stmt_log, 'INSERT INTO notifications (Comment, Time, Type, UserID) VALUES (?,(now() - interval 4 hour),?,?)');
+                                error_log($error_message, 0);
+                                mysqli_stmt_bind_param($stmt_log, 'ssi', $Comment, $Type, $id);
+                                mysqli_stmt_execute($stmt_log);
+                                mysqli_stmt_store_result($stmt_log);
+
+						$stmt_log = mysqli_stmt_init($connection);
+						mysqli_stmt_prepare($stmt_log, 'UPDATE users SET LastLogin=(now() - interval 4 hour) WHERE ID= ?');
+						mysqli_stmt_bind_param($stmt_log,'i', $id);
+						mysqli_stmt_execute($stmt_log);
+						mysqli_stmt_store_result($stmt_log);
+						
+		                // send to main page
+                		header('Location:  dagah_home.html');
+           		 }
+            	
+             } else {
+                $message = "Invalid username/password combination";
+             }
+	
+
+        } else {
+           $message = "Enter a username and password";
+	}
+    } else {
+           // Check if there are any users.  If none, this is the first time running.
+           $stmt_usr = mysqli_stmt_init($connection);
+           mysqli_stmt_prepare($stmt_usr, 'SELECT Username FROM users');
+           mysqli_stmt_execute($stmt_usr);
+           mysqli_stmt_store_result($stmt_usr);
+           mysqli_stmt_fetch($stmt_usr);
+           if (mysqli_stmt_num_rows($stmt_usr) == 0 ){
+             // No users in database... send to accounts page
+             session_start();
+             $_SESSION['admin'] = 1;
+             header('Location:  dagah_faccounts.html');
+           }
+     }
+     mysqli_close($connection);
+
+?>
+<html lang="en">
+
+<head>
+    <title>Login</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="./components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- MetisMenu CSS -->
+    <link href="./components/metisMenu/dist/metisMenu.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="./css/sb-admin-2.css" rel="stylesheet">
+
+    <!-- Custom Fonts -->
+    <link href="./components/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+<body>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4 col-md-offset-4">
+                <div class="login-panel panel panel-default">
+                    <div class="panel-heading">
+                        <img class="pull-left" src="./images/shevirah.png" width="50"/>
+                        <h3 style="color:#0097D0" class="panel-title">Dagah Sign In</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="message" style="color: red;"><?php echo $message ?></div>
+                        <form role="form" name="frmUser" method="post" action="">
+                            <fieldset>
+                                <div class="form-group">
+                                    <input class="form-control" placeholder="Username" type="text" name="user_login" id="user_login">
+                                </div>
+                                <div class="form-group">
+                                    <input class="form-control" placeholder="Password" type="password" name="user_password" id="user_password" autocomplete="off">
+                                </div>
+                                <input type="submit" class="btn btn-block btn-primary" name="submit" value="Submit">
+                                
+                            </fieldset>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- jQuery -->
+    <script src="./components/jquery/dist/jquery.min.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="./components/bootstrap/dist/js/bootstrap.min.js"></script>
+
+    <!-- Metis Menu Plugin JavaScript -->
+    <script src="./components/metisMenu/dist/metisMenu.min.js"></script>
+
+    <!-- Custom Theme JavaScript -->
+    <script src="./js/sb-admin-2.js"></script>
+
+</body>
+
+</html>

@@ -1,0 +1,567 @@
+<?php
+
+// Debug function
+function D($var, $exit = 0) {
+    print '<div style="background-color: #ffffff; padding: 3px; z-index: 5000;"><pre style="text-align: left; font: normal 11px Courier; color: #000000;">';
+    if ( is_array($var) || is_object($var) ) print_r($var);
+    else var_dump($var);
+    print '</pre></div>';
+    if ( $exit ) exit;
+}
+
+
+    require_once './php/db_creds.php';
+    session_start();
+    date_default_timezone_set('UTC');
+    if (isset($_SESSION['userid'])) {
+        $userID=$_SESSION['userid'];
+        $connection = mysqli_connect($db_hostname, $db_username, $db_password, $db_database);
+        // check for modem connection
+        $modem = false;
+        if ($_SESSION['MODEMTYPE'] == "app") {
+            $modem_file = $_SESSION['dagah_dir'] . "/modem/connected";
+            $modem_read = fopen($modem_file, "r");
+            $modem_line = fgets($modem_read);
+            $modem_key = $_SESSION['web_dir'] . $_SESSION['modem_dir'] . '/connect';
+            $modem_keyfile = fopen($modem_key, "r");
+            $modem_keyline = fgets($modem_keyfile);
+            if ((substr($modem_line,0,1) == "1") || (stripos($modem_keyline,"CONNECTED"))) {
+               $modem = true;
+            }
+        } else {
+            $modem = true;
+        }
+
+        if (count($_POST)>0) {
+            // Check User Inputs for safety
+            $characterpattern = '/[^A-Za-z0-9 /\_.\-\\\\]/i';
+            // Check time first
+            $_POST['runNow'] = "now";
+            if (($_POST['runDate'].length==0) && (!isset($_POST['runNow'])) ) {
+                // no good runTime
+                $error="<div class='alert alert-danger'>Error! Select or Define a valid Run Time.</div>";
+            } else if (preg_match($characterpattern, $_POST['campaign'])) {
+                // Someone muking with campaign name
+                $error="<div class='alert alert-danger'>Error! Campaign Name Contains invalid Characters.</div>";
+            } else if (preg_match($characterpattern, $_POST['phoneGroup'])) {
+                // Someone muking with phone group
+                $error="<div class='alert alert-danger'>Error! Target Name Contains invalid Characters.</div>";
+            } else if (preg_match($characterpattern, $_SESSION['dagah_dir'])) {
+                // Someone muking with directory
+                $error="<div class='alert alert-danger'>Error! DAGAHLOC Contains invalid Characters.</div>";
+            } else if (preg_match($characterpattern, $_SESSION['target_dir'])) {
+                // Someone muking with directory
+                $error="<div class='alert alert-danger'>Error! TARGETDIR Contains invalid Characters.</div>";
+            } else {
+              
+                // check to see if any attack are SMS/NFC delivery types
+                $modem_required = false;
+
+                // Checks if need to save results for every phone
+                $isResultsForPhones = false;
+
+                $stmt = mysqli_stmt_init($connection);
+                mysqli_stmt_prepare($stmt, 'SELECT Attribute, Value FROM attack_attributes INNER JOIN linkcampaignsattacks ON attack_attributes.AttackID = linkcampaignsattacks.AttackID WHERE (attack_attributes.Attribute = "Delivery_Method" AND linkcampaignsattacks.CampaignID =?)');
+                mysqli_stmt_bind_param($stmt,'i',$_POST['campaign']);
+                mysqli_stmt_execute($stmt);
+                mysqli_stmt_store_result($stmt);
+                mysqli_stmt_bind_result($stmt, $attackAtt, $attackVal);
+
+                while(mysqli_stmt_fetch($stmt)) {
+                    if (($attackVal == "sms") || ($attackVal == "nfc")) {
+                        $modem_required = false;
+                    }
+                    // Checks if need to save results for every phone
+                    if (!in_array($attackVal, array('qrc', 'nfc', 'external'))) {
+                        $isResultsForPhones = true;
+                    }
+                }
+                if (($modem_required) && !($modem)) {
+                    $modem_text = "Modem Required but not connected. Please connect a modem with configuration: " . $_SESSION['ip_addr'] . " " . $_SESSION['modem_dir'] . " " . $_SESSION['key'] . ". ";
+                    $modem_text .= "<a href='./DagahModemBridge.apk'>Dagah Modem Bridge application</a>";
+                    die($modem_text);
+                }
+                // time is good... proceed to save
+                if ($_POST['runNow'] == "now") {
+                    // run now selected
+                    $Run_time = date("Y-m-d h:i:s", strtotime('-4 hour'));
+                } else {
+                    // delayed time/run
+                    $Run_time = date("Y-m-d h:i:s", strtotime($_POST['runDate']));
+                } // end if runNow
+
+                // get Campaign Name
+                $stmt = mysqli_stmt_init($connection);
+                mysqli_stmt_prepare($stmt, 'SELECT Name FROM campaigns WHERE ID=? LIMIT 1');
+                mysqli_stmt_bind_param($stmt,'i',$_POST['campaign']);
+                mysqli_stmt_execute($stmt);
+                mysqli_stmt_store_result($stmt);
+                mysqli_stmt_bind_result($stmt, $campName);
+                mysqli_stmt_fetch($stmt);
+
+
+                // Create run record
+                $stmt_run = mysqli_stmt_init($connection);
+                mysqli_stmt_prepare($stmt_run, 'INSERT INTO campaign_runs (CampaignID, Date, PhoneGroup, RunTime, UserID) VALUES (?, (now() - interval 4 hour), ?,?,?)');
+                mysqli_stmt_bind_param($stmt_run,'issi', $_POST['campaign'],$_POST['phoneGroup'],$Run_time,$userID);
+                mysqli_stmt_execute($stmt_run);
+                mysqli_stmt_store_result($stmt_run);
+                $campaign_runID = mysqli_stmt_insert_id($stmt_run);
+                // Inserting data in campaign_results
+                // Gets phones if it is needed (not for qrc, nfc, external)
+                if (!$isResultsForPhones) {
+                    mysqli_query($connection,
+                        'INSERT INTO `campaign_results` SET `CampaignRunID` = '.(int) $campaign_runID);
+                } else {
+
+                    $phoneList = mysqli_query($connection,
+                        'SELECT Number, Name, UserID FROM `phonebook` WHERE PhoneGroup = "'
+                        . mysqli_escape_string($connection, $_POST['phoneGroup']) . '"');
+                    while ($phone = $phoneList->fetch_assoc()) {
+                        $stmt = mysqli_stmt_init($connection);
+                        mysqli_stmt_prepare($stmt,
+                            'INSERT INTO campaign_results (CampaignRunID, Name, Number, UserID) VALUES (?,?,?,?)');
+                        mysqli_stmt_bind_param($stmt,'sisi', $campaign_runID, $phone['Name'], $phone['Number'], $phone['UserID']);
+                        mysqli_stmt_execute($stmt);
+                    }
+                }
+
+                // escape characters to avoid command injection
+                $dagah_cmd = $_SESSION['dagah_dir'] . "/dagah2.pyc";
+                $arg_dagah_cmd = escapeshellarg($dagah_cmd);
+                $target_string = $_SESSION['dagah_dir'] . $_SESSION['target_dir'] . $_POST['phoneGroup'];
+                $arg_target = escapeshellarg($target_string);
+                $agr_campaign_label = escapeshellarg($campName);
+                $date = date('YmdHis');
+                $campaign_run = $campName . $date;
+                $arg_campaign_run = escapeshellarg($campaign_run);
+                // execute campaign staging
+                // $run_command = "python " . $arg_dagah_cmd . " Run " . $arg_target . " " . $agr_campaign_label . " " . $arg_campaign_run . " 2>&1";
+                // Spooler Run Command:
+                $run_command = "python /home/dagah/dagah/Spool/qp.pyc python " . $arg_dagah_cmd . " Run " . $arg_target . " " . $agr_campaign_label . " " . $arg_campaign_run . " 2>&1";
+
+                
+                // Update run record
+                $campaignRunOut = $run_command . ": Initial Save";
+                $campaignRunDir = $campName . $date;
+                $stmt_run = mysqli_stmt_init($connection);
+                mysqli_stmt_prepare($stmt_run, 'UPDATE campaign_runs SET RunOutput=?, RunDirectory=?  WHERE ID=?');
+                mysqli_stmt_bind_param($stmt_run,'ssi', $campaignRunOut, $campaignRunDir, $campaign_runID);
+                mysqli_stmt_execute($stmt_run);
+                mysqli_stmt_store_result($stmt_run);
+
+
+				$curDir = getcwd();
+                chdir($_SESSION['dagah_dir']);
+                exec($run_command, $run_output, $result);
+
+                 // format output
+                $output = "";
+				$showError = false;
+				if ($result != 0) {
+
+					$showError = true;
+				} else {
+
+					foreach ($run_output as $value) {
+
+						if (strpos($value, '[Errno') !== false) {
+
+							$showError = true;
+							break;
+						}
+					}
+				}
+
+				if ($showError) {
+
+					$error = "<div class='alert alert-danger'>Error! Campaign execution failed. <br>" . implode(' ', $run_output) . "</div>";
+					// Error, delete campaign_run records
+                                        $stmt_run = mysqli_stmt_init($connection);
+                                        mysqli_stmt_prepare($stmt_run, 'DELETE FROM campaign_runs WHERE ID=?');
+                                        mysqli_stmt_bind_param($stmt_run,'i', $campaign_runID);
+                                        mysqli_stmt_execute($stmt_run);
+                                        mysqli_stmt_store_result($stmt_run);
+
+                                        $stmt_run = mysqli_stmt_init($connection);
+                                        mysqli_stmt_prepare($stmt_run, 'DELETE FROM campaign_results WHERE ID=?');
+                                        mysqli_stmt_bind_param($stmt_run,'i', $campaign_runID);
+                                        mysqli_stmt_execute($stmt_run);
+                                        mysqli_stmt_store_result($stmt_run);
+
+
+                                        chdir($curDir);
+				} else {
+                
+					foreach ($run_output as $value) {
+						if (!strrpos(substr($value,0,5),"[")) {
+							$output .= $value . "<br />";
+						}
+					}
+
+					$for_output = htmlentities($output);           
+
+					// save staging output to campaign record
+					$stmt_run = mysqli_stmt_init($connection);
+					$campaignRunOut = "<b>" . $run_command . "</b><br />" . $for_output;
+					mysqli_stmt_prepare($stmt_run, 'UPDATE campaign_runs SET RunOutput=? WHERE ID=?');
+					mysqli_stmt_bind_param($stmt_run,'si', $campaignRunOut, $campaign_runID);
+					mysqli_stmt_execute($stmt_run);
+					mysqli_stmt_store_result($stmt_run);
+
+					// save notification
+					$Comment = "Created Campaign Run " . $campaignRunDir;
+					$Type = "campaign";
+					$userID = $_SESSION['userid'];
+					$stmt_not = mysqli_stmt_init($connection);
+					mysqli_stmt_prepare($stmt_not, 'INSERT INTO notifications (Comment, Time, Type, UserID) VALUES (?,(now() - interval 4 hour),?,?)');
+					mysqli_stmt_bind_param($stmt_not, 'ssi',$Comment,$Type,$userID);
+					mysqli_stmt_execute($stmt_not);
+					mysqli_stmt_store_result($stmt_not);
+					
+					$error = "<div class='alert alert-success alert-dismissable'>Campaign was executed successfully.</div>";
+					chdir($curDir);
+					//header('Location:  dagah_home.html');
+				}
+            } // end time check
+		} // end POST count > 0
+
+        // Get Campaigns
+        $stmt = mysqli_stmt_init($connection);
+        mysqli_stmt_prepare($stmt, 'SELECT ID, Name FROM campaigns WHERE UserID=? ORDER BY created DESC');
+        mysqli_stmt_bind_param($stmt,'i',$userID);
+        mysqli_stmt_execute($stmt);
+        mysqli_stmt_store_result($stmt);
+        mysqli_stmt_bind_result($stmt, $campaignID, $campaignName);
+
+        // Get Targets
+        $stmt_tar = mysqli_stmt_init($connection);
+        mysqli_stmt_prepare($stmt_tar, 'SELECT DISTINCT PhoneGroup FROM phonebook WHERE UserID=?');
+        mysqli_stmt_bind_param($stmt_tar,'i',$userID);
+        mysqli_stmt_execute($stmt_tar);
+        mysqli_stmt_store_result($stmt_tar);
+        mysqli_stmt_bind_result($stmt_tar, $targetName);
+
+
+    } else {
+        // no session data-- send back to login
+		header('Location:  login.html');
+    }
+    
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Executed Campaigns</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="./components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+
+    <!-- MetisMenu CSS -->
+    <link href="./components/metisMenu/dist/metisMenu.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="./css/Dagah.css" rel="stylesheet">
+    <link href="./css/Dagah_custom.css" rel="stylesheet">
+
+    <!-- Custom Fonts -->
+    <link href="./components/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+<body>
+
+    <div id="wrapper">
+
+        <!-- Navigation -->
+        <?php include_once('dagah_nav.html'); ?>
+		
+        <!-- Page Content -->
+        <div id="page-wrapper">
+            <div class="container-fluid">
+               <?php echo $error ?>
+               <h2><i class="fa fa-bolt fa-fw"></i> Execute a Campaign</h2>
+               <?php 
+               if ($_SESSION['license'] == "free") { 
+                  $message_text = "This version is limited to one attack per campaign and one target per run. Only the first attack in the campaign will be run against the first target.";
+                  $message = "<div class='alert alert_warning'>" . $message_text . "</div>";
+                  echo $message;
+               } 
+               ?>
+               <form role="form" method="post">
+                <div class="row">
+                <div class="col-lg-4">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            Select Campaign
+                        </div>
+                        <!-- /.panel-heading -->
+                        <div class="panel-body">
+                            <div class="table-responsive">
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th></th>
+                                            <th>ID</th>
+                                            <th>Name</th>
+                                            <th>Show Attack(s)</th>
+                                            <th style="width: 0px;"></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php
+                                            while(mysqli_stmt_fetch($stmt)) {
+                                        ?>
+                                        <tr>
+                                            <td><input type="radio" id="campaign_<?php echo $campaignID ?>" name="campaign" value="<?php echo $campaignID ?>" required="required" /></td>
+                                            <td><?php echo $campaignID ?></td>
+                                            <td><?php echo $campaignName ?></td>
+                                            <td><button type="button" data-target="#<?php echo $campaignID ?>" data-toggle="modal" class="btn btn-primary btn-xs">View Attacks</button></td>   
+                                            <td>
+                                                <div aria-hidden="true" aria-labelledby="myModalLabel2" role="dialog" tabindex="-1" id="<?php echo $campaignID ?>" class="modal fade">
+                                                    <div class="modal-dialog">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <button aria-hidden="true" data-dismiss="modal" class="close" type="button">x</button>
+                                                                <h4 id="myModalLabel2" class="modal-title">Campaign Label: <?php echo $campaignName ?></h4>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                <?php 
+                                                                    // query to get attributes
+                                                                    $attack_list = "";
+                                                                    $stmt_ack = mysqli_stmt_init($connection);
+                                                                    mysqli_stmt_prepare($stmt_ack, 'SELECT Label, attacks.ID FROM attacks INNER JOIN linkcampaignsattacks ON attacks.ID = linkcampaignsattacks.AttackID WHERE linkcampaignsattacks.CampaignID =?');
+                                                                    mysqli_stmt_bind_param($stmt_ack,'i',$campaignID);
+                                                                    mysqli_stmt_execute($stmt_ack);
+                                                                    mysqli_stmt_store_result($stmt_ack);
+                                                                    mysqli_stmt_bind_result($stmt_ack, $attackLabel, $attackID);
+
+                                                                    $table_html = '';
+                                                                    while(mysqli_stmt_fetch($stmt_ack)) {
+
+                                                                        // form table
+                                                                        $table_html .='<div class="panel panel-default"><div class="panel-heading">Attack Label: ' . $attackLabel . '</div><div class="panel-body"><div class="table-responsive"><table class="table table-striped"><thead><tr><th>Attribute</th><th>Value</th></tr></thead><tbody>';
+                                                                        
+                                                                        // get attack parameters
+                                                                        $stmt_att = mysqli_stmt_init($connection);
+                                                                        mysqli_stmt_prepare($stmt_att, 'SELECT Attribute, Value FROM attack_attributes WHERE AttackID=?');
+                                                                        mysqli_stmt_bind_param($stmt_att,'i',$attackID);
+                                                                        mysqli_stmt_execute($stmt_att);
+                                                                        mysqli_stmt_store_result($stmt_att);
+                                                                        mysqli_stmt_bind_result($stmt_att, $attackAtt, $attackVal);
+
+                                                                        while(mysqli_stmt_fetch($stmt_att)) {
+                                                                            if ($attackAtt != "XML") {
+                                                                                $table_html .= '<tr><td>' . $attackAtt . '</td><td>' . htmlentities($attackVal) . '</td></tr>';
+                                                                            }
+                                                                        }    
+                                                                        // end table
+                                                                        $table_html .= '</tbody></table></div></div></div>';
+                                                                    }
+                                                                    echo $table_html;
+                                                                ?>
+                                                            </div>
+                                                        </div>
+                                                        <!-- /.modal-content -->
+                                                    </div>
+                                                    <!-- /.modal-dialog -->
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <?php } ?>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <!-- /.table-responsive -->
+                        </div>
+                        <!-- /.panel-body -->
+                    </div>
+                    <!-- /.panel -->
+                </div>
+                <!-- /.col-lg-4 -->
+                <div class="col-lg-4">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            Select Phone Group
+                        </div>
+                        <!-- /.panel-heading -->
+                        <div class="panel-body">
+                            <div class="table-responsive">
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th></th>
+                                            <th>Phone Group</th>
+                                            <th>Show Phone Numbers</th>
+                                            <th style="width: 0px;"></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php
+                                            while(mysqli_stmt_fetch($stmt_tar)) {
+                                                $group_id = str_replace(' ','--',$targetName);
+                                        ?>
+                                        <tr>
+                                            <td><input type="radio" id="phoneGroup_<?php echo $group_id ?>" name="phoneGroup" required="required" value="<?php echo $group_id ?>" /></td>
+                                            <td><?php echo $targetName ?></td>
+                                            <td><button type="button" data-target="#<?php echo $group_id ?>" data-toggle="modal" class="btn btn-primary btn-xs">View Phone Numbers</button></td>   
+                                            <td>
+                                                <div aria-hidden="true" aria-labelledby="myModalLabel" role="dialog" tabindex="-1" id="<?php echo $group_id ?>" class="modal fade">
+                                                    <div class="modal-dialog">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <button aria-hidden="true" data-dismiss="modal" class="close" type="button">x</button>
+                                                                <h4 id="myModalLabel" class="modal-title"><?php echo $targetName ?></h4>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                <?php 
+                                                                    // query to get attributes
+                                                                    $attribute_list = "";
+                                                                    $stmt_phn = mysqli_stmt_init($connection);
+                                                                    mysqli_stmt_prepare($stmt_phn, 'SELECT Name, Number FROM phonebook WHERE PhoneGroup = ?');
+                                                                    mysqli_stmt_bind_param($stmt_phn,'s', $targetName);
+                                                                    mysqli_stmt_execute($stmt_phn);
+                                                                    mysqli_stmt_store_result($stmt_phn);
+                                                                    mysqli_stmt_bind_result($stmt_phn, $phoneNum, $cntactName);
+
+                                                                    while(mysqli_stmt_fetch($stmt_phn)) { 
+                                                                        $attribute_list .= $cntactName . ' ' . $phoneNum . "<br />";
+                                                                    }
+                                                                    echo $attribute_list;
+                                                                ?>
+                                                            </div>
+                                                        </div>
+                                                        <!-- /.modal-content -->
+                                                    </div>
+                                                    <!-- /.modal-dialog -->
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <?php } ?>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <!-- /.table-responsive -->
+                        </div>
+                        <!-- /.panel-body -->
+                    </div>
+                    <!-- /.panel -->
+                </div>
+                <div class="col-lg-4">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            Select Run Time
+                        </div>
+                        <!-- /.panel-heading -->
+                        <div class="panel-body">
+                            <div class="checkbox">
+                                <label>
+                                    <input name="runNow" type="checkbox" value="now" checked>
+                                    Run Now
+                                </label>
+                            </div>
+                            <div class="datePick">
+                                Run Date/Time: <input type="text" name="runDate" id="runDate" disabled/>
+                                <?php 
+                                // Run at a later date future code
+                                // <img src="./components/datetimepicker/images2/cal.gif" onclick="javascript:NewCssCal('runDate','MMddyyyy','arrow',true,'12');" style="cursor:pointer"/>
+                                ?>
+                                <br /><br /> 
+                                <input type="submit" class="btn btn-block btn-primary" name="submit" value="Execute Campaign" />
+                                <input type="button" class="btn btn-block btn-primary" value="Cancel" onclick="location.href='dagah_home.html'" />
+                            </div>
+                        </div>
+                        <!-- /.panel-body -->
+                    </div>
+                    <!-- /.panel -->
+                </div>
+                <!-- /.col-lg-4 -->
+                </div>
+               </form>
+                <?php
+                  if (!$modem) {
+                    // Warn about Modem
+                    $message_text = "Modem is not Connected.  Conect an external modem before running any Camapaigns with SMS or NFC attacks. For more information, please see the Concept of Operations in the <a HREF=\"./dagah_documentation.html\">Documentation.</a>";
+                    $message = "<div class='alert alert_warning'>" . $message_text . " </div>";
+                    echo $message;
+                  }
+                ?>
+
+            </div>
+            <!-- /.container-fluid -->
+        </div>
+        <!-- /#page-wrapper -->
+
+    </div>
+    <!-- /#wrapper -->
+
+    <!-- jQuery -->
+    <script src="./components/jquery/dist/jquery.min.js"></script>
+
+    <!-- DatePicker -->
+    <script src="./components/datetimepicker/datetimepicker_css.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="./components/bootstrap/dist/js/bootstrap.min.js"></script>
+
+    <!-- Metis Menu Plugin JavaScript -->
+    <script src="./components/metisMenu/dist/metisMenu.min.js"></script>
+
+    <!-- Custom Theme JavaScript -->
+    <script src="./js/sb-admin-2.js"></script>
+
+    <!-- Custom JS -->
+    <script type="text/javascript">
+        function SavedRun() {
+            $('input[name=runNow]').prop('checked', false);
+        }
+
+        // only allow single campaign to be selected
+        $('input[id^=campaign]').change(function () {
+            if ($('input[id^=campaign]:checked').length > 1) {
+                // multiple checkboxes selected -- error
+                // uncheck all
+                $('input[id^=campaign]').prop('checked', false);
+                // recheck current one
+                $(this).prop('checked', true);
+            }
+        });
+
+        // only allow single phonebook select
+        $('input[id^=phone_]').change(function () {
+            if ($('input[id^=phone_]:checked').length > 1) {
+                // multiple checkboxes selected -- error
+                // uncheck all
+                $('input[id^=phone_]').prop('checked', false);
+                // recheck current one
+                $(this).prop('checked', true);
+            }
+        });
+
+        // clear timedate field if checked run now checkbox
+        $('input[name=runNow]').change(function () {
+            if ($('input[name=runNow]:checked').length > 0) {
+                // It's check, so delete textbox
+                $('input#runDate').val('');
+            }
+        });
+    </script>
+</body>
+
+</html>

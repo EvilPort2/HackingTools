@@ -1,0 +1,59 @@
+<?php
+    require_once './php/db_creds.php';
+    // check for existing session
+    session_start();
+    if (isset($_SESSION['userid'])) {
+        $id=str_replace('%20',' ',split("=", $_SERVER['QUERY_STRING'])[1]);
+        $connection = mysqli_connect($db_hostname, $db_username, $db_password, $db_database);
+        $userID = $_SESSION['userid'];
+        $stmt = mysqli_stmt_init($connection);
+        mysqli_stmt_prepare($stmt, 'DELETE FROM phonebook WHERE PhoneGroup=? AND UserID=?');
+        mysqli_stmt_bind_param($stmt,'si',$id,$userID);
+        mysqli_stmt_execute($stmt);
+        mysqli_stmt_store_result($stmt);
+
+        // remove file
+        if (!unlink($_SESSION['dagah_dir'] . $_SESSION['target_dir'] . $id)) {
+            $error=true;
+        }
+
+        if ($error) {
+            echo "Error removing Target file: " . $_SESSION['dagah_dir'] . $_SESSION['target_dir'] . $id;
+        } else {
+            // save notification
+            $Comment = "Phone Group deleted" . $id;
+            $Type = "account";
+            $userID = $_SESSION['userid'];
+            $stmt_not = mysqli_stmt_init($connection);
+            mysqli_stmt_prepare($stmt_not, 'INSERT INTO notifications (Comment, Time, Type, UserID) VALUES (?,(now() - interval 4 hour),?,?)');
+            mysqli_stmt_bind_param($stmt_not, 'ssi',$Comment,$Type,$userID);
+            mysqli_stmt_execute($stmt_not);
+            mysqli_stmt_store_result($stmt_not);
+
+            header('Location:  dagah_vPhone.html');
+        }
+
+    } else {
+        // take back to login
+        header('Location:  login.html');   
+    }
+?>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Dagah</title>
+
+</head>
+
+<body>
+</body>
+
+</html>

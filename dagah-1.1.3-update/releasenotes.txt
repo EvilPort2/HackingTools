@@ -1,0 +1,12 @@
+Release Notes - Dagah - Version 1.1.3
+
+
+
+** Improvement
+    * [DAGAH-242] - Use SMS Templates for Messaging Apps
+
+** Bug
+    * [DAGAH-237] - Licenses. Misspelling after changing parameter "licAgent" from "true" to "false"
+    * [DAGAH-240] - Dagah created user accounts are able to login even when 'rights' are not selected.
+    * [DAGAH-243] - GUI Config fails to read AGENTBLDIOSJOB correctly from config file
+    * [DAGAH-251] - Profile Attack is Incorrect

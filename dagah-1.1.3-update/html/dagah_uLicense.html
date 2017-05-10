@@ -1,0 +1,177 @@
+<?php
+
+  require_once './php/db_creds.php';
+    // check for existing session
+    session_start();
+    // Set Timezone to UTC
+    date_default_timezone_set('UTC');
+    if (isset($_SESSION['userid'])) {
+        $home_not_userID=$_SESSION['userid'];
+        $connection = mysqli_connect($db_hostname, $db_username, $db_password, $db_database);
+        if (mysqli_connect_errno()) {
+            $message = "Failed to connect to MySQL: " . mysqli_connect_error();
+        }
+    
+    if (isset($_SESSION['message'])) {
+      $message = $_SESSION['message'];
+      unset($_SESSION['message']);
+    } else {
+      $message = '';
+    }
+  
+
+    // check user last login field
+    if ($firstLogin = !empty($_SESSION['first_time_login'])) {
+      
+      unset($_SESSION['first_time_login']);
+    }
+    } else {
+        // no session data-- send back to login
+        header('Location:  login.html');
+    }
+?>
+    <!DOCTYPE html>
+    <html lang="en">
+
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="">
+        <meta name="author" content="">
+        <title>Dagah</title>
+        <!-- Bootstrap Core CSS -->
+        <link href="./components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+        <!-- MetisMenu CSS -->
+        <link href="./components/metisMenu/dist/metisMenu.min.css" rel="stylesheet">
+        <link href="./css/timeline.css" rel="stylesheet" />
+        <!-- Custom CSS -->
+        <link href="./css/Dagah.css" rel="stylesheet">
+        <link href="./css/Dagah_custom.css" rel="stylesheet">
+        <!-- Custom Fonts -->
+        <link href="./components/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+        <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+        <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    </head>
+    <div id="wrapper">
+        <!-- Navigation -->
+        <?php include('dagah_nav.html'); ?>
+        <!-- Page Content -->
+        <div id="page-wrapper">
+            <div class="container-fluid">
+                <?php echo $message ?>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <?php echo $config_warning ?>
+                        <h1 class="page-header">License Update</h1>
+                    </div>
+                    <!-- /.col-lg-12 -->
+                </div>
+                <!-- /.row -->
+                <div class="panel-heading">
+                    <div class="col-lg-13">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <i class="fa fa-bell fa-fw"></i> Upload License File
+                            </div>
+                            <!-- /.panel-heading -->
+                            <div class="panel-body">
+                                <div class="list-group">
+                                    <form enctype="multipart/form-data" action="dagah_uLicense.html" method="POST">
+                                        <input type="file" name="license" value="license" />
+                                        <br />
+                                        <input type="submit" value="Update License" />
+                                        <br />
+                                    </form>
+                                    <br />
+                                    <?PHP
+ 
+
+ if(!empty($_FILES['license']))
+  {
+    $path = "upload/";
+    $path = $path . basename( $_FILES['license']['name']);
+    if(move_uploaded_file($_FILES['license']['tmp_name'], $path)) {
+      echo "<pre>License ". basename( $_FILES['license']['name']). 
+     " has been uploaded. \n</pre>";
+
+// Working Variables
+
+  $file = basename( $_FILES['license']['name']);
+  $trimmedFile = preg_replace('/\\.[^.\\s]{3,4}$/', '', $file);
+  $path = $path . basename( $_FILES['license']['name']);
+  $qual = "/";
+  $folder = "$trimmedFile$qual";
+  $fqfolder = "upload/$file";
+
+// debug 
+
+//  echo "<pre>Trimmed:$trimmedFile</pre>";
+//  echo "<pre>file:$file</pre>";
+//  echo "<pre>folder:$folder</pre>";
+//  echo "<pre>fullfold:$fqfolder</pre>";
+
+// Working Variables 
+
+  $cpcmd = "cp --preserve=all ";
+  $mvcmd = "mv "; 
+  $webdata ="/var/www/html/";
+  $dagah_dir = "/home/dagah/dagah/";
+  $dagah = "/home/dagah/dagah";
+  $dagah_home = " /home/dagah/dagah/";
+  $license = "license.lic";
+  $run_mv = "$cpcmd$webdata$fqfolder$dagah_home$license";
+  $backupLic = "$cpcmd$webdata$fqfolder$dagah_home$license.bak";
+  $script = "python ";
+  $file = "$path";
+  $readLic = "licDB.pyc";
+  $readScript = "$script$dagah_dir$readLic$dagah_home$license localhost root '' shevirah";
+
+//  $readLic = "$script$dagah_dir$readScript$dagah_dir$license";
+  
+// debug 
+ 
+//   echo "<pre>cpcmd: $run_mv</pre>";
+//   echo "<pre>licenseReader:$readScript</pre>";
+
+
+// Log Output to Browser 
+
+//  $outputF = " > /var/www/html/output.log";
+//  $readLicF = "$script$dagah_dir$readScript$license$outputF";
+//  $fh = fopen("/var/www/html/output.log", 'r');
+//  $pageText = fread($fh, 25000);
+//  echo nl2br($pageText);
+//  fclose($fh);
+//  exec("$readLicF");
+
+
+
+// Executors
+
+  exec($backupLic);
+  exec($run_mv);
+//  echo "<pre>$copyLic</pre>";
+  
+   $readLic = shell_exec($readScript);
+    echo "Reading License File:";
+    echo "<pre>$readLic</pre>";
+    echo "<div class='alert alert-success alert-dismissable'>License Updated.  Please <A HREF=./php/logout.php>logout and log back in to take effect</a></div>";
+
+// Error Checks
+
+   } else{
+      echo "<pre>There was an error uploading the file, please try again!</pre>";
+    }
+  }
+?>
+                                        <br />
+                                        <br />
+                                </div>
+                                </body>
+
+    </html>

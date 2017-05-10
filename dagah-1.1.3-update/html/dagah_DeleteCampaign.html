@@ -1,0 +1,133 @@
+<?php
+    $error = false;
+    require_once './php/db_creds.php';
+    // check for existing session
+    session_start();
+    date_default_timezone_set('UTC');
+    if (isset($_SESSION['userid'])) {
+        $userID = $_SESSION['userid'];
+        $id=split("=", $_SERVER['QUERY_STRING'])[1];
+        $connection = mysqli_connect($db_hostname, $db_username, $db_password, $db_database);
+        // delete XML file in filesystem
+        // get campaign name first
+        $stmt = mysqli_stmt_init($connection);
+        mysqli_stmt_prepare($stmt, 'SELECT Name FROM campaigns WHERE ID=? AND UserID=? LIMIT 1');
+        mysqli_stmt_bind_param($stmt,'ii', $id, $userID);
+        mysqli_stmt_execute($stmt);
+        mysqli_stmt_store_result($stmt);
+        mysqli_stmt_bind_result($stmt, $campaignName);
+        mysqli_stmt_fetch($stmt);
+
+        $name = $campaignName;
+
+        // remove files & directories
+        // campaigns
+        $dagah_cmd = $_SESSION['dagah_dir'] . "/dagah2.pyc";
+        $arg_dagah_cmd = escapeshellarg($dagah_cmd);
+        $agr_campaign_label = escapeshellarg($name);
+        // Delete campaign staging
+        $run_command = "python " . $arg_dagah_cmd . " Delete Campaign " . $agr_campaign_label . " 2>&1";
+        chdir($_SESSION['dagah_dir']);
+        $delete_results = exec($run_command, $run_output);
+        if (!$delete_results) {
+            // Delete Campaign Failed
+            $error = 1;
+        }
+        // Runs
+        $stmt_runs = mysqli_stmt_init($connection);
+        mysqli_stmt_prepare($stmt_runs, 'SELECT RunDirectory FROM campaign_runs WHERE CampaignID=? AND UserID=?');
+        mysqli_stmt_bind_param($stmt_runs,'ii', $id, $userID);
+        mysqli_stmt_execute($stmt_runs);
+        mysqli_stmt_store_result($stmt_runs);
+        mysqli_stmt_bind_result($stmt_runs, $campaignRunName);
+        while(mysqli_stmt_fetch($stmt_runs)) {
+            $agr_campaignrunlabel = escapeshellarg($campaignRunName);
+            $run_command = "python " . $arg_dagah_cmd . " Delete Run " . $agr_campaignrunlabel . " 2>&1";
+            chdir($_SESSION['dagah_dir']);
+            $delete_results = exec($run_command, $run_output);
+            if (!$delete_results) {
+                // Delete Campaign Failed
+                $error = 1;
+            }
+        }
+
+        // delete databse entires
+        // campaigns table
+        $stmt = mysqli_stmt_init($connection);
+        mysqli_stmt_prepare($stmt, 'DELETE FROM campaigns WHERE ID=? AND UserID=?');
+        mysqli_stmt_bind_param($stmt,'ii', $id, $userID);
+        mysqli_stmt_execute($stmt);
+        mysqli_stmt_store_result($stmt);
+
+        // linkcampaignsattacks table
+        $stmt = mysqli_stmt_init($connection);
+        mysqli_stmt_prepare($stmt, 'DELETE FROM linkcampaignsattacks WHERE CampaignID=?');
+        mysqli_stmt_bind_param($stmt,'i', $id);
+        mysqli_stmt_execute($stmt);
+        mysqli_stmt_store_result($stmt);
+
+        // campaign_results table
+        $stmt = mysqli_stmt_init($connection);
+        mysqli_stmt_prepare($stmt, 'DELETE FROM campaign_results WHERE CampaignID IN (SELECT ID WHERE CampaignID=? AND UserID=?)');
+        mysqli_stmt_bind_param($stmt,'ii', $id, $userID);
+        mysqli_stmt_execute($stmt);
+        mysqli_stmt_store_result($stmt);
+
+        // campaign_runs table
+        $stmt = mysqli_stmt_init($connection);
+        mysqli_stmt_prepare($stmt, 'DELETE FROM campaign_runs WHERE CampaignID=? AND UserID=?');
+        mysqli_stmt_bind_param($stmt,'ii', $id, $userID);
+        mysqli_stmt_execute($stmt);
+        mysqli_stmt_store_result($stmt);
+
+        // linkcampaignphone table
+        $stmt = mysqli_stmt_init($connection);
+        mysqli_stmt_prepare($stmt, 'DELETE FROM linkcampaignphone WHERE CampaignID=?');
+        mysqli_stmt_bind_param($stmt,'i', $id);
+        mysqli_stmt_execute($stmt);
+        mysqli_stmt_store_result($stmt);
+
+        // save notification
+        $Comment = "Campaign Deleted " . $id;
+        $Type = "campaign";
+        $userID = $_SESSION['userid'];
+        $stmt_not = mysqli_stmt_init($connection);
+        mysqli_stmt_prepare($stmt_not, 'INSERT INTO notifications (Comment, Time, Type, UserID) VALUES (?,(now() - interval 4 hour),?,?)');
+        mysqli_stmt_bind_param($stmt_not, 'ssi',$Comment,$Type,$userID);
+        mysqli_stmt_execute($stmt_not);
+        mysqli_stmt_store_result($stmt_not);
+
+
+        if ($error) {
+            $err = date('m/d/Y H:i:s') . ": File Delete Error... " . $_SESSION['dagah_dir'] . $_SESSION['campaign_dir'] . $name . ".xml\n";
+            file_put_contents($_SESSION['dagah_dir'] . "/error_log.txt", $err, FILE_APPEND);
+            echo "File Delete failed! " . $_SESSION['dagah_dir'] . $_SESSION['campaign_dir'] . $name . ".xml";
+        } else {
+            header('Location: dagah_vCampaigns.html');
+        }
+    } else {
+        // take back to login
+        header('Location:  login.html');   
+    }
+?>
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Dagah</title>
+
+</head>
+
+<body>
+</body>
+
+</html>

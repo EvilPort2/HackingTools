@@ -1,0 +1,205 @@
+<?php
+
+  require_once './php/db_creds.php';
+    // check for existing session
+    session_start();
+    // Set Timezone to UTC
+    date_default_timezone_set('UTC');
+    if (isset($_SESSION['userid'])) {
+        $home_not_userID=$_SESSION['userid'];
+        $connection = mysqli_connect($db_hostname, $db_username, $db_password, $db_database);
+        if (mysqli_connect_errno()) {
+            $message = "Failed to connect to MySQL: " . mysqli_connect_error();
+        }
+		
+		if (isset($_SESSION['message'])) {
+			$message = $_SESSION['message'];
+			unset($_SESSION['message']);
+		} else {
+			$message = '';
+		}
+    } else {
+        // no session data-- send back to login
+        header('Location:  login.html');
+    }
+
+
+
+
+
+
+
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Dagah</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="./components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+
+    <!-- MetisMenu CSS -->
+    <link href="./components/metisMenu/dist/metisMenu.min.css" rel="stylesheet">
+    <link href="./css/timeline.css" rel="stylesheet" />
+
+
+    <!-- Custom CSS -->
+    <link href="./css/Dagah.css" rel="stylesheet">
+    <link href="./css/Dagah_custom.css" rel="stylesheet">
+
+    <!-- Custom Fonts -->
+    <link href="./components/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+    <div id="wrapper">
+
+        <!-- Navigation -->
+        <?php include('dagah_nav.html'); ?>
+
+        <!-- Page Content -->
+        <div id="page-wrapper">
+            <div class="container-fluid">
+				<?php echo $message ?>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <?php echo $config_warning ?>
+                        <h1 class="page-header">Dagah Software Update</h1>
+                    </div>
+                    <!-- /.col-lg-12 -->
+                </div>
+                <!-- /.row -->
+        
+			
+                            
+               <div class="panel-heading">
+                <div class="col-lg-13">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                           <i class="fa fa-bell fa-fw"></i> Upload Software Update
+                        </div>
+                        <!-- /.panel-heading -->
+                        <div class="panel-body">
+                           <div class="list-group">
+                           <form enctype="multipart/form-data" action="dagah_update.html" method="POST">
+    <input type="file" name="update" value="update"/> <br />
+    <input type="submit" value="Manual Update"/> <br />
+</form>
+
+<br />
+
+<?PHP
+ 
+
+ if(!empty($_FILES['update']))
+  {
+
+    $path = "update/";
+    $path = $path . basename( $_FILES['update']['name']);
+    if(move_uploaded_file($_FILES['update']['tmp_name'], $path)) {
+      echo "Software Update ". basename( $_FILES['update']['name']). 
+     " has been uploaded. \n";
+
+// Working Variables
+
+  $file = basename( $_FILES['update']['name']);
+  $trimmedFile = preg_replace('/\\.[^.\\s]{3,4}$/', '', $file);
+  $path = $path . basename( $_FILES['update']['name']);
+  $qual = "/";
+  $update = "update/";
+  $folder = "$trimmedFile$qual";
+  $fqfolder = "update$qual$file/";
+  $fqfile = "$update$trimmedFile"; 
+  $webdata = "/var/www/html/";
+  $updateFolder = "update/"; 
+  $archiveFolder = "update/trimmedFile/";
+  $cpcmd = "cp --preserve=all ";
+  $mvcmd = "mv -f "; 
+  $dagah_dir = "/home/dagah/dagah/";
+  $dagah = "/home/dagah/dagah";
+  $dagah_home = " /home/dagah/dagah/";
+  $upload = "upload";
+  $shellsh = "unzip.sh";
+  $license = "license.lic";
+  $run_mv = "$mvcmd$webdata$updateFolder$file $webdata$updateFolder$trimmedFile$qual$file";
+  $createZip = "echo unzip -o $webdata$updateFolder$file -d $webdata$updateFolder$trimmedFile > $webdata$uploadFolder$upload$qual$shellsh";
+  $script = "python ";
+  $readLic = "licDB.pyc";
+  $deadFolder = "folder";
+  $crtHDR = "echo #!/bin/bash > $webdata$upload$unzipsh"; 
+  $readScript = "$script$dagah_dir$readLic$dagah_home$license localhost root '' shevirah";
+  $unzip = ".$webdata$upload$qual$shellsh"; 
+  $mkdir = "mkdir $webdata$update$trimmedFile";  
+
+// Debug 
+ 
+// echo "<pre>Create Directory: $mkdir</pre>";
+// echo "<pre>Update Folder: updateFolder</pre>";	
+// echo "<pre>cpcmd: $run_mv</pre>";
+// echo "<pre>licenseReader: $readScript</pre>";
+// echo "<pre>Unzip Archive: $unzip</pre>";
+// echo "<pre>Create Script  Header:crtHDR</pre>";  
+// echo "<pre>Trimmed:$trimmedFile</pre>";
+// echo "<pre>file:$file</pre>";
+//  echo "<pre>folder:$folder</pre>";
+// echo "<pre>fullfold:$fqfolder</pre>";
+// echo "<pre>unzip cmd:$unzip</pre>";
+// echo "<pre>Create Zip File: $createZip</pre>";
+// echo "<pre>Create Hdr: $crtHDR</pre>"; 
+
+
+
+
+shell_exec('./unzip.sh');
+shell_exec('chmod 775 -R update/');
+// output2 = shell_exec('run-parts update/');
+// echo "<pre>$output2</pre>"; 
+
+echo "<pre>Extracting $trimmedFile</pre>";
+$output5 = shell_exec('cat ./extracted.log');
+echo "<pre>$output5</pre>";
+
+echo "<pre>Executing Upgrade Script</pre>";
+$output6 = shell_exec('cat ./upgrade.log');
+echo "<pre>$output6</pre>";
+echo "<pre>Upgrade Script Complete.</pre>";
+
+shell_exec('rm -rf update/*');
+
+
+
+
+  } else{
+      echo "<pre>There was an error uploading the file, please try again!</pre>";
+    }
+  }
+?>
+</div>
+</div>
+<br>
+<br>
+
+
+
+<html>
+
+
+
+</body>
+</html>
