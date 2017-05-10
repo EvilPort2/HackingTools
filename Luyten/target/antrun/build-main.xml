@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<project name="maven-antrun-" default="main"  >
+<target name="main">
+  <taskdef classname="com.ultramixer.jarbundler.JarBundler" name="jarbundler"/>
+  <chmod file="/home/evilport/HackingTools/Luyten/target/resources/universalJavaApplicationStub.sh" perm="+x"/>
+  <jarbundler mainclass="us.deathmarine.luyten.LuytenOsx" screenmenu="true" useJavaXKey="true" copyright="2015" signature="Luyten" antialiasedgraphics="true" bundleid="us.deathmarine.luyten" icon="/home/evilport/HackingTools/Luyten/src/resources/luyten.icns" jars="/home/evilport/HackingTools/Luyten/target/luyten-0.5.2.jar" dir="/home/evilport/HackingTools/Luyten/target" shortname="Luyten" version="0.5.2" highresolutioncapable="true" name="Luyten" workingdirectory="$JAVAROOT" jvmversion="1.7+" stubfile="/home/evilport/HackingTools/Luyten/target/resources/universalJavaApplicationStub.sh">
+    <documenttype extensions="class" role="Viewer" name="Class File"/>
+    <documenttype extensions="java" role="Viewer" name="Java File"/>
+    <documenttype extensions="jar" role="Viewer" name="Jar File"/>
+    <documenttype extensions="war" role="Viewer" name="War File"/>
+    <documenttype extensions="ear" role="Viewer" name="Ear File"/>
+    <documenttype extensions="zip" role="Viewer" name="Zip File"/>
+  </jarbundler>
+  <zip destfile="/home/evilport/HackingTools/Luyten/target/luyten-OSX-0.5.2.zip">
+    <zipfileset excludes="Luyten.app/Contents/MacOS/*" includes="Luyten.app/**" dir="/home/evilport/HackingTools/Luyten/target"/>
+    <zipfileset includes="Luyten.app/Contents/MacOS/*" filemode="755" dir="/home/evilport/HackingTools/Luyten/target"/>
+  </zip>
+</target>
+</project>

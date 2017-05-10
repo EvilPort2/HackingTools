@@ -1,0 +1,3 @@
+include *.rst
+include mitmflib/ua_parser/regexes.yaml
+include mitmflib/ua_parser/regexes.json

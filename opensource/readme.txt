@@ -1,0 +1,39 @@
+
+---
+-- NETOOL TOOLKIT 4.6 [ STABLE ] MitM opensource tollkit
+-- Author: peterubuntu10@sourceforge.net  [ r00t-3xp10it ]
+-- Project HomePage: https://sourceforge.net/projects/netoolsh
+-- Project WIKIPage: https://sourceforge.net/p/netoolsh/wiki/netool.sh%20script%20project/
+-- Dependencies: zenity, Nmap, Ettercap, Macchanger, Metasploit, Driftnet, Apache2, sslstrip
+-- INURLBR Dependencies: curl, libcurl3, libcurl3-dev, php5, php5-cli, php5-curl
+--
+--
+-- [DISCLAMER]
+-- The author does not hold any responsibility about the bad use of this script,
+-- remmenber that attacking targets without prior concent its ilegal and punish
+-- by law, However you are allowed to protect yourselfe from any intruder by any
+-- meens necessary (using this tool the ethical way) please read the license.
+--
+-- [DESCRIPTION]
+-- netool.sh toolkit provides a fast and easy way For new arrivals to IT security
+-- pentesting and also to experience users to use allmost all features that the
+-- Man-In-The-Middle can provide under local lan, since scanning, sniffing and
+-- social engeneering attacks (metasploit & veil needs to be manually installed)
+--
+-- [TOOL SETTINGS]
+-- Additional tool settings can be configurated just by editing the 'toolkit_config'
+-- file befor running the tool, settings like: config paths to frameworks installed,
+-- and some internal toolkit settings.
+--
+--
+-- [DOWNLOAD - INSTALL] [STABLE VERSION] -> open terminal and write:
+-- wget http://sourceforge.net/projects/netoolsh/files/opensource[kali].tar.gz
+-- tar -xvf opensource[kali].tar.gz && cd opensource
+-- chmod +x INSTALL.sh && ./INSTALL.sh
+--
+-- [DOWNLOAD - INSTALL] [GIT VERSION] -> open terminal and write:
+-- git clone git://git.code.sf.net/p/netoolsh/opensource-kali opensource
+-- cd opensource && chmod +x INSTALL.sh && ./INSTALL.sh
+---
+
+Copyright © 2015 - netool toolkit

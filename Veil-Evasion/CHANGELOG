@@ -1,0 +1,420 @@
+[09.12.2016]
+     Released.: 2.28.2
+     Modified.: Setup script heavily updated by @g0tmi1k, thanks for the continued updates!
+     Modified.: update.py script now changes the pyinstaller update path based on the latest setup script updates
+
+[07.19.2016]
+     Released.: 2.28.1
+     Modified.: Modified user submission, checks to ensure "=" is present for extra msfvenom options, and doesn't error out.  Converted tabs to spaces
+
+[07.19.2016]
+     Released.: 2.28
+     Fixed....: Fixed issue within Veil where Python scripts gave cannot open archive.  Determined it to be an issue with the bootloader.  An old bootloader (runw.exe) was being used on the pyinstaller payloads which introduced the error.  Updating to the latest bootloader fixed the problem.  Might have to look into removing pwnstaller since it uses the old bootloader.
+
+[06.29.2016]
+     Released.: 2.27.2
+     Modified.: Setup script now contains a fix for a bug in ubuntu and arch
+
+[06.26.2016]
+     Released.: 2.27.1
+     Modified.: Python payloads now show a console until issue with --noconsole is figured out
+
+[06.14.2016]
+     Released.: 2.27
+     Added....: Added stallion payload which self-brute forces itself.
+
+[06.05.2016]
+     Released.: 2.26.5
+     Modified.: SupportFiles.py not properly handles the correct path for runw.exe and prevents error from displaying
+
+[05.19.2016]
+     Released.: 2.26.4
+     Removed..: PyObfuscate is no longer used.  It looks like it is less random using it vs. Veil's randomization.
+
+[05.04.2016]
+     Released.: 2.26.3
+     Modified.: Hyperion and PEScrambler payload modules are now working.  This fixes issue #326
+
+[04.22.2016]
+     Released.: 2.26.2
+     Modified.: pyobfuscator code no longer embeds a static hash at the end of each python payload
+
+[04.01.2016]
+     Released.: 2.26.1
+     Updated..: Our update.py script has been updated for better compatibility with Kali.  Thanks to @Sbrun for providing the patch!
+
+[03.31.2016]
+     Released.: 2.26
+     Fixed....: Fixed command injection vulnerability because @botnet_hunter supplied us with a fix that worked against all of his tests.  Thanks to @botnet_hunter for helping to remediate this issue!
+
+[03.29.2016]
+     Released.: 2.25
+     Fixed....: Security vulnerability reported to us by @botnet_hunter.  There was an issue with the RPC server when binding to 0.0.0.0 that essentially allowed RCE.  If you weren't using the RPC server, you weren't affected, but it's good to patch.
+     Thanks...: Thanks to Brian Wallace (@botnet_hunter) for reporting this vulnerability and allowing us to push a patch.
+
+[02.16.2016]
+     Released.: 2.24
+     Added....: I've added obfuscation to the python payloads.  Some AVs are triggering on ctypes being referenced everywhere, at the moment, it's only in the file once.
+     Updated..: Pyinstaller has been updated to version 3.1 which allows us to encrypt the bytecode using the -key option.  The key is randomly generated time a payload is made.
+
+[01.15.2016]
+     Released.: 2.23
+     Info.....: Happy New Years!
+     Added....: Added a perl module for Veil-Evasion.  Working on native compilation in Linux, but if you know how to do it, get in touch with me!
+
+[11.15.2015]
+     Released.: 2.22.2
+     Updated..: Pure go stager payloads now have the correct buffer length for the latest meterpreter dll.  Fixes issue #243
+
+[9.19.2015]
+     Released.: 2.22.1
+     Updated..:  Fixed issue with msfvenom output change and command line usage, updated in pull requests #218 and #219, thanks to gryffus for the patches! 
+
+[9.15.2015]
+     Released.: 2.22.0
+     Added....: Added a Ruby payload which base64 decodes its shellcode at runtime and injects into memory
+
+[07.11.2015]
+     Released.: 2.21.4
+     Updated..: Addressed issue #189, where powershell payloads essentially ignore the compile option since it doesn't apply to them.
+     Updated..: Addressed issue #188, really just expanded upon g0tmilk's PR to give context to the error message.
+
+[7.01.2015]
+     Released.: 2.21.3
+     Fixed....: Fixed a bug in controller so it no longer ignores the "compile_to_exe" option.
+
+[6.27.2015]
+     Released.: 2.21.2
+     Modified.: Removed references to msfpayload throughout veil-evasion
+
+[6.24.2015]
+     Released.: 2.21.1
+     Modified.: RPC server now accepts the pwnstaller and doesn't crash (thanks to PR #171)
+     Updated..: Hyperion was updated to version 1.2, thanks to PR #172
+
+[6.15.2015]
+     Released.: 2.21.0
+     Modified.: June V-Day released! https://www.veil-framework.com/june-2015-v-day/
+
+[6.9.2015]
+     Released.: 2.20.4
+     Modified.: Pure Python stagers are now proxy aware.  Thanks to @meatballs for opening this a long time ago, sorry it took so long :)
+
+[5.31.2015]
+     Released.: 2.20.3
+     Modified.: Finally, the self-contained payload patch is ready, and has been merged.  All contained payloads should now work! :)
+
+[5.30.2015]
+     Released.: 2.20.2
+     Modified.: Only modification here is a small change to the setup script.  If already installed, no new changes.
+
+[5.29.2015]
+     Released.: 2.20.1
+     Modified.: Python payloads now include McAfee bypass... oh antivirus.... avlol :)
+
+[5.19.2015]
+     Released.: 2.20
+     Added....: This release includes Go payloads being added into the framework!  Veil-Evasion can now compile any go payloads provided to it!  Thanks to @b00stfr3ak for submitting them to us!
+
+[4.27.2015]
+     Released.: 2.19.2
+     Fixed....: Fixed bug identified in Github Issue #138.  Msfvenom options are now being properly added into the command each time.
+
+[4.21.2015]
+     Released.: 2.19.1
+     Modified.: Fixed Github issue #132 with an issue for msfvenom path on non-kali distro.
+
+[4.17.2015]
+     Released.: 2.19.0
+     Modified.: Forgot to add to changelog and update version number last month, fixed here!
+     Modified.: Added the latest Backdoor Factory Updates into Veil-Evasion
+
+[2.28.2015]
+     Released.: 2.17.0
+     Modified.: Self-contained payloads now uses version 0.0.14 of meterpreter.
+     Modified.: Updated Version number
+
+[1.20.2015]
+     Released.: 2.16.0
+     Modified.: Updated meterpreter version compatibility to version 13 (latest/current version at this time).  Fixed small bug in the process
+     Added....: Ruby flat injection payload now includes heap injection technique.
+
+[12.28.2014]
+     Released.: 2.15.3
+     Modified.: Much larger BDF update, and slight modification in the setup script.
+
+[12.27.2014]
+     Released.: 2.15.2
+     Modified.: Small modification for Backdoor Factory payload module to allow higher port numbers.  Thanks to Josh Pitts (@midnite_runr) for the fix!
+
+[12.20.2014]
+     Released.: 2.15.1
+     Modified.: Self Contained payloads now use latest build of meterpreter (0.0.12)
+
+[12.17.2014]
+     Released.: 2.15.0
+     Added....: We've added in pure ruby http and https stagers!  Get pwning!
+
+[11.17.2014]
+     Released.: 2.14.1
+     Modified.: Self-Contained payload modules now don't all contained the same binary patch, it's all in one place (within the helpers file).  Partially in response to some feedback about how we are handling the self-contained payloads.  This will make it easier to only patch one area for the payloads using it.
+
+[11.16.2014]
+     Released.: 2.14.0
+     Added....: So.... we missed a month.  Life happens.  But we do have new payloads today!  We've released self-contained ruby payloads.  These contain the meterpreter dll and do not require the stage to be sent over the wire!
+
+[10.24.2014]
+     Released.: 2.13.4
+     Modified.: Self-Contained payloads display an error message and exit if not using the latest version of metasploit (other payloads still work).  This is a requirement for the self-contained payloads!
+
+[10.23.2014]
+     Released.: 2.13.3
+     Modified.: Self-Contained payloads now look for 0.0.10 of meterpreter dll (thanks for letting us know @Viss)
+
+[10.10.2014]
+	Released.: 2.13.2
+	Modified.: Fixed bug with self contained python payloads
+
+[9.20.2014]
+     Released.: 2.13.1
+     Added....: ability to specify a raw custom shellcode file for injection modules
+
+[9.15.2014]
+     Released.: 2.13.0
+     Added....: ruby/shellcode_inject/flat, ruby/meterpreter/rev_tcp stagers
+     Added....: .NET crypter option for all C# payloads
+     Added....: Ubuntu compatibility
+
+[9.6.2014]
+     Released.: 2.12.1
+     Modified.: Workaround for M$ Sillyness to Fix Setup Script.
+
+[8.27.2014]
+     Released.: 2.12.0
+     Modified.: Setup Script Now Supports Ubuntu 14+, Debian 7+, and non-root installations.
+
+[8.23.2014]
+     Released.: 2.11.1
+     Modified.: Now catching EOFError exception when Ctrl+d is pressed.  Thanks to Robin Woods (@digininja) for letting us know about this.
+
+[8.11.2014]
+     Released.: 2.11.0
+     Added....: powershell/meterpreter/rev_http[s]
+
+[7.29.2014]
+     Modified.: Powershell shellcode inject virtual payload modified to work correctly.  Thanks to henryk for pointing this out to us.
+
+[7.28.2014]
+     Released.: 2.10.2
+     Modified.: Users can now provide IPv6 addresses for LHOST values.  Thanks to henryk for the suggestion.
+
+[7.16.2014]
+     Released.: 2.10.1
+     Updated..: Setup script and Backdoor Factory have been updated for compatibility with the latest version of backdoor factory.
+
+[7.15.2014]
+     Released.: 2.10.0
+     Added....: powershell/meterpreter/rev_tcp
+     
+[7.11.2014]
+     Released.: 2.9.2
+     Modified.: bug fix for meterpreter/rev_https payload
+
+[7.10.2014]
+     Released.: 2.9.1
+     Modified.: bug fix for option parsing of new Metasploit payload modules
+
+[6.15.2014]
+     Released.: 2.9.0
+     Added....: c/shellcode_inject/flat payload (Contains all shellcode injection techniques)
+     Modified.: Backdoor Factory now is at its latest release.
+
+[5.15.2014]
+     Released.: 2.8.0
+     Added....: cs/meterpreter/rev_http and cs/meterpreter/rev_https payloads
+
+[5.6.2014]
+     Released.: 2.7.2
+     Modified.: integrated Pwnstaller loader obfuscation into Python payloads
+
+[5.5.2014]
+     Released.: 2.7.1
+     Modified.: Bug fix for the obfuscation used in c/meterpreter/* payloads
+
+[4.24.2014]
+	Modified.: Msfvenom call now includes a specific encoder to use to hopefully prevent bad characters from appearing that were still included with shikata ga nai
+
+[4.15.2014]
+     Released.: 2.7.0
+     Added....: Shellcode injection into an existing process payload
+
+[3.14.2014]
+     Released.: 2.6.0
+     Added....: Added basic JSON-RPC interface into the main Veil-Evasion.py launcher
+     Added....: c/meterpreter/rev_http[_service]
+
+[3.11.2014]
+     Modified.: Added backwards compatibility for shellcode generation.
+
+[3.9.2014]
+     Modified.: Modified shellcode generating calls of Veil to be compatible with recent MSF changes.
+
+[3.4.2014]
+     Released.: 2.5.1
+     Modified.: Removed smart_migrate from generated resource file due to forum thread saying it caused detection of the payload (https://www.veil-framework.com/forums/index.php/topic/90-auto-migrate/)
+     Modified.: Fixed bug in resource script generation for Backdoor Factory Payloads to now include the LHOST within the resource script.
+
+[2.15.2014]
+     Released.: 2.5.0
+     Added....: War payload wrapper and python file wrapper added as Veil-Evasion's first auxiliary modules
+
+[1.24.2014]
+     Released.: 2.4.5
+     Modified.: Reverted accidental change of migrate in controller, added war file check
+     Modified.: error checking introduced on prompting the user for the output file base
+     Modified.: added in tab-completion of LPORT and 'original_exe' in module menus
+
+[1.20.2014]
+     Released.: 2.4.4
+     Modified.: resource scripts now call post/windows/manage/smart_migrate instead of post/windows/manage/migrate
+
+[1.19.2014]
+     Released.: 2.4.3
+     Modified.: Fixed LHOST being properly parsed for resource script generation
+
+[1.18.2014]
+     Released.: 2.4.2
+     Added....: Added heap memory injection method to python payloads
+
+[1.16.2014]
+     Released.: 2.4.1
+     Added....: tools/cortana/veil_evasion.cna Cortana script for Armitage/Cobalt Strike integration
+
+[1.15.2014]
+     Released.: 2.4.0
+     Added....: python/meterpreter/rev_http[s] stagers
+     Added....: logic to check for version upgrades
+     Updated..: "Veil" references changed to "Veil-Evasion" and "Veil-Framework" as appropriate
+     Updated..: misc bug fixes
+     Updated..: updated README.md file
+
+[12.18.2013]
+     Released.: 2.3.1
+     Added....: virustotal checking command to the main menu
+
+[12.15.2013]
+     Released.: 2.3.0
+     Added....: cs/meterpreter/rev_tcp and python/meterpreter/rev_tcp stagers
+     Added....: added a hashing function to store/document sha1 hashes of Veil compiled payloads
+     Added....: fork of @mubix's vt-notify script to ./tools/vt-notify/
+     Added....: python payloads can be set to expire after X days
+     Added....: basic obfuscation into all C# payloads
+
+[12.3.2013]
+     Released.: 2.2.2
+     Added....: --overwrite option to overwrite existing source/.exe's produced
+     Added....: "clean" command and "--clean" option to clean out payload compiled/source folders
+     Modified.: payload import cleanup and various bug fixes, converted all tabs to spaces
+     Modified.: randomString() length now defaults to between 6-15 characters
+     Modified.: modules/common/randomizer.py integrated into modules/common/helpers.py
+     Modified.: modules/common/crypters.py integrated into modules/common/encryption.py
+     Modified.: payload modules rewritten with new module names (from above)
+     Modified.: encryption usage condolidated in encryption.py, python modules changed as appropriate
+     Modified.: bug fix to allow Veil to be used from any folder location
+     Modified.: payloadCompleter() now takes a dynamic command list
+     Modified.: internal command object changed from dictionary to list to preserve display order
+     Updated..: .dll patch in python self contained payloads (thanks to Achoo for letting us know)
+     
+[11.22.2013]
+     Released.: 2.2.1
+     Modified.: payload module loading now builds name based on menu structure dynamically, up to 5 levels deep
+     Modified.: reorganized payload menu structure and payload names
+     Modified.: payload.shortname no longer needed in payload modules
+     Modified.: -l command line flag consolidated into just -p, eliminated unnessary code
+     Modified.: menu UI/color tweaks
+
+[11.15.2013]
+     Released.: 2.2.0
+     Added....: c/meter_rev_tcp and c/meter_rev_tcp_service payloads
+     Modified.: LetterSub python payload to prevent potential issue with 'x' as a modified character
+     
+[10.23.2013] 
+     Released.: 2.1.2
+     Modified.: handler script generation now checks if the proper options exist in /etc/veil/settings.py
+     Modified.: handler scipts should now be generated for anything that requires a required LHOST parameter
+
+[10.15.2013] 
+     Released.: 2.1.1
+     Added....: msf handler.rc scripts are now generated, config options available in /etc/veil/settings.py
+     Modified.: bug fix in Backdoor Factory code to ensure code caves are valid
+     Modified.: updated the documentation in ./doc/
+
+[10.15.2013] 
+     Released.: 2.1.0
+     Added....: The Backdoor Factory (https://github.com/secretsquirrel/the-backdoor-factory) payload into native/*
+     Added....: Validation to LHOST and LPORT parameters when providing a value before prompted.  Thanks to issue #26 (Lesiah) for bringing this to out attention.
+     Added....: Default msfvenom options can now be specified in /etc/veil/settings.py
+     Re-Added.: Update functionality within Veil-Evasion was accidentally removed at some point.  This update re-adds that functionality to the main menu.
+     Modified.: self-contained .dll payloads now fixed
+
+[9.15.2013]
+     Released.: 2.0.6
+     Added....: --clean flag to setup script to force reinstallation of dependencies to fix issues
+     Added....: PYINSTALLER_PATH variable to Veil configuration to meet Kali FHS request
+     Added....: Python payloads now all have void pointer and virtualalloc injection methods
+     Modified.: supportfiles.py to use new PYINSTALLER_PATH variable
+     Modified.: Cosmetics
+     Modified.: Output folder for payloads moved to ~/veil-output/
+     Modfiied.: Configuration file for veil moved to /etc/veil/settings.py
+
+[08.29.2013]
+     Released.: Version 2.0.5
+     Modified.: Updated the file which the setup script searches for when installing/configuring Veil
+
+[08.18.2013]
+     Released.: Version 2.0.4
+     Modified.: Added 64 bit compatbility to Veil
+     Modified.: Added update functionality within Veil
+
+[07.22.2013]
+     Released.: Version 2.0.2
+     Modified.: Fixed powershell and c# payloads, thanks to think.pink for letting us know of the issue
+
+[06.28.2013]
+     Released.: Version 2.0.1
+     Modified.: file name overwrite bug fix, main menu exit bugfix
+     Modified.: local file path completer added to ./modules/common/completers.py
+     Modified.: controller.py can be called from external code, returns path of .exe
+
+[06.16.2013]
+     Released.: Version 2.0
+     Added....: payloads: powershell, c#, native (hyperion/pecrypter)
+     Added....: python encrypter "pyherion" functionality
+     Added....: ./tools/ directory "pyherion" crypter standalone
+     Added....: automatic loading of payload modules
+     Added....: automatic loading of metasploit payloads available and config option extraction
+     Added....: tab completion of available msfvenom payload modules
+     Added....: ability to specify any metasploit payload for shellcode generation
+     Added....: command line switches
+     Added....: Output folder for payload source/compiled .exes
+     Added....: ./doc/ folder for autogenerated pydoc documentation
+     Added....: ./config/* for configuration of various options
+     Added....: created tab completion for almost all menus
+     Modified.: Massive refactor of most of the code base
+     Modified.: Payload files won't overwrite (automatic renaming)
+     Modified.: Payload files properly modularized
+     Modified.: Eliminated /auxiliary/ folder, combined everything /common/
+     Modified.: Standardized doc strings so pydoc will work properly
+     Modified.: Cosmetics
+
+[06.01.2013]
+     Released.: Version 1.2
+     Added....: C-based payloads (many more coming)
+     Added....: Ability to use custom shellcode.
+     Modified.: Organized payloads by language.
+     Modified.: Split all payloads into single files.
+     Modified.: Cosmetics
+
+[05.31.2013]
+     Released.: Version 1.1.0
+     Modified.: Major revamp of codebase. Began framework-based structure.

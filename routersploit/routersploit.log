@@ -1,0 +1,33 @@
+2017-05-10 01:41:12,255 ERROR routersploit.exceptions       Error during loading 'routersploit/modules/'
+
+Error: 'routersploit.modules.'
+
+It should be valid path to the module. Use <tab> key multiple times for completion.
+Traceback (most recent call last):
+  File "/home/evilport/HackingTools/routersploit/routersploit/utils/__init__.py", line 66, in import_exploit
+    module = importlib.import_module(path)
+  File "/usr/lib/python2.7/importlib/__init__.py", line 38, in import_module
+    return sys.modules[name]
+KeyError: 'routersploit.modules.'
+2017-05-10 01:42:29,456 ERROR routersploit.exceptions       Error during loading 'routersploit/modules/exploits/routers/'
+
+Error: 'routersploit.modules.exploits.routers.'
+
+It should be valid path to the module. Use <tab> key multiple times for completion.
+Traceback (most recent call last):
+  File "/home/evilport/HackingTools/routersploit/routersploit/utils/__init__.py", line 66, in import_exploit
+    module = importlib.import_module(path)
+  File "/usr/lib/python2.7/importlib/__init__.py", line 38, in import_module
+    return sys.modules[name]
+KeyError: 'routersploit.modules.exploits.routers.'
+2017-05-10 01:43:22,711 ERROR routersploit.exceptions       Error during loading 'routersploit/modules/exploits/routers/dlink/'
+
+Error: 'routersploit.modules.exploits.routers.dlink.'
+
+It should be valid path to the module. Use <tab> key multiple times for completion.
+Traceback (most recent call last):
+  File "/home/evilport/HackingTools/routersploit/routersploit/utils/__init__.py", line 66, in import_exploit
+    module = importlib.import_module(path)
+  File "/usr/lib/python2.7/importlib/__init__.py", line 38, in import_module
+    return sys.modules[name]
+KeyError: 'routersploit.modules.exploits.routers.dlink.'

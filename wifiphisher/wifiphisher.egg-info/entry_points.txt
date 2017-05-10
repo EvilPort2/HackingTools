@@ -1,0 +1,3 @@
+[console_scripts]
+wifiphisher = wifiphisher.pywifiphisher:run
+

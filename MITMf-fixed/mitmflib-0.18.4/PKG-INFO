@@ -1,0 +1,13 @@
+Metadata-Version: 1.1
+Name: mitmflib
+Version: 0.18.4
+Summary: A collection of libraries and packages that are used in MITMf (https://github.com/byt3bl33d3r/MITMf)
+Home-page: https://github.com/byt3bl33d3r/mitmflib
+Author: byt3bl33d3r
+Author-email: byt3bl33d3r@gmail.com
+License: GNU
+Description: A collection of libraries and packages that are used in MITMf (https://github.com/byt3bl33d3r/MITMf)
+        
+Keywords: MITMf MITMF development
+Platform: UNKNOWN
+Classifier: Programming Language :: Python :: 2.7
