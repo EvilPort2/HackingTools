@@ -1,5 +1,0 @@
-#!/bin/bash
-
-QDIR=/home/dagah/dagah/Spool
-
-python $QDIR/qctl.pyc quit

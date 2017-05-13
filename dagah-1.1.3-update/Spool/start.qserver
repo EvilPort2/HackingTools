@@ -1,5 +1,0 @@
-#!/bin/bash
-
-QDIR=/home/dagah/dagah/Spool
-
-python -u $QDIR/qserver.pyc >> $QDIR/LOG.qserver 2>&1
