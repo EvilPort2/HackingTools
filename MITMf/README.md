@@ -5,7 +5,7 @@
 [![Build Status](https://travis-ci.org/byt3bl33d3r/MITMf.svg)](https://travis-ci.org/byt3bl33d3r/MITMf)
 [![Coverage Status](https://coveralls.io/repos/byt3bl33d3r/MITMf/badge.svg?branch=master&service=github)](https://coveralls.io/github/byt3bl33d3r/MITMf?branch=master)
 
-#MITMf
+# MITMf
 
 Framework for Man-In-The-Middle attacks
 
@@ -16,7 +16,7 @@ This tool is based on [sergio-proxy](https://github.com/supernothing/sergio-prox
 Contact me at:
 - Twitter: @byt3bl33d3r
 - IRC on Freenode: #MITMf
-- Email: byt3bl33d3r@gmail.com
+- Email: byt3bl33d3r@protonmail.com
 
 **Before submitting issues, please read the relevant [section](https://github.com/byt3bl33d3r/MITMf/wiki/Reporting-a-bug) in the wiki .**
 
@@ -148,7 +148,7 @@ For a complete list of available options, just run ```python mitmf.py --help```
 - **Spoof**            : Redirect traffic using ARP, ICMP, DHCP or DNS spoofing
 - **BeEFAutorun**      : Autoruns BeEF modules based on a client's OS or browser type
 - **AppCachePoison**   : Performs HTML5 App-Cache poisoning attacks 
-- **Ferret-NG**        : Transperently hijacks client sessions
+- **Ferret-NG**        : Transparently hijacks client sessions
 - **BrowserProfiler**  : Attempts to enumerate all browser plugins of connected clients
 - **FilePwn**          : Backdoor executables sent over HTTP using the Backdoor Factory and BDFProxy
 - **Inject**           : Inject arbitrary content into HTML content

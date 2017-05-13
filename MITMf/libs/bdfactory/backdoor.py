@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python2
 '''
 BackdoorFactory (BDF) v3 - FOUNTAINPATCH
 
@@ -12,7 +12,7 @@ techniques are based on.
 
 Special thanks to Travis Morrow for poking holes in my ideas.
 
-Copyright (c) 2013-2015, Joshua Pitts
+Copyright (c) 2013-2017, Joshua Pitts
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without modification,
@@ -62,7 +62,7 @@ def signal_handler(signal, frame):
 class bdfMain():
 
     version = """\
-         Version:   3.1.3
+         Version:   3.4.2
          """
 
     author = """\
@@ -255,8 +255,8 @@ class bdfMain():
                       help="EXPERIMENTAL "
                       "Checks the PE binaries for \'requestedExecutionLevel level=\"highestAvailable\"\'"
                       ". If this string is included in the binary, it must run as system/admin. If not "
-		      "in Support Check mode it will attmept to patch highestAvailable into the manifest " 
-		      "if requestedExecutionLevel entry exists."
+                      "in Support Check mode it will attmept to patch highestAvailable into the manifest "
+                      "if requestedExecutionLevel entry exists."
                       )
     parser.add_option("-L", "--patch_dll", dest="PATCH_DLL", default=True, action="store_false",
                       help="Use this setting if you DON'T want to patch DLLs. Patches by default."
@@ -269,14 +269,25 @@ class bdfMain():
                       help="For payloads that have the ability to beacon out, set the time in secs"
                       )
     parser.add_option("-m", "--patch-method", dest="PATCH_METHOD", default="manual", action="store",
-                      type="string", help="Patching methods for PE files, 'manual','automatic', "
+                      type="string", help="Patching methods for PE files, 'manual','automatic', replace "
                       "and onionduke")
     parser.add_option("-b", "--user_malware", dest="SUPPLIED_BINARY", default=None, action="store",
                       help="For onionduke. Provide your desired binary.")
     parser.add_option("-X", "--xp_mode", dest="XP_MODE", default=False, action="store_true",
                       help="Default: DO NOT support for XP legacy machines, use -X to support XP"
-                      ". By default the binary will crash on XP machines (e.g. sandboxes)"
+                      ". By default the binary will crash on XP machines (e.g. sandboxes)")
+    parser.add_option("-A", "--idt_in_cave", dest="IDT_IN_CAVE", default=False, action="store_true",
+                      help="EXPERIMENTAL "
+                      "By default a new Import Directory Table is created in a new section, "
+                      "by calling this flag it will be put in a code cave.  This can cause bianry "
+                      "failure is some cases. Test on target binaries first."
                       )
+    parser.add_option("-C","--code_sign", dest="CODE_SIGN", default=False, action="store_true", 
+                      help="For those with codesigning certs wishing to sign PE binaries only. " 
+                      "Name your signing key and private key signingcert.cer and signingPrivateKey.pem "
+                      "repectively in the certs directory it's up to you to obtain signing certs.")
+    parser.add_option("-p","--preprocess", dest="PREPROCESS", default=False, action="store_true", 
+                      help="To execute preprocessing scripts in the preprocess directory")
 
     (options, args) = parser.parse_args()
 
@@ -302,7 +313,7 @@ class bdfMain():
         print choice(menu)
         print author
         print version
-        time.sleep(1)
+        time.sleep(.5)
     else:
         print "\t Backdoor Factory"
         print author
@@ -342,7 +353,10 @@ class bdfMain():
                                            options.PATCH_DLL,
                                            options.PATCH_METHOD,
                                            options.SUPPLIED_BINARY,
-                                           options.XP_MODE
+                                           options.XP_MODE,
+                                           options.IDT_IN_CAVE,
+                                           options.CODE_SIGN,
+                                           options.PREPROCESS,
                                            )
                 elif is_supported is "ELF":
                     supported_file = elfbin(options.FILE,
@@ -354,7 +368,8 @@ class bdfMain():
                                             options.FIND_CAVES,
                                             options.SHELL_LEN,
                                             options.SUPPLIED_SHELLCODE,
-                                            options.IMAGE_TYPE
+                                            options.IMAGE_TYPE,
+                                            options.PREPROCESS,
                                             )
                 elif is_supported is "MACHO":
                     supported_file = machobin(options.FILE,
@@ -365,7 +380,8 @@ class bdfMain():
                                               options.SUPPORT_CHECK,
                                               options.SUPPLIED_SHELLCODE,
                                               options.FAT_PRIORITY,
-                                              options.BEACON
+                                              options.BEACON,
+                                              options.PREPROCESS,
                                               )
 
                 if options.SUPPORT_CHECK is True:
@@ -436,6 +452,9 @@ class bdfMain():
                                                options.PATCH_METHOD,
                                                options.SUPPLIED_BINARY,
                                                options.XP_MODE,
+                                               options.IDT_IN_CAVE,
+                                               options.CODE_SIGN,
+                                               options.PREPROCESS,
                                                )
                         supported_file.OUTPUT = None
                         supported_file.output_options()
@@ -450,7 +469,8 @@ class bdfMain():
                                                 options.FIND_CAVES,
                                                 options.SHELL_LEN,
                                                 options.SUPPLIED_SHELLCODE,
-                                                options.IMAGE_TYPE
+                                                options.IMAGE_TYPE,
+                                                options.PREPROCESS,
                                                 )
 
                         supported_file.OUTPUT = None
@@ -466,7 +486,8 @@ class bdfMain():
                                                   options.SUPPORT_CHECK,
                                                   options.SUPPLIED_SHELLCODE,
                                                   options.FAT_PRIORITY,
-                                                  options.BEACON
+                                                  options.BEACON,
+                                                  options.PREPROCESS,
                                                   )
                         supported_file.OUTPUT = None
                         supported_file.output_options()
@@ -503,6 +524,7 @@ class bdfMain():
                                options.SHELL_LEN,
                                options.FIND_CAVES,
                                options.SUFFIX,
+                               options.CAVE_MINER,
                                options.DELETE_ORIGINAL,
                                options.IMAGE_TYPE,
                                options.ZERO_CERT,
@@ -511,6 +533,9 @@ class bdfMain():
                                options.PATCH_METHOD,
                                options.SUPPLIED_BINARY,
                                options.XP_MODE,
+                               options.IDT_IN_CAVE,
+                               options.CODE_SIGN,
+                               options.PREPROCESS,
                                )
         supported_file.injector()
         sys.exit()
@@ -548,6 +573,9 @@ class bdfMain():
                                options.PATCH_METHOD,
                                options.SUPPLIED_BINARY,
                                options.XP_MODE,
+                               options.IDT_IN_CAVE,
+                               options.CODE_SIGN,
+                               options.PREPROCESS,
                                )
     elif is_supported is "ELF":
         supported_file = elfbin(options.FILE,
@@ -559,7 +587,8 @@ class bdfMain():
                                 options.FIND_CAVES,
                                 options.SHELL_LEN,
                                 options.SUPPLIED_SHELLCODE,
-                                options.IMAGE_TYPE
+                                options.IMAGE_TYPE,
+                                options.PREPROCESS,
                                 )
 
     elif is_supported is "MACHO":
@@ -571,7 +600,8 @@ class bdfMain():
                                   options.SUPPORT_CHECK,
                                   options.SUPPLIED_SHELLCODE,
                                   options.FAT_PRIORITY,
-                                  options.BEACON
+                                  options.BEACON,
+                                  options.PREPROCESS,
                                   )
 
     else:
@@ -580,7 +610,6 @@ class bdfMain():
     result = supported_file.run_this()
     if result is True and options.SUPPORT_CHECK is False:
         print "File {0} is in the 'backdoored' directory".format(os.path.basename(supported_file.OUTPUT))
-
 
     #END BDF MAIN
 

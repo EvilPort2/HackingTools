@@ -1,7 +1,0 @@
-CACHE MANIFEST
-CACHE:
-%%tamper_url%%
-NETWORK:
-*
-http://*
-https://**
